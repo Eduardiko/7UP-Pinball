@@ -17,8 +17,21 @@ public:
 	bool CleanUp();
 	void OnCollision(PhysBody* bodyA, PhysBody* bodyB);
 
+	void spawnBall();
+	void setWalls();
+	void setSensors();
+
 public:
+
+	p2List<PhysBody*> balls;
 
 	SDL_Texture* backgroundTex;
 	SDL_Rect background;
+private:
+	// win/fail
+	unsigned int ballsLeft;
+
+	//Fx
+	uint hitWallFx;
+	uint holeFx;
 };

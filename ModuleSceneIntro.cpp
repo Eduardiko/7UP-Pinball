@@ -6,6 +6,7 @@
 #include "ModuleTextures.h"
 #include "ModuleAudio.h"
 #include "ModulePhysics.h"
+#include "ModuleUI.h"
 
 ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
@@ -19,6 +20,9 @@ ModuleSceneIntro::~ModuleSceneIntro()
 // Load assets
 bool ModuleSceneIntro::Start()
 {
+	ballsLeft = 3;
+	App->UI->score = 0;
+
 	LOG("Loading Intro assets");
 	bool ret = true;
 
@@ -27,6 +31,8 @@ bool ModuleSceneIntro::Start()
 	background.y = 0;
 	background.w = SCREEN_WIDTH;
 	background.h = SCREEN_HEIGHT;	
+
+	hitWallFx = App->audio->LoadFx(".wav");
 
 	return ret;
 }
@@ -52,4 +58,46 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 {
 
 
+}
+
+void ModuleSceneIntro::setWalls() {
+
+	// Here we create all chains of the scene
+
+	// Bouncing triangles
+
+	
+
+	// Static walls
+
+	int points_top_wall[160] =
+	{
+		
+	};
+
+	
+	int points_bottom_wall[108] =
+	{
+		
+	};
+
+	
+
+}
+
+void ModuleSceneIntro::setSensors()
+{
+	// Set triggers and sensors
+
+	
+
+	
+}
+
+void ModuleSceneIntro::spawnBall()
+{
+	//create in module physics the next functions
+
+	/*balls.add(App->physics->CreateBall
+	balls.getLast()->data->listener = this;*/
 }
