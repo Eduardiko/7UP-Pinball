@@ -9,9 +9,8 @@
 
 ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
-	circle = box = rick = NULL;
-	ray_on = false;
-	sensed = false;
+	backgroundTex = NULL;
+
 }
 
 ModuleSceneIntro::~ModuleSceneIntro()
@@ -20,6 +19,13 @@ ModuleSceneIntro::~ModuleSceneIntro()
 // Load assets
 bool ModuleSceneIntro::Start()
 {
+	backgroundTex = App->textures->Load("pinball/background.png");
+	background.x = 0;
+	background.y = 0;
+	background.w = SCREEN_WIDTH;
+	background.h = SCREEN_HEIGHT;
+
+
 	LOG("Loading Intro assets");
 	bool ret = true;
 
@@ -46,6 +52,9 @@ bool ModuleSceneIntro::CleanUp()
 // Update: draw background
 update_status ModuleSceneIntro::Update()
 {
+
+	App->renderer->Blit(backgroundTex, 0, 0, &background, 1.0f);
+
 	if(App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
 	{
 		ray_on = !ray_on;

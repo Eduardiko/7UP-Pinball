@@ -25,6 +25,9 @@ public:
 	PhysBody* sensor;
 	bool sensed;
 
+	SDL_Texture* backgroundTex;
+	SDL_Rect background;
+
 	SDL_Texture* circle;
 	SDL_Texture* box;
 	SDL_Texture* rick;

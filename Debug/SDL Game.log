@@ -1,0 +1,53 @@
+﻿  ModuleSceneIntro.cpp
+D:\UNI\2n\Física\7UP-Pinball\ModuleSceneIntro.cpp(167,45): warning C4244: 'argumento': conversión de 'TYPE' a 'TYPE'; posible pérdida de datos
+          with
+          [
+              TYPE=int
+          ]
+          and
+          [
+              TYPE=float
+          ]
+D:\UNI\2n\Física\7UP-Pinball\ModuleSceneIntro.cpp(167,30): warning C4244: 'argumento': conversión de 'TYPE' a 'TYPE'; posible pérdida de datos
+          with
+          [
+              TYPE=int
+          ]
+          and
+          [
+              TYPE=float
+          ]
+D:\UNI\2n\Física\7UP-Pinball\ModuleSceneIntro.cpp(169,18): warning C4244: 'argumento': conversión de 'int' a 'float'; posible pérdida de datos
+D:\UNI\2n\Física\7UP-Pinball\ModuleSceneIntro.cpp(171,70): warning C4244: 'argumento': conversión de 'TYPE' a 'int'; posible pérdida de datos
+          with
+          [
+              TYPE=float
+          ]
+D:\UNI\2n\Física\7UP-Pinball\ModuleSceneIntro.cpp(171,47): warning C4244: 'argumento': conversión de 'TYPE' a 'int'; posible pérdida de datos
+          with
+          [
+              TYPE=float
+          ]
+D:\UNI\2n\Física\7UP-Pinball\ModuleSceneIntro.cpp(174,138): warning C4244: 'argumento': conversión de 'TYPE' a 'int'; posible pérdida de datos
+          with
+          [
+              TYPE=float
+          ]
+D:\UNI\2n\Física\7UP-Pinball\ModuleSceneIntro.cpp(174,96): warning C4244: 'argumento': conversión de 'TYPE' a 'int'; posible pérdida de datos
+          with
+          [
+              TYPE=float
+          ]
+D:\UNI\2n\Física\7UP-Pinball\ModuleSceneIntro.cpp(174,57): warning C4244: 'argumento': conversión de 'TYPE' a 'int'; posible pérdida de datos
+          with
+          [
+              TYPE=float
+          ]
+D:\UNI\2n\Física\7UP-Pinball\ModuleSceneIntro.cpp(174,34): warning C4244: 'argumento': conversión de 'TYPE' a 'int'; posible pérdida de datos
+          with
+          [
+              TYPE=float
+          ]
+D:\UNI\2n\Física\7UP-Pinball\ModuleSceneIntro.cpp(182,9): warning C4101: 'y': variable local sin referencia
+D:\UNI\2n\Física\7UP-Pinball\ModuleSceneIntro.cpp(182,6): warning C4101: 'x': variable local sin referencia
+  SDL Game.vcxproj -> D:\UNI\2n\Física\7UP-Pinball\Debug\2D Physics - class 4.exe
