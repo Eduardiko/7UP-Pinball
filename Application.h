@@ -13,6 +13,7 @@ class ModulePlayer;
 class ModuleSceneIntro;
 class ModulePhysics;
 class ModuleUI;
+class ModuleDebug;
 
 class Application
 {
@@ -26,6 +27,7 @@ public:
 	ModuleSceneIntro* scene_intro;
 	ModulePhysics* physics;
 	ModuleUI* UI;
+	ModuleDebug* debug;
 
 private:
 

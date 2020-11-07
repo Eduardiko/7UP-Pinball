@@ -9,6 +9,7 @@
 #include "ModulePhysics.h"
 #include "ModuleSceneIntro.h"
 #include "ModuleUI.h"
+#include "Debug.h"
 
 #include "Application.h"
 
@@ -23,6 +24,7 @@ Application::Application()
 	scene_intro = new ModuleSceneIntro(this);
 	physics = new ModulePhysics(this);
 	UI = new ModuleUI(this);
+	debug = new ModuleDebug(this);
 
 	// The order of calls is very important!
 	// Modules will Init() Start() and Update in this order
@@ -36,6 +38,7 @@ Application::Application()
 	AddModule(input);
 	AddModule(audio);
 	AddModule(UI);
+	AddModule(debug);
 	
 	// Scenes
 	AddModule(scene_intro);

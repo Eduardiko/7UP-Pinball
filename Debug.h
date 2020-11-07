@@ -5,13 +5,13 @@
 
 #include "SDL/include/SDL_scancode.h"
 
-class Debug : public Module
+class ModuleDebug : public Module
 {
 public:
-	Debug();
+	ModuleDebug(Application* app, bool start_enabled = true);
 
 	// Destructor
-	virtual ~Debug();
+	virtual ~ModuleDebug();
 
 	//Called at the beginning of the application execution
 	bool Awake();
@@ -21,20 +21,22 @@ public:
 	bool Start();
 
 	//Called at the beginning of each application loop
-	bool PreUpdate();
+	update_status PreUpdate();
 
 	//Called at the middle of each application loop
-	bool Update(float dt);
+	update_status Update();
 
 	//Called at the end of each application loop
-	bool PostUpdate();
+	update_status PostUpdate();
 
 	//Called at the end of the application
 	bool CleanUp();
 
 	void ToggleColliders();
-	void LoadLvl1();
-	void LoadLvL2();
+	
+
+private:
+	bool showColliders = false;
 
 };
 

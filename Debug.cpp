@@ -1,68 +1,77 @@
 #define _CRT_SECURE_NO_WARNINGS
 
 #include "Debug.h"
+#include "ModuleInput.h"
+#include "Application.h"
+
 //#include "App.h"
 //#include "Input.h"
 //#include "Collisions.h"
 //#include "Log.h";
 
-Debug::Debug() : Module()
+ModuleDebug::ModuleDebug(Application* app, bool start_enabled) :  Module(app, start_enabled)
 {
 	//name.Create("debug");
 }
 
 
-Debug::~Debug()
+ModuleDebug::~ModuleDebug()
 {
 
 }
 
-bool Debug::Awake()
+bool ModuleDebug::Awake()
 {
 	return true;
 }
 
-bool Debug::Start()
+bool ModuleDebug::Start()
 {
 	return true;
 }
 
-bool Debug::PreUpdate()
+update_status ModuleDebug::PreUpdate()
 {
-	return true;
+	update_status status = UPDATE_CONTINUE;
+
+
+	return status;
 }
 
-bool Debug::Update(float dt)
+update_status ModuleDebug::Update()
 {
-	bool ret = true;
+	update_status status = UPDATE_CONTINUE;
 
 	
-	/*if (App->input->GetKey(SDL_SCANCODE_F9) == KEY_DOWN)
+	if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
 	{
 		ToggleColliders();
-	}*/
-
-	return ret;
-}
-
-bool Debug::PostUpdate()
-{
-
-	return true;
-}
-
-bool Debug::CleanUp()
-{
-	return true;
-}
-
-void Debug::ToggleColliders()
-{
-	if (app->collisions->showColliders == false)
-	{
-		app->collisions->showColliders = true;
 	}
-	else if (app->collisions->showColliders == true) {
-		app->collisions->showColliders = false;
+
+	return status;
+}
+
+update_status ModuleDebug::PostUpdate()
+{
+	update_status status = UPDATE_CONTINUE;
+
+	return status;
+}
+
+bool ModuleDebug::CleanUp()
+{
+	return true;
+}
+
+void ModuleDebug::ToggleColliders()
+{
+	if (App->debug->showColliders == false)
+	{
+		LOG("Draw Colliders");
+		App->debug->showColliders = true;
+	}
+	else if (App->debug->showColliders == true) {
+		LOG("Undraw Colliders")
+		App->debug->showColliders = false;
 	}
 }
