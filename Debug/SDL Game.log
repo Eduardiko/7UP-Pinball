@@ -1,9 +1,0 @@
-﻿  ModulePhysics.cpp
-D:\UNI\2n\Física\7UP-Pinball\ModulePhysics.cpp(40,8): warning C4244: 'inicializando': conversión de 'float' a 'int'; posible pérdida de datos
-D:\UNI\2n\Física\7UP-Pinball\ModulePhysics.cpp(121,23): warning C4244: '=': conversión de 'float' a 'int'; posible pérdida de datos
-D:\UNI\2n\Física\7UP-Pinball\ModulePhysics.cpp(122,25): warning C4244: '=': conversión de 'float' a 'int'; posible pérdida de datos
-D:\UNI\2n\Física\7UP-Pinball\ModulePhysics.cpp(165,20): warning C4018: '<': no coinciden signed/unsigned
-D:\UNI\2n\Física\7UP-Pinball\ModulePhysics.cpp(346,13): warning C4244: 'inicializando': conversión de 'int' a 'float'; posible pérdida de datos
-D:\UNI\2n\Física\7UP-Pinball\ModulePhysics.cpp(347,13): warning C4244: 'inicializando': conversión de 'int' a 'float'; posible pérdida de datos
-D:\UNI\2n\Física\7UP-Pinball\ModulePhysics.cpp(353,27): warning C4244: 'return': conversión de 'float32' a 'int'; posible pérdida de datos
-  SDL Game.vcxproj -> D:\UNI\2n\Física\7UP-Pinball\Debug\2D Physics - class 4.exe
