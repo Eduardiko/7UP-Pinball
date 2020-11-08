@@ -17,6 +17,11 @@ ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Modul
 	ballAnim.loop = true;
 	ballAnim.speed = 0.0f;
 
+	arrowLightsAnim.PushBack({ 349,266,290,290 });
+	//arrowLightsAnim.PushBack({ 0,0,0,0 });
+	arrowLightsAnim.loop = true;
+	arrowLightsAnim.speed = 0.1f;
+
 }
 
 ModuleSceneIntro::~ModuleSceneIntro()
@@ -47,15 +52,18 @@ bool ModuleSceneIntro::Start()
 	bool ret = true;
 
 	spriteSheet = App->textures->Load("pinball/pinballSpritesheet.png");
-	if (spriteSheet == nullptr) LOG("Couldnt load sprite sheet!")
-	else
-		LOG("sprite sheet loaded succesfully!")
+	
 
 	backgroundTex = App->textures->Load("pinball/background.png");
 	background.x = 0;
 	background.y = 0;
 	background.w = SCREEN_WIDTH;
 	background.h = SCREEN_HEIGHT;	
+
+	backgroundAssets=App->textures->Load("pinball/background assets.png");
+	if (backgroundAssets == nullptr) LOG("Couldnt load background assets!")
+	else
+		LOG("sprite sheet loaded succesfully!")
 
 	hitWallFx = App->audio->LoadFx(".wav");
 
@@ -79,10 +87,26 @@ update_status ModuleSceneIntro::Update()
 
 	App->renderer->Blit(backgroundTex, 0, 0, &background, 1.0f);
 
+	App->renderer->Blit(spriteSheet, 0,0, &arrowLightsAnim.GetCurrentFrame(), 1.0f);
+
 	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
 	{
 		SpawnBall();
 	}
+
+	//render objects
+
+	//ball
+	p2List_item<PhysBody*>* ball_item = balls.getFirst();
+	int x, y;
+	ball_item->data->GetPosition(x, y);
+
+	float vel = ball_item->data->body->GetLinearVelocity().Length();
+	ballAnim.speed = vel / 15;
+
+	App->renderer->Blit(spriteSheet, x, y, &ballAnim.GetCurrentFrame(), 1.0f);
+
+	ball_item = ball_item->next;
 
 	return UPDATE_CONTINUE;
 }
@@ -95,7 +119,7 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 
 void ModuleSceneIntro::setWalls() {
 
-	// Here we create all chains of the scene
+	// Here we create all chains of the scene	
 
 	// Bouncing triangles
 
@@ -131,6 +155,6 @@ void ModuleSceneIntro::SpawnBall()
 {
 	//create in module physics the next functions
 
-	balls.add(App->physics->CreateBall(30,30));
-	//balls.getLast()->data->listener = this;
+	balls.add(App->physics->CreateBall(350,30));
+	balls.getLast()->data->listener = this;
 }

@@ -37,6 +37,7 @@ private:
 	uint holeFx;
 
 	SDL_Texture *spriteSheet;
+	SDL_Texture* backgroundAssets;
 
-	Animation ballAnim;
+	Animation ballAnim, arrowLightsAnim;
 };
