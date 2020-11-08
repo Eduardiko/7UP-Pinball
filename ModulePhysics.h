@@ -20,6 +20,7 @@ enum bodyType
 
 
 };
+
 class PhysBody
 {
 public:
@@ -34,6 +35,8 @@ public:
 public:
 	int width, height;
 	b2Body* body;
+	b2Body* body2;
+	b2Joint* joint;
 	Module* listener;
 };
 
@@ -53,14 +56,14 @@ public:
 	PhysBody* CreateRectangle(int x, int y, int width, int height);
 	PhysBody* CreateRectangleSensor(int x, int y, int width, int height);
 	PhysBody* CreateChain(int x, int y, int* points, int size);
+	PhysBody* CreateLeftTrigger();
 
-	// b2ContactListener ---
 	void BeginContact(b2Contact* contact);
 
-private:
-
-	bool debug;
 	b2World* world;
+
+private:
+	bool debug;
 	b2MouseJoint* mouse_joint;
 	b2Body* ground;
 };

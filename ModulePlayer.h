@@ -2,6 +2,8 @@
 #include "Module.h"
 #include "Globals.h"
 #include "p2Point.h"
+#include "ModuleTextures.h"
+#include "ModulePhysics.h"
 
 class ModulePlayer : public Module
 {
@@ -15,4 +17,13 @@ public:
 
 public:
 
+	PhysBody* rightTrigger;
+	SDL_Rect rTriggerRect;
+
+	PhysBody* leftTrigger;
+	SDL_Rect lTriggerRect;
+
+	SDL_Texture* spriteSheet;
+
+	PhysBody* elDisparador;
 };

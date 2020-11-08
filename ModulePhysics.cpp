@@ -31,27 +31,8 @@ bool ModulePhysics::Start()
 	world = new b2World(b2Vec2(GRAVITY_X, -GRAVITY_Y));
 	world->SetContactListener(this);
 
-	// needed to create joints like mouse joint
 	b2BodyDef bd;
 	ground = world->CreateBody(&bd);
-
-	// big static circle as "ground" in the middle of the screen
-	int x = SCREEN_WIDTH / 2;
-	int y = SCREEN_HEIGHT / 1.5f;
-	int diameter = SCREEN_WIDTH / 2;
-
-	b2BodyDef body;
-	body.type = b2_staticBody;
-	body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
-
-	////b2Body* big_ball = world->CreateBody(&body);
-
-	//b2CircleShape shape;
-	//shape.m_radius = PIXEL_TO_METERS(diameter) * 0.5f;
-
-	//b2FixtureDef fixture;
-	//fixture.shape = &shape;
-	//big_ball->CreateFixture(&fixture);
 
 	return true;
 }
@@ -183,6 +164,77 @@ PhysBody* ModulePhysics::CreateChain(int x, int y, int* points, int size)
 	pbody->width = pbody->height = 0;
 
 	return pbody;
+}
+
+PhysBody* ModulePhysics::CreateLeftTrigger()
+{
+	b2BodyDef triggerBodyDef;
+	triggerBodyDef.type = b2_dynamicBody;
+	triggerBodyDef.position.Set(PIXEL_TO_METERS(0), PIXEL_TO_METERS(0));
+
+	b2Body* triggerBody = world->CreateBody(&triggerBodyDef);
+
+	b2PolygonShape triggerShape;
+
+	int rightTriggerCoord[16] = {
+	538, 480,
+	501, 501,
+	501, 508,
+	508, 510,
+	548, 494,
+	552, 487,
+	547, 479,
+	538, 480
+	};
+
+	b2Vec2 rightTriggerVec[8];
+	for (int i = 0; i < 8; i++)
+	{
+		rightTriggerVec[i].x = PIXEL_TO_METERS(rightTriggerCoord[i * 2]);
+		rightTriggerVec[i].y = PIXEL_TO_METERS(rightTriggerCoord[i * 2 + 1]);
+	}
+
+	triggerShape.Set(rightTriggerVec, 8);
+
+	b2FixtureDef triggerFixtureDef;
+	triggerFixtureDef.shape = &triggerShape;
+	triggerFixtureDef.density = 1;
+	//triggerFixtureDef.filter.groupIndex = groupIndex::RIGID_PINBALL;
+	triggerBody->CreateFixture(&triggerFixtureDef);
+
+	b2Vec2 centerRectangle = triggerBody->GetWorldCenter();
+	centerRectangle += (b2Vec2(PIXEL_TO_METERS(-18), 0));
+
+	b2BodyDef pivotBodyDef;
+	pivotBodyDef.type = b2_staticBody;
+	pivotBodyDef.position.Set(centerRectangle.x,centerRectangle.y);
+
+	b2Body* pivotBody = world->CreateBody(&pivotBodyDef);
+
+	b2CircleShape pivotCircle;
+	pivotCircle.m_radius = PIXEL_TO_METERS(0.5f);
+	b2FixtureDef pivotFixtureDef;
+	pivotFixtureDef.shape = &pivotCircle;
+	//pivotFixtureDef.filter.groupIndex = groupIndex::RIGID_PINBALL;
+	pivotBody->CreateFixture(&pivotFixtureDef);
+
+	b2RevoluteJointDef revJointDef;
+	revJointDef.Initialize(triggerBody, pivotBody, centerRectangle);
+	revJointDef.upperAngle = 0.6f;
+	revJointDef.lowerAngle = -0.6f;
+	revJointDef.enableLimit = true;
+	revJointDef.maxMotorTorque = 10.0f;
+	revJointDef.motorSpeed = 0.0f;
+	revJointDef.enableMotor = true;
+	b2Joint* joint = world->CreateJoint(&revJointDef);
+
+	PhysBody* leftTrigger = new PhysBody();
+	leftTrigger->body = triggerBody;
+	leftTrigger->body2 = pivotBody;
+	leftTrigger->joint = joint;
+	triggerBody->SetUserData(leftTrigger);
+
+	return leftTrigger;
 }
 
 // 
