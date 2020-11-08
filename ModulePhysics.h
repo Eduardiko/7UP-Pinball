@@ -14,11 +14,25 @@
 
 // Small class to return to other modules to track position and rotation of physics bodies
 
-enum bodyType 
+enum BODY_INDEX
 {
 	BALL,
-
-
+	TRIGGER,
+	WALL,
+	TOP,
+	HOLE,
+	
+	NOT_DEFINED
+};
+enum PHYSIC_BODY_TYPE
+{
+	_BALL,
+	_TRIGGER,
+	_WALL,
+	_TOP,
+	_HOLE,
+	
+	_NOT_DEFINED
 };
 
 class PhysBody
@@ -38,6 +52,8 @@ public:
 	b2Body* body2;
 	b2Joint* joint;
 	Module* listener;
+
+	PHYSIC_BODY_TYPE bodyType = _NOT_DEFINED;
 };
 
 // Module --------------------------------------
@@ -51,6 +67,8 @@ public:
 	update_status PreUpdate();
 	update_status PostUpdate();
 	bool CleanUp();
+
+	PhysBody* CreateBall(int x, int y);
 
 	PhysBody* CreateCircle(int x, int y, int radius);
 	PhysBody* CreateRectangle(int x, int y, int width, int height);
@@ -66,4 +84,6 @@ private:
 	bool debug;
 	b2MouseJoint* mouse_joint;
 	b2Body* ground;
+
+	
 };

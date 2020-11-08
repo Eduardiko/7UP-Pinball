@@ -34,6 +34,8 @@ bool ModulePhysics::Start()
 	b2BodyDef bd;
 	ground = world->CreateBody(&bd);
 
+	
+
 	return true;
 }
 
@@ -420,4 +422,36 @@ void ModulePhysics::BeginContact(b2Contact* contact)
 
 	if(physB && physB->listener != NULL)
 		physB->listener->OnCollision(physB, physA);
+}
+
+PhysBody* ModulePhysics::CreateBall(int x, int y)
+{
+	int ballRadius = 10;
+	b2BodyDef body;
+	body.type = b2_dynamicBody;
+	body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
+	body.bullet = true;
+
+	b2Body* b = world->CreateBody(&body);
+
+	b2CircleShape shape;
+	shape.m_radius = PIXEL_TO_METERS(ballRadius);
+	b2FixtureDef fixture;
+	fixture.shape = &shape;
+	fixture.density = 5.0f;
+	fixture.friction = 0.0f;
+	fixture.restitution = 0.3f;
+	fixture.filter.groupIndex = BODY_INDEX::BALL;
+
+	fixture.density = 1.0f;
+
+	b->CreateFixture(&fixture);
+
+	PhysBody* pbody = new PhysBody();
+	pbody->body = b;
+	b->SetUserData(pbody);
+	pbody->width = pbody->height = ballRadius;
+	pbody->bodyType= _BALL;
+
+	return pbody;
 }

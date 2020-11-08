@@ -37,11 +37,12 @@ Application::Application()
 	AddModule(textures);
 	AddModule(input);
 	AddModule(audio);
+	AddModule(scene_intro);
 	AddModule(UI);
 	AddModule(debug);
 	
 	// Scenes
-	AddModule(scene_intro);
+	
 	
 	// Player
 	AddModule(player);

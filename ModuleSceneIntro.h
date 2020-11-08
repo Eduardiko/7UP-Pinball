@@ -3,6 +3,7 @@
 #include "p2List.h"
 #include "p2Point.h"
 #include "Globals.h"
+#include "Animation.h"
 
 class PhysBody;
 
@@ -17,7 +18,7 @@ public:
 	bool CleanUp();
 	void OnCollision(PhysBody* bodyA, PhysBody* bodyB);
 
-	void spawnBall();
+	void SpawnBall();
 	void setWalls();
 	void setSensors();
 
@@ -34,4 +35,8 @@ private:
 	//Fx
 	uint hitWallFx;
 	uint holeFx;
+
+	SDL_Texture *spriteSheet;
+
+	Animation ballAnim;
 };
