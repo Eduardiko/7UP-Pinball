@@ -34,8 +34,6 @@ bool ModulePhysics::Start()
 	b2BodyDef bd;
 	ground = world->CreateBody(&bd);
 
-	
-
 	return true;
 }
 
@@ -178,25 +176,23 @@ PhysBody* ModulePhysics::CreateLeftTrigger()
 
 	b2PolygonShape triggerShape;
 
-	int rightTriggerCoord[16] = {
-	538, 480,
-	501, 501,
-	501, 508,
-	508, 510,
-	548, 494,
-	552, 487,
-	547, 479,
-	538, 480
+	int leftTriggerCoord[12] = {
+	426, 477,
+	419, 484,
+	426, 494,
+	473, 489,
+	473, 481,
+	426, 477
 	};
 
-	b2Vec2 rightTriggerVec[8];
-	for (int i = 0; i < 8; i++)
+	b2Vec2 leftTriggerVec[6];
+	for (int i = 0; i < 6; i++)
 	{
-		rightTriggerVec[i].x = PIXEL_TO_METERS(rightTriggerCoord[i * 2]);
-		rightTriggerVec[i].y = PIXEL_TO_METERS(rightTriggerCoord[i * 2 + 1]);
+		leftTriggerVec[i].x = PIXEL_TO_METERS(leftTriggerCoord[i * 2]);
+		leftTriggerVec[i].y = PIXEL_TO_METERS(leftTriggerCoord[i * 2 + 1]);
 	}
 
-	triggerShape.Set(rightTriggerVec, 8);
+	triggerShape.Set(leftTriggerVec, 6);
 
 	b2FixtureDef triggerFixtureDef;
 	triggerFixtureDef.shape = &triggerShape;
@@ -222,8 +218,8 @@ PhysBody* ModulePhysics::CreateLeftTrigger()
 
 	b2RevoluteJointDef revJointDef;
 	revJointDef.Initialize(triggerBody, pivotBody, centerRectangle);
-	revJointDef.upperAngle = 0.6f;
-	revJointDef.lowerAngle = -0.6f;
+	revJointDef.upperAngle = 0.5f;
+	revJointDef.lowerAngle = -0.5f;
 	revJointDef.enableLimit = true;
 	revJointDef.maxMotorTorque = 10.0f;
 	revJointDef.motorSpeed = 0.0f;
@@ -249,25 +245,23 @@ PhysBody* ModulePhysics::CreateRightTrigger()
 
 	b2PolygonShape triggerShape;
 
-	int rightTriggerCoord[16] = {
-	538, 480,
-	501, 501,
-	501, 508,
-	508, 510,
-	548, 494,
-	552, 487,
-	547, 479,
-	538, 480
+	int rightTriggerCoord[12] = {
+	543, 477,
+	548, 484,
+	543, 494,
+	495, 490,
+	495, 480,
+	543, 477
 	};
 
-	b2Vec2 rightTriggerVec[8];
-	for (int i = 0; i < 8; i++)
+	b2Vec2 rightTriggerVec[6];
+	for (int i = 0; i < 6; i++)
 	{
 		rightTriggerVec[i].x = PIXEL_TO_METERS(rightTriggerCoord[i * 2]);
 		rightTriggerVec[i].y = PIXEL_TO_METERS(rightTriggerCoord[i * 2 + 1]);
 	}
 
-	triggerShape.Set(rightTriggerVec, 8);
+	triggerShape.Set(rightTriggerVec, 6);
 
 	b2FixtureDef triggerFixtureDef;
 	triggerFixtureDef.shape = &triggerShape;
@@ -276,7 +270,7 @@ PhysBody* ModulePhysics::CreateRightTrigger()
 	triggerBody->CreateFixture(&triggerFixtureDef);
 
 	b2Vec2 centerRectangle = triggerBody->GetWorldCenter();
-	centerRectangle += (b2Vec2(PIXEL_TO_METERS(-18), 30));
+	centerRectangle += (b2Vec2(PIXEL_TO_METERS(18), 0));
 
 	b2BodyDef pivotBodyDef;
 	pivotBodyDef.type = b2_staticBody;
@@ -293,8 +287,8 @@ PhysBody* ModulePhysics::CreateRightTrigger()
 
 	b2RevoluteJointDef revJointDef;
 	revJointDef.Initialize(triggerBody, pivotBody, centerRectangle);
-	revJointDef.upperAngle = 0.6f;
-	revJointDef.lowerAngle = -0.6f;
+	revJointDef.upperAngle = 0.5f;
+	revJointDef.lowerAngle = -0.5f;
 	revJointDef.enableLimit = true;
 	revJointDef.maxMotorTorque = 10.0f;
 	revJointDef.motorSpeed = 0.0f;

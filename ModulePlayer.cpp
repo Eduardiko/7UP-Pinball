@@ -27,7 +27,7 @@ bool ModulePlayer::Start()
 	lTriggerRect.h = 19;
 
 	rTriggerRect.x = 56;
-	rTriggerRect.y = 203;
+	rTriggerRect.y = 202;
 	rTriggerRect.w = 56;
 	rTriggerRect.h = 19;
 
@@ -46,20 +46,25 @@ bool ModulePlayer::CleanUp()
 update_status ModulePlayer::Update()
 {
 	b2Vec2 anchorLVec = leftTrigger->joint->GetAnchorB();
-	b2Vec2 anchorRVec = rightTrigger->joint->GetAnchorA();
+	b2Vec2 anchorRVec = rightTrigger->joint->GetAnchorB();
 
-	App->renderer->Blit(spriteSheet, 588, 666, &lTriggerRect, 1.0f, leftTrigger->GetRotation(), anchorLVec.x, anchorLVec.y - 4);
-	App->renderer->Blit(spriteSheet, 741, 666, &rTriggerRect, 1.0f, rightTrigger->GetRotation(), anchorRVec.x, anchorRVec.y - 4);
+	App->renderer->Blit(spriteSheet, 418, 476, &lTriggerRect, 1.0f, leftTrigger->GetRotation(), anchorLVec.x, anchorLVec.y - 4);
+	App->renderer->Blit(spriteSheet, 494, 476, &rTriggerRect, 1.0f, rightTrigger->GetRotation(), anchorRVec.x + 36, anchorRVec.y - 4);
 
 	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
 		leftTrigger->body->ApplyTorque(-65.0f, true);
-	else if(App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
-		rightTrigger->body->ApplyTorque(65.0f, true);
 	else
 	{
 		leftTrigger->body->ApplyTorque(10.0f, true);
-		rightTrigger->body->ApplyTorque(10.0f, true);
 	}
+
+	if(App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
+		rightTrigger->body->ApplyTorque(65.0f, true);
+	else
+	{
+		rightTrigger->body->ApplyTorque(-10.0f, true);
+	}
+
 	return UPDATE_CONTINUE;
 }
 
