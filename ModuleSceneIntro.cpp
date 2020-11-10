@@ -18,9 +18,10 @@ ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Modul
 	ballAnim.speed = 0.0f;
 
 	arrowLightsAnim.PushBack({ 349,266,290,290 });
+	arrowLightsAnim.PushBack({ 0,0,290,290 });
 	//arrowLightsAnim.PushBack({ 0,0,0,0 });
 	arrowLightsAnim.loop = true;
-	arrowLightsAnim.speed = 0.1f;
+	arrowLightsAnim.speed = 0.07f;
 
 }
 
@@ -52,7 +53,6 @@ bool ModuleSceneIntro::Start()
 	bool ret = true;
 
 	spriteSheet = App->textures->Load("pinball/pinballSpritesheet.png");
-	
 
 	backgroundTex = App->textures->Load("pinball/background.png");
 	background.x = 0;
@@ -63,7 +63,7 @@ bool ModuleSceneIntro::Start()
 	backgroundAssets=App->textures->Load("pinball/background assets.png");
 	if (backgroundAssets == nullptr) LOG("Couldnt load background assets!")
 	else
-		LOG("sprite sheet loaded succesfully!")
+		LOG("bg assets loaded succesfully!")
 
 	hitWallFx = App->audio->LoadFx(".wav");
 
@@ -97,18 +97,25 @@ update_status ModuleSceneIntro::Update()
 	//render objects
 
 	//ball
+	
 	p2List_item<PhysBody*>* ball_item = balls.getFirst();
-	int x, y;
-	ball_item->data->GetPosition(x, y);
+	while (ball_item != NULL)
+	{
+		int x, y;
+		ball_item->data->GetPosition(x, y);
 
-	float vel = ball_item->data->body->GetLinearVelocity().Length();
-	ballAnim.speed = vel / 15;
+		float vel = ball_item->data->body->GetLinearVelocity().Length();
+		ballAnim.speed = vel / 15;
 
-	App->renderer->Blit(spriteSheet, x, y, &ballAnim.GetCurrentFrame(), 1.0f);
+		App->renderer->Blit(spriteSheet, x, y, &ballAnim.GetCurrentFrame(), 1.0f);
 
-	App->renderer->Blit(spriteSheet, 0, 0, &arrowLightsAnim.GetCurrentFrame(), 1.0f);
+		ball_item = ball_item->next;
+	}
+	//App->renderer->Blit(spriteSheet, x, y, &ballAnim.GetCurrentFrame(), 1.0f);
 
-	ball_item = ball_item->next;
+	App->renderer->Blit(backgroundAssets, 483, 455, &arrowLightsAnim.GetCurrentFrame(), 1.0f);
+
+	
 
 	return UPDATE_CONTINUE;
 }
