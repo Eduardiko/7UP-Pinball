@@ -48,6 +48,13 @@ update_status ModuleDebug::Update()
 		ToggleColliders();
 	}
 
+	if (App->input->GetMouseButton(1))
+	{
+		int x, y;
+		x = App->input->GetMouseX(); y = App->input->GetMouseY();
+		LOG("Mouse Position X: %d , Y: %d", x, y);
+	}
+
 	return status;
 }
 

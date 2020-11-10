@@ -87,11 +87,11 @@ update_status ModuleSceneIntro::Update()
 
 	App->renderer->Blit(backgroundTex, 0, 0, &background, 1.0f);
 
-	App->renderer->Blit(spriteSheet, 0,0, &arrowLightsAnim.GetCurrentFrame(), 1.0f);
+	
 
 	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
 	{
-		SpawnBall();
+		CreateBallInMousePos();
 	}
 
 	//render objects
@@ -105,6 +105,8 @@ update_status ModuleSceneIntro::Update()
 	ballAnim.speed = vel / 15;
 
 	App->renderer->Blit(spriteSheet, x, y, &ballAnim.GetCurrentFrame(), 1.0f);
+
+	App->renderer->Blit(spriteSheet, 0, 0, &arrowLightsAnim.GetCurrentFrame(), 1.0f);
 
 	ball_item = ball_item->next;
 
@@ -156,5 +158,15 @@ void ModuleSceneIntro::SpawnBall()
 	//create in module physics the next functions
 
 	balls.add(App->physics->CreateBall(350,30));
+	balls.getLast()->data->listener = this;
+}
+
+void ModuleSceneIntro::CreateBallInMousePos()
+{
+	int x, y;
+	x = App->input->GetMouseX();
+	y = App->input->GetMouseY();
+
+	balls.add(App->physics->CreateBall(x, y));
 	balls.getLast()->data->listener = this;
 }

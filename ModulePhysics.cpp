@@ -239,6 +239,76 @@ PhysBody* ModulePhysics::CreateLeftTrigger()
 	return leftTrigger;
 }
 
+PhysBody* ModulePhysics::CreateRightTrigger()
+{
+	b2BodyDef triggerBodyDef;
+	triggerBodyDef.type = b2_dynamicBody;
+	triggerBodyDef.position.Set(PIXEL_TO_METERS(0), PIXEL_TO_METERS(0));
+
+	b2Body* triggerBody = world->CreateBody(&triggerBodyDef);
+
+	b2PolygonShape triggerShape;
+
+	int rightTriggerCoord[16] = {
+	538, 480,
+	501, 501,
+	501, 508,
+	508, 510,
+	548, 494,
+	552, 487,
+	547, 479,
+	538, 480
+	};
+
+	b2Vec2 rightTriggerVec[8];
+	for (int i = 0; i < 8; i++)
+	{
+		rightTriggerVec[i].x = PIXEL_TO_METERS(rightTriggerCoord[i * 2]);
+		rightTriggerVec[i].y = PIXEL_TO_METERS(rightTriggerCoord[i * 2 + 1]);
+	}
+
+	triggerShape.Set(rightTriggerVec, 8);
+
+	b2FixtureDef triggerFixtureDef;
+	triggerFixtureDef.shape = &triggerShape;
+	triggerFixtureDef.density = 1;
+	//triggerFixtureDef.filter.groupIndex = groupIndex::RIGID_PINBALL;
+	triggerBody->CreateFixture(&triggerFixtureDef);
+
+	b2Vec2 centerRectangle = triggerBody->GetWorldCenter();
+	centerRectangle += (b2Vec2(PIXEL_TO_METERS(-18), 30));
+
+	b2BodyDef pivotBodyDef;
+	pivotBodyDef.type = b2_staticBody;
+	pivotBodyDef.position.Set(centerRectangle.x, centerRectangle.y);
+
+	b2Body* pivotBody = world->CreateBody(&pivotBodyDef);
+
+	b2CircleShape pivotCircle;
+	pivotCircle.m_radius = PIXEL_TO_METERS(0.5f);
+	b2FixtureDef pivotFixtureDef;
+	pivotFixtureDef.shape = &pivotCircle;
+	//pivotFixtureDef.filter.groupIndex = groupIndex::RIGID_PINBALL;
+	pivotBody->CreateFixture(&pivotFixtureDef);
+
+	b2RevoluteJointDef revJointDef;
+	revJointDef.Initialize(triggerBody, pivotBody, centerRectangle);
+	revJointDef.upperAngle = 0.6f;
+	revJointDef.lowerAngle = -0.6f;
+	revJointDef.enableLimit = true;
+	revJointDef.maxMotorTorque = 10.0f;
+	revJointDef.motorSpeed = 0.0f;
+	revJointDef.enableMotor = true;
+	b2Joint* joint = world->CreateJoint(&revJointDef);
+
+	PhysBody* rightTrigger = new PhysBody();
+	rightTrigger->body = triggerBody;
+	rightTrigger->body2 = pivotBody;
+	rightTrigger->joint = joint;
+	triggerBody->SetUserData(rightTrigger);
+
+	return rightTrigger;
+}
 // 
 update_status ModulePhysics::PostUpdate()
 {
@@ -426,7 +496,7 @@ void ModulePhysics::BeginContact(b2Contact* contact)
 
 PhysBody* ModulePhysics::CreateBall(int x, int y)
 {
-	int ballRadius = 10;
+	int ballRadius = 13;
 	b2BodyDef body;
 	body.type = b2_dynamicBody;
 	body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));

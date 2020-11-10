@@ -19,6 +19,7 @@ public:
 	void OnCollision(PhysBody* bodyA, PhysBody* bodyB);
 
 	void SpawnBall();
+	void CreateBallInMousePos();
 	void setWalls();
 	void setSensors();
 
