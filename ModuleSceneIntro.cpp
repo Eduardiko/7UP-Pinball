@@ -114,7 +114,7 @@ update_status ModuleSceneIntro::Update()
 	}
 	//App->renderer->Blit(spriteSheet, x, y, &ballAnim.GetCurrentFrame(), 1.0f);
 
-	App->renderer->Blit(backgroundAssets, 483, 455, &arrowLightsAnim.GetCurrentFrame(), 1.0f);
+	App->renderer->Blit(backgroundAssets, 349, 266, &arrowLightsAnim.GetCurrentFrame(), 1.0f);
 
 	return UPDATE_CONTINUE;
 }
