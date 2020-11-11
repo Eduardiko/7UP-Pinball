@@ -41,5 +41,5 @@ private:
 	SDL_Texture *spriteSheet;
 	SDL_Texture* backgroundAssets;
 
-	Animation ballAnim, arrowLightsAnim,reboundLightAnim;
+	Animation ballAnim, arrowLightsAnim,reboundLightAnim,ballLostAnim;
 };
