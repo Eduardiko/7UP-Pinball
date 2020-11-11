@@ -113,7 +113,7 @@ update_status ModuleSceneIntro::Update()
 		float vel = ball_item->data->body->GetLinearVelocity().Length();
 		ballAnim.speed = vel / 15;
 
-		App->renderer->Blit(spriteSheet, x, y, &ballAnim.GetCurrentFrame(), 1.0f);
+		App->renderer->Blit(spriteSheet, x-2, y-2, &ballAnim.GetCurrentFrame(), 1.0f);
 
 		ball_item = ball_item->next;
 	}
@@ -144,7 +144,7 @@ void ModuleSceneIntro::setWalls() {
 
 	// Static walls
 
-	int backgroundFloor[190] = {
+	int backgroundFloor[188] = {
 	514, 532,
 	526, 530,
 	537, 525,
@@ -178,7 +178,7 @@ void ModuleSceneIntro::setWalls() {
 	606, 257,
 	600, 253,
 	606, 242,
-	613, 224,
+	616, 221,
 	620, 209,
 	623, 191,
 	623, 172,
@@ -202,14 +202,14 @@ void ModuleSceneIntro::setWalls() {
 	440, 86,
 	420, 88,
 	403, 93,
-	386, 105,
-	371, 116,
-	358, 133,
-	352, 148,
-	349, 167,
-	349, 186,
-	351, 207,
-	358, 227,
+	385, 102,
+	370, 113,
+	355, 126,
+	344, 142,
+	341, 162,
+	343, 184,
+	347, 204,
+	355, 224,
 	367, 248,
 	369, 255,
 	363, 260,
@@ -238,11 +238,10 @@ void ModuleSceneIntro::setWalls() {
 	444, 530,
 	454, 536,
 	454, 552,
-	514, 552,
-	514, 532
+	514, 552
 	};
 	//backgroundWalls.add(App->physics->CreateChain(0, 0, backgroundFloor, 190, BODY_INDEX::WALL, 0.01f, _NOT_DEFINED));
-	backgroundWalls.add(App->physics->CreateChain(0, 0, backgroundFloor, 190));
+	backgroundWalls.add(App->physics->CreateChain(0, 0, backgroundFloor, 188));
 	int backgroundLeftFunnel[60] = {
 	337, 267,
 	353, 251,

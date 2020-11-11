@@ -218,8 +218,8 @@ PhysBody* ModulePhysics::CreateLeftTrigger()
 
 	b2RevoluteJointDef revJointDef;
 	revJointDef.Initialize(triggerBody, pivotBody, centerRectangle);
-	revJointDef.upperAngle = 0.5f;
-	revJointDef.lowerAngle = -0.5f;
+	revJointDef.upperAngle = 0.4f;
+	revJointDef.lowerAngle = -0.4f;
 	revJointDef.enableLimit = true;
 	revJointDef.maxMotorTorque = 10.0f;
 	revJointDef.motorSpeed = 0.0f;
@@ -287,8 +287,8 @@ PhysBody* ModulePhysics::CreateRightTrigger()
 
 	b2RevoluteJointDef revJointDef;
 	revJointDef.Initialize(triggerBody, pivotBody, centerRectangle);
-	revJointDef.upperAngle = 0.5f;
-	revJointDef.lowerAngle = -0.5f;
+	revJointDef.upperAngle = 0.4f;
+	revJointDef.lowerAngle = -0.4f;
 	revJointDef.enableLimit = true;
 	revJointDef.maxMotorTorque = 10.0f;
 	revJointDef.motorSpeed = 0.0f;
@@ -490,7 +490,7 @@ void ModulePhysics::BeginContact(b2Contact* contact)
 
 PhysBody* ModulePhysics::CreateBall(int x, int y)
 {
-	int ballRadius = 10;
+	int ballRadius = 8;
 	b2BodyDef body;
 	body.type = b2_dynamicBody;
 	body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
@@ -502,12 +502,10 @@ PhysBody* ModulePhysics::CreateBall(int x, int y)
 	shape.m_radius = PIXEL_TO_METERS(ballRadius);
 	b2FixtureDef fixture;
 	fixture.shape = &shape;
-	fixture.density = 5.0f;
-	fixture.friction = 0.0f;
+	fixture.density = 3.5f;
+	fixture.friction = 1.0f;
 	fixture.restitution = 0.3f;
 	fixture.filter.groupIndex = BODY_INDEX::BALL;
-
-	fixture.density = 1.0f;
 
 	b->CreateFixture(&fixture);
 
