@@ -23,6 +23,11 @@ ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Modul
 	arrowLightsAnim.loop = true;
 	arrowLightsAnim.speed = 0.07f;
 
+
+	reboundLightAnim.PushBack({ 244,120,30,30 });
+	reboundLightAnim.PushBack({ 0,0,0,0 });
+	reboundLightAnim.loop = true;
+	reboundLightAnim.speed = 0.05f;
 }
 
 ModuleSceneIntro::~ModuleSceneIntro()
@@ -115,6 +120,10 @@ update_status ModuleSceneIntro::Update()
 	//App->renderer->Blit(spriteSheet, x, y, &ballAnim.GetCurrentFrame(), 1.0f);
 
 	App->renderer->Blit(backgroundAssets, 349, 266, &arrowLightsAnim.GetCurrentFrame(), 1.0f);
+
+	App->renderer->Blit(spriteSheet, 429, 209, &reboundLightAnim.GetCurrentFrame(), 1.0f);
+	App->renderer->Blit(spriteSheet, 513, 209, &reboundLightAnim.GetCurrentFrame(), 1.0f);
+	App->renderer->Blit(spriteSheet, 470, 173, &reboundLightAnim.GetCurrentFrame(), 1.0f);
 
 	return UPDATE_CONTINUE;
 }
