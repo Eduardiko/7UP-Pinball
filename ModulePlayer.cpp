@@ -55,14 +55,14 @@ update_status ModulePlayer::Update()
 		leftTrigger->body->ApplyTorque(-65.0f, true);
 	else
 	{
-		leftTrigger->body->ApplyTorque(10.0f, true);
+		leftTrigger->body->ApplyTorque(15.0f, true);
 	}
 
 	if(App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
 		rightTrigger->body->ApplyTorque(65.0f, true);
 	else
 	{
-		rightTrigger->body->ApplyTorque(-10.0f, true);
+		rightTrigger->body->ApplyTorque(-15.0f, true);
 	}
 
 	return UPDATE_CONTINUE;
