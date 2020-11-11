@@ -26,6 +26,7 @@ public:
 public:
 
 	p2List<PhysBody*> balls;
+	p2List<PhysBody*> backgroundWalls;
 
 	SDL_Texture* backgroundTex;
 	SDL_Rect background;
