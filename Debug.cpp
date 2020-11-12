@@ -3,6 +3,7 @@
 #include "Debug.h"
 #include "ModuleInput.h"
 #include "Application.h"
+#include "ModuleRender.h"
 
 //#include "App.h"
 //#include "Input.h"
@@ -61,6 +62,8 @@ update_status ModuleDebug::Update()
 update_status ModuleDebug::PostUpdate()
 {
 	update_status status = UPDATE_CONTINUE;
+
+	
 
 	return status;
 }

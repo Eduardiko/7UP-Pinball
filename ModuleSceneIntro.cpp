@@ -72,6 +72,16 @@ bool ModuleSceneIntro::Start()
 
 	hitWallFx = App->audio->LoadFx(".wav");
 
+	//SDL_Rect atributtes
+	background.x = 0;
+	background.y = 0;
+	background.w = SCREEN_WIDTH;
+	background.h = SCREEN_HEIGHT;
+
+	hole.x = 130;
+	hole.y = 130;
+	hole.w = hole.h = 40;
+
 	//spawned ball coordinates are in createBall()
 	SpawnBall();
 	setWalls();
@@ -130,7 +140,11 @@ update_status ModuleSceneIntro::Update()
 
 void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 {
+	//iterate all balls to see if they collide
+	for (p2List_item<PhysBody*>* bc = balls.getFirst(); bc != NULL; bc = bc->next)
+	{
 
+	}
 
 }
 

@@ -42,4 +42,8 @@ private:
 	SDL_Texture* backgroundAssets;
 
 	Animation ballAnim, arrowLightsAnim,reboundLightAnim,ballLostAnim;
+
+
+	//sensors and collision detectors
+	SDL_Rect hole, rebouncer1, rebouncer2, rebouncer3;
 };
