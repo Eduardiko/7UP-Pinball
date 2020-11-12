@@ -27,12 +27,14 @@ public:
 
 	p2List<PhysBody*> balls;
 	p2List<PhysBody*> backgroundWalls;
+	p2List<PhysBody*> sensors;
 
 	SDL_Texture* backgroundTex;
 	SDL_Rect background;
 private:
 	// win/fail
 	unsigned int ballsLeft;
+
 
 	//Fx
 	uint hitWallFx;

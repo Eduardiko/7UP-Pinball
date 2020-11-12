@@ -78,11 +78,13 @@ bool ModuleSceneIntro::Start()
 	background.w = SCREEN_WIDTH;
 	background.h = SCREEN_HEIGHT;
 
-	hole.x = 130;
-	hole.y = 130;
-	hole.w = hole.h = 40;
+	hole.x = 458;
+	hole.y = 537;
+	hole.w = 54;
+	hole.h = 30;
 
 	//spawned ball coordinates are in createBall()
+	setSensors();
 	SpawnBall();
 	setWalls();
 
@@ -143,7 +145,14 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 	//iterate all balls to see if they collide
 	for (p2List_item<PhysBody*>* bc = balls.getFirst(); bc != NULL; bc = bc->next)
 	{
-
+		
+		if (bodyB->bodyType == _DEAD_SENSOR)
+		{
+			LOG("Ball lost");
+			App->audio->PlayFx(holeFx);
+			//ball_lost = true;
+			ballsLeft--;
+		}
 	}
 
 }
@@ -526,6 +535,16 @@ void ModuleSceneIntro::setWalls() {
 void ModuleSceneIntro::setSensors()
 {
 	// Set triggers and sensors
+	// Here we create all sensors in the scene
+
+	sensors.add(App->physics->CreateRectangleSensor(SCREEN_WIDTH / 2 - 20, SCREEN_HEIGHT + 80, 150, 80, _DEAD_SENSOR));
+
+	
+	
+	sensors.add(App->physics->CreateRectangleSensor(hole.x, hole.y, hole.w, hole.h, _DEAD_SENSOR));
+	
+
+
 
 	
 

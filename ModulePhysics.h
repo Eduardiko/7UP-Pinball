@@ -31,6 +31,7 @@ enum PHYSIC_BODY_TYPE
 	_TRIGGER,
 	_BUMPER,
 	_PLUNGE,
+	_DEAD_SENSOR,
 	
 	_NOT_DEFINED
 };
@@ -72,7 +73,7 @@ public:
 
 	PhysBody* CreateCircle(int x, int y, int radius);
 	PhysBody* CreateRectangle(int x, int y, int width, int height);
-	PhysBody* CreateRectangleSensor(int x, int y, int width, int height);
+	PhysBody* CreateRectangleSensor(int x, int y, int width, int height,PHYSIC_BODY_TYPE sesorType);
 	PhysBody* CreateChain(int x, int y, int* points, int size);
 	PhysBody* CreateLeftTrigger();
 	PhysBody* CreateRightTrigger();
