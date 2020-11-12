@@ -25,6 +25,8 @@ public:
 
 public:
 
+	bool topLevelActive = false;
+
 	p2List<PhysBody*> balls;
 	p2List<PhysBody*> backgroundWalls;
 	p2List<PhysBody*> sensors;
@@ -34,7 +36,7 @@ public:
 private:
 	// win/fail
 	unsigned int ballsLeft;
-
+	bool ballLost = false;
 
 	//Fx
 	uint hitWallFx;

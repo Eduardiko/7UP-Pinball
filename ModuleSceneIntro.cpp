@@ -28,6 +28,11 @@ ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Modul
 	reboundLightAnim.PushBack({ 0,0,0,0 });
 	reboundLightAnim.loop = true;
 	reboundLightAnim.speed = 0.05f;
+
+	ballLostAnim.PushBack({ 0,163,67,20 });
+	ballLostAnim.loop = true;
+	ballLostAnim.speed = 0.01f;
+
 }
 
 ModuleSceneIntro::~ModuleSceneIntro()
@@ -78,15 +83,16 @@ bool ModuleSceneIntro::Start()
 	background.w = SCREEN_WIDTH;
 	background.h = SCREEN_HEIGHT;
 
-	hole.x = 458;
-	hole.y = 537;
-	hole.w = 54;
-	hole.h = 30;
+	hole.x = 484;
+	hole.y = 550;
+	hole.w = 60;
+	hole.h = 27;
 
 	//spawned ball coordinates are in createBall()
 	setSensors();
 	SpawnBall();
 	setWalls();
+	
 
 	return ret;
 }
@@ -133,9 +139,9 @@ update_status ModuleSceneIntro::Update()
 
 	App->renderer->Blit(backgroundAssets, 349, 266, &arrowLightsAnim.GetCurrentFrame(), 1.0f);
 
-	App->renderer->Blit(spriteSheet, 429, 209, &reboundLightAnim.GetCurrentFrame(), 1.0f);
+	/*App->renderer->Blit(spriteSheet, 429, 209, &reboundLightAnim.GetCurrentFrame(), 1.0f);
 	App->renderer->Blit(spriteSheet, 513, 209, &reboundLightAnim.GetCurrentFrame(), 1.0f);
-	App->renderer->Blit(spriteSheet, 470, 173, &reboundLightAnim.GetCurrentFrame(), 1.0f);
+	App->renderer->Blit(spriteSheet, 470, 173, &reboundLightAnim.GetCurrentFrame(), 1.0f);*/
 
 	return UPDATE_CONTINUE;
 }
@@ -149,10 +155,42 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 		if (bodyB->bodyType == _DEAD_SENSOR)
 		{
 			LOG("Ball lost");
+			App->renderer->Blit(spriteSheet, 452, 540, &ballLostAnim.GetCurrentFrame(), 1.0f);
 			App->audio->PlayFx(holeFx);
-			//ball_lost = true;
+			ballLost = true;
 			ballsLeft--;
 		}
+
+		if (bodyB->bodyType == _REBOUNCER1)
+		{
+			LOG("rebouncer 1");
+			App->renderer->Blit(spriteSheet, 429, 209, &reboundLightAnim.GetCurrentFrame(), 1.0f);
+		}
+		if (bodyB->bodyType == _REBOUNCER2)
+		{
+			App->renderer->Blit(spriteSheet, 513, 209, &reboundLightAnim.GetCurrentFrame(), 1.0f);
+		}
+		if (bodyB->bodyType == _REBOUNCER3)
+		{
+			App->renderer->Blit(spriteSheet, 470, 173, &reboundLightAnim.GetCurrentFrame(), 1.0f);
+		}
+
+
+		if (bodyB->bodyType == _LEVEL_CHANGE)
+		{
+			topLevelActive = !topLevelActive;
+
+			if (topLevelActive == true)
+			{
+				LOG("Entering top level");
+			}
+			else
+			{
+				LOG("Exiting top level");
+			}
+		}
+
+
 	}
 
 }
@@ -537,17 +575,13 @@ void ModuleSceneIntro::setSensors()
 	// Set triggers and sensors
 	// Here we create all sensors in the scene
 
-	sensors.add(App->physics->CreateRectangleSensor(SCREEN_WIDTH / 2 - 20, SCREEN_HEIGHT + 80, 150, 80, _DEAD_SENSOR));
-
-	
-	
 	sensors.add(App->physics->CreateRectangleSensor(hole.x, hole.y, hole.w, hole.h, _DEAD_SENSOR));
 	
-
-
-
+	sensors.add(App->physics->CreateRectangleSensor(443, 223, 28,28, _REBOUNCER1));
+	sensors.add(App->physics->CreateRectangleSensor(485, 188, 28,28, _REBOUNCER2));
+	sensors.add(App->physics->CreateRectangleSensor(528, 223, 28,28, _REBOUNCER3));
 	
-
+	sensors.add(App->physics->CreateRectangleSensor(340, 255, 20, 20, _LEVEL_CHANGE));
 	
 }
 
