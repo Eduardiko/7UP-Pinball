@@ -91,7 +91,7 @@ public:
 	PhysBody* CreatePlunge();
 	PhysBody* CreateRectangle(int x, int y, int width, int height);
 	PhysBody* CreateRectangleSensor(int x, int y, int width, int height,PHYSIC_BODY_TYPE sesorType);
-	PhysBody* CreateChain(int x, int y, int* points, int size);
+	PhysBody* CreateChain(int x, int y, int* points, int size, BODY_INDEX index, PHYSIC_BODY_TYPE type);
 	PhysBody* CreateBall(int x, int y, int radius);
 	PhysBody* CreateLeftTrigger();
 	PhysBody* CreateRightTrigger();

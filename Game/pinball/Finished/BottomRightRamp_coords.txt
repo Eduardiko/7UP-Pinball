@@ -1,5 +1,5 @@
 // Pivot 0, 0
-int Background2[28] = {
+int Background[28] = {
 	586, 400,
 	593, 401,
 	592, 426,
@@ -17,7 +17,7 @@ int Background2[28] = {
 };
 
 // Pivot 0.000000, 0.000000
-float Background2[28] = {
+float Background[28] = {
 	0.781333f, 0.714286f,
 	0.790667f, 0.716071f,
 	0.789333f, 0.760714f,

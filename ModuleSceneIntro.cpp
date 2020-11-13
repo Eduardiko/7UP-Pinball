@@ -233,8 +233,6 @@ void ModuleSceneIntro::setWalls() {
 
 	// Bouncing triangles
 
-	
-
 	// Static walls
 
 	int backgroundFloor[188] = {
@@ -334,7 +332,7 @@ void ModuleSceneIntro::setWalls() {
 	514, 552
 	};
 	//backgroundWalls.add(App->physics->CreateChain(0, 0, backgroundFloor, 190, BODY_INDEX::WALL, 0.01f, _NOT_DEFINED));
-	backgroundWalls.add(App->physics->CreateChain(0, 0, backgroundFloor, 188));
+	backgroundWalls.add(App->physics->CreateChain(0, 0, backgroundFloor, 188, BODY_INDEX::WALL, PHYSIC_BODY_TYPE::_WALL));
 	int backgroundLeftFunnel[60] = {
 	337, 267,
 	353, 251,
@@ -367,7 +365,7 @@ void ModuleSceneIntro::setWalls() {
 	313, 233,
 	337, 267
 	};
-	backgroundWalls.add(App->physics->CreateChain(0, 0, backgroundLeftFunnel, 60));
+	backgroundWalls.add(App->physics->CreateChain(0, 0, backgroundLeftFunnel, 60, BODY_INDEX::WALL, PHYSIC_BODY_TYPE::_WALL));
 	int ballStartTunnel[120] = {
 	688, 328,
 	701, 328,
@@ -430,7 +428,7 @@ void ModuleSceneIntro::setWalls() {
 	689, 335,
 	688, 328
 	};
-	backgroundWalls.add(App->physics->CreateChain(0, 0, ballStartTunnel, 120));
+	backgroundWalls.add(App->physics->CreateChain(0, 0, ballStartTunnel, 120, BODY_INDEX::WALL, PHYSIC_BODY_TYPE::_WALL));
 
 	int bottomRightBumper[22] = {
 	553, 404,
@@ -445,7 +443,7 @@ void ModuleSceneIntro::setWalls() {
 	546, 420,
 	553, 404
 	};
-	backgroundWalls.add(App->physics->CreateChain(0, 0, bottomRightBumper, 22));
+	backgroundWalls.add(App->physics->CreateChain(0, 0, bottomRightBumper, 22, BODY_INDEX::BUMPER, PHYSIC_BODY_TYPE::_BUMPER));
 	int bottomLeftBumper[22] = {
 	415, 404,
 	408, 407,
@@ -459,7 +457,7 @@ void ModuleSceneIntro::setWalls() {
 	424, 421,
 	415, 404
 };
-	backgroundWalls.add(App->physics->CreateChain(0, 0, bottomLeftBumper, 22));
+	backgroundWalls.add(App->physics->CreateChain(0, 0, bottomLeftBumper, 22, BODY_INDEX::BUMPER, PHYSIC_BODY_TYPE::_BUMPER));
 	int bottomRightRamp[28] = {
 	586, 400,
 	593, 401,
@@ -476,7 +474,7 @@ void ModuleSceneIntro::setWalls() {
 	584, 419,
 	586, 400
 	};
-	backgroundWalls.add(App->physics->CreateChain(0, 0, bottomRightRamp, 28));
+	backgroundWalls.add(App->physics->CreateChain(0, 0, bottomRightRamp, 28, BODY_INDEX::WALL, PHYSIC_BODY_TYPE::_WALL));
 	int bottomLeftRamp[30] = {
 	381, 402,
 	383, 418,
@@ -494,7 +492,7 @@ void ModuleSceneIntro::setWalls() {
 	374, 405,
 	381, 402
 	};
-	backgroundWalls.add(App->physics->CreateChain(0, 0, bottomLeftRamp, 30));
+	backgroundWalls.add(App->physics->CreateChain(0, 0, bottomLeftRamp, 30, BODY_INDEX::WALL, PHYSIC_BODY_TYPE::_WALL));
 
 	int middleCannon[44] = {
 	452, 277,
@@ -520,7 +518,7 @@ void ModuleSceneIntro::setWalls() {
 	460, 274,
 	452, 277
 	};
-	backgroundWalls.add(App->physics->CreateChain(0, 0, middleCannon, 44));
+	backgroundWalls.add(App->physics->CreateChain(0, 0, middleCannon, 44, BODY_INDEX::WALL, PHYSIC_BODY_TYPE::_WALL));
 
 	int topLeftBoomerang[44] = {
 	388, 230,
@@ -546,7 +544,7 @@ void ModuleSceneIntro::setWalls() {
 	382, 227,
 	388, 230,
 	};
-	backgroundWalls.add(App->physics->CreateChain(0, 0, topLeftBoomerang, 44));
+	backgroundWalls.add(App->physics->CreateChain(0, 0, topLeftBoomerang, 44, BODY_INDEX::WALL, PHYSIC_BODY_TYPE::_WALL));
 	int topRightBoomerang[44] = {
 	544, 148,
 	580, 161,
@@ -571,7 +569,7 @@ void ModuleSceneIntro::setWalls() {
 	538, 143,
 	544, 148
 	};
-	backgroundWalls.add(App->physics->CreateChain(0, 0, topRightBoomerang, 44));
+	backgroundWalls.add(App->physics->CreateChain(0, 0, topRightBoomerang, 44, BODY_INDEX::WALL, PHYSIC_BODY_TYPE::_WALL));
 	int topLeftStick[18] = {
 	466, 112,
 	461, 116,
@@ -583,10 +581,7 @@ void ModuleSceneIntro::setWalls() {
 	471, 116,
 	466, 112,
 	};
-	backgroundWalls.add(App->physics->CreateChain(0, 0, topLeftStick, 18));
-
-	printf("jamon");
-
+	backgroundWalls.add(App->physics->CreateChain(0, 0, topLeftStick, 18, BODY_INDEX::WALL, PHYSIC_BODY_TYPE::_WALL));
 	int topRightStick[20] = {
 	500, 110,
 	497, 116,
@@ -599,7 +594,7 @@ void ModuleSceneIntro::setWalls() {
 	509, 115,
 	500, 110
 	};
-	backgroundWalls.add(App->physics->CreateChain(0, 0, topRightStick, 20));
+	backgroundWalls.add(App->physics->CreateChain(0, 0, topRightStick, 20, BODY_INDEX::WALL, PHYSIC_BODY_TYPE::_WALL));
 }
 
 void ModuleSceneIntro::setSensors()

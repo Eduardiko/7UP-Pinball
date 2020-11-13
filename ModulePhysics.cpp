@@ -133,7 +133,7 @@ PhysBody* ModulePhysics::CreateRectangleSensor(int x, int y, int width, int heig
 	return pbody;
 }
 
-PhysBody* ModulePhysics::CreateChain(int x, int y, int* points, int size)
+PhysBody* ModulePhysics::CreateChain(int x, int y, int* points, int size, BODY_INDEX index, PHYSIC_BODY_TYPE type)
 {
 	b2BodyDef body;
 	body.type = b2_staticBody;
@@ -154,6 +154,7 @@ PhysBody* ModulePhysics::CreateChain(int x, int y, int* points, int size)
 
 	b2FixtureDef fixture;
 	fixture.shape = &shape;
+	fixture.filter.groupIndex = index;
 
 	b->CreateFixture(&fixture);
 
@@ -161,6 +162,7 @@ PhysBody* ModulePhysics::CreateChain(int x, int y, int* points, int size)
 
 	PhysBody* pbody = new PhysBody();
 	pbody->body = b;
+	pbody->bodyType = type;
 	b->SetUserData(pbody);
 	pbody->width = pbody->height = 0;
 
@@ -198,7 +200,7 @@ PhysBody* ModulePhysics::CreateLeftTrigger()
 	b2FixtureDef triggerFixtureDef;
 	triggerFixtureDef.shape = &triggerShape;
 	triggerFixtureDef.density = 1;
-	//triggerFixtureDef.filter.groupIndex = groupIndex::RIGID_PINBALL;
+	triggerFixtureDef.filter.groupIndex = BODY_INDEX::TRIGGER;
 	triggerBody->CreateFixture(&triggerFixtureDef);
 
 	b2Vec2 centerRectangle = triggerBody->GetWorldCenter();
@@ -214,7 +216,7 @@ PhysBody* ModulePhysics::CreateLeftTrigger()
 	pivotCircle.m_radius = PIXEL_TO_METERS(0.5f);
 	b2FixtureDef pivotFixtureDef;
 	pivotFixtureDef.shape = &pivotCircle;
-	//pivotFixtureDef.filter.groupIndex = groupIndex::RIGID_PINBALL;
+	pivotFixtureDef.filter.groupIndex = BODY_INDEX::TRIGGER;
 	pivotBody->CreateFixture(&pivotFixtureDef);
 
 	b2RevoluteJointDef revJointDef;
@@ -267,7 +269,7 @@ PhysBody* ModulePhysics::CreateRightTrigger()
 	b2FixtureDef triggerFixtureDef;
 	triggerFixtureDef.shape = &triggerShape;
 	triggerFixtureDef.density = 1;
-	//triggerFixtureDef.filter.groupIndex = groupIndex::RIGID_PINBALL;
+	triggerFixtureDef.filter.groupIndex = BODY_INDEX::TRIGGER;
 	triggerBody->CreateFixture(&triggerFixtureDef);
 
 	b2Vec2 centerRectangle = triggerBody->GetWorldCenter();
@@ -283,7 +285,7 @@ PhysBody* ModulePhysics::CreateRightTrigger()
 	pivotCircle.m_radius = PIXEL_TO_METERS(0.5f);
 	b2FixtureDef pivotFixtureDef;
 	pivotFixtureDef.shape = &pivotCircle;
-	//pivotFixtureDef.filter.groupIndex = groupIndex::RIGID_PINBALL;
+	pivotFixtureDef.filter.groupIndex = BODY_INDEX::TRIGGER;
 	pivotBody->CreateFixture(&pivotFixtureDef);
 
 	b2RevoluteJointDef revJointDef;
