@@ -33,6 +33,7 @@ ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Modul
 	ballLostAnim.loop = true;
 	ballLostAnim.speed = 0.01f;
 
+	//plunge pushback
 }
 
 ModuleSceneIntro::~ModuleSceneIntro()
@@ -118,6 +119,29 @@ update_status ModuleSceneIntro::Update()
 		CreateBallInMousePos();
 	}
 
+	/*if (start_canon.GetCurrentFrame().x == 801 && !ball_created && inside_start_canon)
+	{
+		for (p2List_item<PhysBody*>* bc = balls.getFirst(); bc != NULL; bc = bc->next)
+		{
+			App->physics->world->DestroyBody(bc->data->body);
+		}
+		balls.clear();
+
+		balls.add(App->physics->CreateBall(485, 608, 14));
+		balls.getLast()->data->listener = this;
+		ball_created = true;
+
+		for (p2List_item<PhysBody*>* bc = balls.getFirst(); bc != NULL; bc = bc->next)
+		{
+			int x, y;
+			bc->data->GetPosition(x, y);
+			bc->data->body->ApplyLinearImpulse(b2Vec2(-2.3f, -2.9f), b2Vec2(x, y), true);
+		}
+		//App->audio->PlayFx();
+		//start_canon_fx
+		if (inside_start_canon)
+			inside_start_canon = false;
+	}*/
 	//render objects
 
 	//ball

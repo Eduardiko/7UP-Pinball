@@ -14,6 +14,9 @@
 
 // Small class to return to other modules to track position and rotation of physics bodies
 
+
+
+
 enum BODY_INDEX
 {
 	BALL,
@@ -24,6 +27,15 @@ enum BODY_INDEX
 
 	NOT_DEFINED
 };
+/*enum groupIndex {
+
+	RIGID_PINBALL = -1,
+	FLIPPERS,
+	PLUNGE_TOP,
+	PLUNGE_BOTTOM,
+
+	NO_DEF
+};*/
 enum PHYSIC_BODY_TYPE
 {
 	_BALL,
@@ -77,6 +89,7 @@ public:
 	PhysBody* CreateBall(int x, int y);
 
 	PhysBody* CreateCircle(int x, int y, int radius);
+	PhysBody* CreatePlunge();
 	PhysBody* CreateRectangle(int x, int y, int width, int height);
 	PhysBody* CreateRectangleSensor(int x, int y, int width, int height,PHYSIC_BODY_TYPE sesorType);
 	PhysBody* CreateChain(int x, int y, int* points, int size);
