@@ -621,16 +621,18 @@ void ModuleSceneIntro::SpawnBall()
 {
 	//create in module physics the next functions
 
-	balls.add(App->physics->CreateBall(350,30));
+	balls.add(App->physics->CreateBall(350,30,9));
 	balls.getLast()->data->listener = this;
 }
 
 void ModuleSceneIntro::CreateBallInMousePos()
 {
 	int x, y;
+	int radius = 9;
+
 	x = App->input->GetMouseX();
 	y = App->input->GetMouseY();
 
-	balls.add(App->physics->CreateBall(x, y));
+	balls.add(App->physics->CreateBall(x, y, radius));
 	balls.getLast()->data->listener = this;
 }

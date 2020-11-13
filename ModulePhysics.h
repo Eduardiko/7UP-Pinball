@@ -86,13 +86,13 @@ public:
 	update_status PostUpdate();
 	bool CleanUp();
 
-	PhysBody* CreateBall(int x, int y);
 
 	PhysBody* CreateCircle(int x, int y, int radius);
 	PhysBody* CreatePlunge();
 	PhysBody* CreateRectangle(int x, int y, int width, int height);
 	PhysBody* CreateRectangleSensor(int x, int y, int width, int height,PHYSIC_BODY_TYPE sesorType);
 	PhysBody* CreateChain(int x, int y, int* points, int size);
+	PhysBody* CreateBall(int x, int y, int radius);
 	PhysBody* CreateLeftTrigger();
 	PhysBody* CreateRightTrigger();
 
