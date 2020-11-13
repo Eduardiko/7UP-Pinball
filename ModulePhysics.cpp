@@ -105,7 +105,7 @@ PhysBody* ModulePhysics::CreateRectangle(int x, int y, int width, int height)
 	return pbody;
 }
 
-PhysBody* ModulePhysics::CreateRectangleSensor(int x, int y, int width, int height,PHYSIC_BODY_TYPE sensorType)
+PhysBody* ModulePhysics::CreateRectangleSensor(int x, int y, int width, int height, PHYSIC_BODY_TYPE sensorType)
 {
 	b2BodyDef body;
 	body.type = b2_staticBody;
@@ -128,6 +128,32 @@ PhysBody* ModulePhysics::CreateRectangleSensor(int x, int y, int width, int heig
 	b->SetUserData(pbody);
 	pbody->width = width;
 	pbody->height = height;
+	pbody->bodyType = sensorType;
+
+	return pbody;
+}
+
+PhysBody* ModulePhysics::CreateCircleSensor(int x, int y, int radius, PHYSIC_BODY_TYPE sensorType)
+{
+	b2BodyDef body;
+	body.type = b2_staticBody;
+	body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
+
+	b2Body* b = world->CreateBody(&body);
+
+	b2CircleShape shape;
+	shape.m_radius = PIXEL_TO_METERS(radius);
+	b2FixtureDef fixture;
+	fixture.shape = &shape;
+	fixture.density = 1.0f;
+	fixture.restitution = 1.2f;
+
+	b->CreateFixture(&fixture);
+
+	PhysBody* pbody = new PhysBody();
+	pbody->body = b;
+	b->SetUserData(pbody);
+	pbody->width = pbody->height = radius;
 	pbody->bodyType = sensorType;
 
 	return pbody;
@@ -180,12 +206,12 @@ PhysBody* ModulePhysics::CreateLeftTrigger()
 	b2PolygonShape triggerShape;
 
 	int leftTriggerCoord[12] = {
-	419, 476,
+	426, 477,
 	419, 484,
 	426, 494,
 	473, 489,
 	473, 481,
-	419, 476,
+	426, 477,
 	};
 
 	b2Vec2 leftTriggerVec[6];
@@ -574,9 +600,13 @@ void ModulePhysics::BeginContact(b2Contact* contact)
 	PhysBody* physA = (PhysBody*)contact->GetFixtureA()->GetBody()->GetUserData();
 	PhysBody* physB = (PhysBody*)contact->GetFixtureB()->GetBody()->GetUserData();
 
-	if(physA && physA->listener != NULL)
-		physA->listener->OnCollision(physA, physB);
+	/*if ((physB->top && physA->bodyType == _TOP_LEVEL) || (!physB->top && physA->bodyType == _FLOOR_LEVEL))
+	{*/
+		if (physA && physA->listener != NULL)
+			physA->listener->OnCollision(physA, physB);
 
-	if(physB && physB->listener != NULL)
-		physB->listener->OnCollision(physB, physA);
+		if (physB && physB->listener != NULL)
+			physB->listener->OnCollision(physB, physA);
+	//}
+
 }

@@ -48,8 +48,9 @@ enum PHYSIC_BODY_TYPE
 	_REBOUNCER2,
 	_REBOUNCER3,
 
-	_LEVEL_CHANGE,
-	
+	_TOP_LEVEL,
+	_FLOOR_LEVEL,
+
 	_NOT_DEFINED
 };
 
@@ -66,6 +67,7 @@ public:
 
 public:
 	int width, height;
+	bool top;
 	b2Body* body;
 	b2Body* body2;
 	b2Joint* joint;
@@ -90,11 +92,12 @@ public:
 	PhysBody* CreateCircle(int x, int y, int radius);
 	PhysBody* CreatePlunge();
 	PhysBody* CreateRectangle(int x, int y, int width, int height);
-	PhysBody* CreateRectangleSensor(int x, int y, int width, int height,PHYSIC_BODY_TYPE sesorType);
 	PhysBody* CreateChain(int x, int y, int* points, int size, BODY_INDEX index, PHYSIC_BODY_TYPE type);
 	PhysBody* CreateBall(int x, int y, int radius);
 	PhysBody* CreateLeftTrigger();
 	PhysBody* CreateRightTrigger();
+	PhysBody* CreateRectangleSensor(int x, int y, int width, int height, PHYSIC_BODY_TYPE sensorType);
+	PhysBody* CreateCircleSensor(int x, int y, int radius, PHYSIC_BODY_TYPE sensorType);
 
 	void BeginContact(b2Contact* contact);
 
