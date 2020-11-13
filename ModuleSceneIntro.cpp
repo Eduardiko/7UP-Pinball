@@ -19,6 +19,7 @@ ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Modul
 
 	arrowLightsAnim.PushBack({ 349,266,290,290 });
 	arrowLightsAnim.PushBack({ 0,0,290,290 });
+
 	//arrowLightsAnim.PushBack({ 0,0,0,0 });
 	arrowLightsAnim.loop = true;
 	arrowLightsAnim.speed = 0.07f;
@@ -34,6 +35,10 @@ ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Modul
 	ballLostAnim.speed = 0.01f;
 
 	//plunge pushback
+	plungeRect.x = 275;
+	plungeRect.y = 116;
+	plungeRect.w = 9;
+	plungeRect.h = 32;
 }
 
 ModuleSceneIntro::~ModuleSceneIntro()
@@ -64,6 +69,8 @@ bool ModuleSceneIntro::Start()
 	bool ret = true;
 
 	spriteSheet = App->textures->Load("pinball/pinballSpritesheet.png");
+
+	debug = App->textures->Load("pinball/debug.png");
 
 	backgroundTex = App->textures->Load("pinball/background.png");
 	background.x = 0;
@@ -162,7 +169,8 @@ update_status ModuleSceneIntro::Update()
 	//App->renderer->Blit(spriteSheet, x, y, &ballAnim.GetCurrentFrame(), 1.0f);
 
 	App->renderer->Blit(backgroundAssets, 349, 266, &arrowLightsAnim.GetCurrentFrame(), 1.0f);
-
+	App->renderer->Blit(spriteSheet, 275, 116, &plungeRect, 1.0f);
+	//App->renderer->Blit(debug, 675, 480, &background, 1.0f);
 	/*App->renderer->Blit(spriteSheet, 429, 209, &reboundLightAnim.GetCurrentFrame(), 1.0f);
 	App->renderer->Blit(spriteSheet, 513, 209, &reboundLightAnim.GetCurrentFrame(), 1.0f);
 	App->renderer->Blit(spriteSheet, 470, 173, &reboundLightAnim.GetCurrentFrame(), 1.0f);*/
