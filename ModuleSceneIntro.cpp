@@ -31,8 +31,14 @@ ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Modul
 	reboundLightAnim.speed = 0.05f;
 
 	ballLostAnim.PushBack({ 0,163,67,20 });
-	ballLostAnim.loop = true;
+	ballLostAnim.PushBack({ 0,0,0,0 });
+	ballLostAnim.loop =false;
 	ballLostAnim.speed = 0.01f;
+
+	thinkClearAnim.PushBack({ 0,73,67,1100 });
+	thinkClearAnim.PushBack({ 0,0,0,0 });
+	thinkClearAnim.loop = true;
+	thinkClearAnim.speed = 0.01f;
 
 	//plunge pushback
 	plungeRect.x = 275;
@@ -99,6 +105,10 @@ bool ModuleSceneIntro::Start()
 	four_dots_fx = App->audio->LoadFx("audio/sound_fx/four_dots.wav");
 	rebouncer_fx = App->audio->LoadFx("audio/sound_fx/yellow_dot.wav");
 
+	App->audio->PlayMusic("audio/music/Nightmaren.ogg");
+
+	
+
 	//SDL_Rect atributtes
 	background.x = 0;
 	background.y = 0;
@@ -138,29 +148,7 @@ update_status ModuleSceneIntro::Update()
 		CreateBallInMousePos();
 	}
 
-	/*if (start_canon.GetCurrentFrame().x == 801 && !ball_created && inside_start_canon)
-	{
-		for (p2List_item<PhysBody*>* bc = balls.getFirst(); bc != NULL; bc = bc->next)
-		{
-			App->physics->world->DestroyBody(bc->data->body);
-		}
-		balls.clear();
 
-		balls.add(App->physics->CreateBall(485, 608, 14));
-		balls.getLast()->data->listener = this;
-		ball_created = true;
-
-		for (p2List_item<PhysBody*>* bc = balls.getFirst(); bc != NULL; bc = bc->next)
-		{
-			int x, y;
-			bc->data->GetPosition(x, y);
-			bc->data->body->ApplyLinearImpulse(b2Vec2(-2.3f, -2.9f), b2Vec2(x, y), true);
-		}
-		//App->audio->PlayFx();
-		//start_canon_fx
-		if (inside_start_canon)
-			inside_start_canon = false;
-	}*/
 	//render objects
 
 	//ball
@@ -182,10 +170,7 @@ update_status ModuleSceneIntro::Update()
 
 	App->renderer->Blit(backgroundAssets, 349, 266, &arrowLightsAnim.GetCurrentFrame(), 1.0f);
 	App->renderer->Blit(spriteSheet, 275, 116, &plungeRect, 1.0f);
-	//App->renderer->Blit(debug, 675, 480, &background, 1.0f);
-	/*App->renderer->Blit(spriteSheet, 429, 209, &reboundLightAnim.GetCurrentFrame(), 1.0f);
-	App->renderer->Blit(spriteSheet, 513, 209, &reboundLightAnim.GetCurrentFrame(), 1.0f);
-	App->renderer->Blit(spriteSheet, 470, 173, &reboundLightAnim.GetCurrentFrame(), 1.0f);*/
+	
 
 	if (reb1) {
 		App->audio->PlayFx(App->scene_intro->rebouncer_fx);
@@ -222,7 +207,8 @@ update_status ModuleSceneIntro::Update()
 		ballsLeft--;
 
 		if (ballsLeft > 0) {
-			SpawnBall();
+			
+			SpawnBall(694,332);
 		}
 
 		ballLost = false;
@@ -239,6 +225,7 @@ update_status ModuleSceneIntro::Update()
 		}
 		balls.clear();
 
+		SpawnBall(485,80);
 		enterFunnel = false;
 
 	}
@@ -262,24 +249,49 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 		
 		if (bodyB->bodyType == _DEAD_SENSOR)
 		{
-			LOG("Ball lost");
-			App->renderer->Blit(spriteSheet, 452, 540, &ballLostAnim.GetCurrentFrame(), 1.0f);
-			App->audio->PlayFx(holeFx);
+			ballLostBlit = true;
+
 			ballLost = true;
-			ballsLeft--;
 		}
 
 		if (bodyB->bodyType == _REBOUNCER1)
 		{
-			//circleBumperCollision(bodyA);
+			reb1 = true;
+			reboundLightAnim.Reset();
 		}
 		if (bodyB->bodyType == _REBOUNCER2)
 		{
-			App->renderer->Blit(spriteSheet, 513, 209, &reboundLightAnim.GetCurrentFrame(), 1.0f);
+			reb2 = true;
+			reboundLightAnim.Reset();
 		}
 		if (bodyB->bodyType == _REBOUNCER3)
 		{
-			App->renderer->Blit(spriteSheet, 470, 173, &reboundLightAnim.GetCurrentFrame(), 1.0f);
+			reb3 = true;
+			reboundLightAnim.Reset();
+		}
+
+		if (bodyB->bodyType == _LEVEL_CHANGE)
+		{
+			topLevelActive = !topLevelActive;
+
+			if (topLevelActive == true)
+			{
+				LOG("Entering top level");
+			}
+			else
+			{
+				LOG("Exiting top level");
+			}
+		}
+
+		if (bodyB->bodyType == _FUNNEL)
+		{
+			enterFunnel = true;
+		}
+
+		if (bodyB->bodyType == _CATAPULT)
+		{
+			holdInCatapult = true;
 		}
 	}
 
@@ -684,6 +696,14 @@ void ModuleSceneIntro::SpawnBall()
 	//create in module physics the next functions
 
 	balls.add(App->physics->CreateBall(350,30,9));
+	balls.getLast()->data->listener = this;
+}
+
+void ModuleSceneIntro::SpawnBall(int x,int y)
+{
+	//create in module physics the next functions
+
+	balls.add(App->physics->CreateBall(x,y,9));
 	balls.getLast()->data->listener = this;
 }
 

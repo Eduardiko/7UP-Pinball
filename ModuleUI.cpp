@@ -134,7 +134,7 @@ void ModuleUI::UnLoad(int font_id)
 
 void ModuleUI::BlitText(int x, int y, int font_id, const char* text) const
 {
-	LOG("printing");
+	//LOG("printing");
 
 	if (text == nullptr || font_id < 0 || font_id >= MAX_FONTS || fonts[font_id].texture == nullptr)
 	{

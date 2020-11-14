@@ -20,6 +20,7 @@ public:
 	void OnCollision(PhysBody* bodyA, PhysBody* bodyB);
 
 	void SpawnBall();
+	void SpawnBall(int x, int y);
 	void CreateBallInMousePos();
 	void setWalls();
 	void setSensors();
@@ -39,6 +40,7 @@ public:
 
 private:
 	// win/fail
+
 	unsigned int ballsLeft;
 	bool ballLost = false;
 
