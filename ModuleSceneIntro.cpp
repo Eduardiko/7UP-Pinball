@@ -687,9 +687,9 @@ void ModuleSceneIntro::setSensors()
 
 	sensors.add(App->physics->CreateRectangleSensor(hole.x, hole.y, hole.w, hole.h, _DEAD_SENSOR));
 
-	sensors.add(App->physics->CreateRectangleSensor(443, 223, 28, 28, _REBOUNCER1));
-	sensors.add(App->physics->CreateRectangleSensor(485, 188, 28, 28, _REBOUNCER2));
-	sensors.add(App->physics->CreateRectangleSensor(528, 223, 28, 28, _REBOUNCER3));
+	sensors.add(App->physics->CreateCircleSensor(442, 223, 10, _REBOUNCER1));
+	sensors.add(App->physics->CreateCircleSensor(485, 188, 10, _REBOUNCER2));
+	sensors.add(App->physics->CreateCircleSensor(526, 223, 10, _REBOUNCER3));
 
 	sensors.add(App->physics->CreateRectangleSensor(340, 255, 20, 20, _LEVEL_CHANGE));
 
