@@ -48,7 +48,7 @@ ModuleSceneIntro::~ModuleSceneIntro()
 bool ModuleSceneIntro::Start()
 {
 	ballsLeft = 3;
-	App->UI->score = 0;
+	App->UI->halfScoreLeft = 0;
 
 	if (!App->audio->IsEnabled() ) {
 		App->audio->Enable();
@@ -98,7 +98,7 @@ bool ModuleSceneIntro::Start()
 
 	//spawned ball coordinates are in createBall()
 	setSensors();
-	//SpawnBall();
+	SpawnBall();
 	setWalls();
 	
 
@@ -161,7 +161,7 @@ update_status ModuleSceneIntro::Update()
 		ballAnim.speed = vel / 15;
 
 		App->renderer->Blit(spriteSheet, x-2, y-2, &ballAnim.GetCurrentFrame(), 1.0f);
-
+		
 		ball_item = ball_item->next;
 	}
 	//App->renderer->Blit(spriteSheet, x, y, &ballAnim.GetCurrentFrame(), 1.0f);

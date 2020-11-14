@@ -35,6 +35,7 @@ public:
 	SDL_Texture* backgroundTex;
 	SDL_Rect background;
 	SDL_Rect plungeRect;
+
 private:
 	// win/fail
 	unsigned int ballsLeft;
@@ -44,7 +45,7 @@ private:
 	uint hitWallFx;
 	uint holeFx;
 
-	SDL_Texture *spriteSheet;
+	SDL_Texture* spriteSheet;
 	SDL_Texture* backgroundAssets;
 	SDL_Texture* debug;
 	Animation ballAnim, arrowLightsAnim,reboundLightAnim,ballLostAnim;
