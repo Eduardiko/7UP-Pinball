@@ -187,8 +187,7 @@ update_status ModuleSceneIntro::Update()
 
 	App->renderer->Blit(spriteSheet, 245, 70, &topTexRect, 1.0f);
 	App->renderer->Blit(backgroundAssets, 349, 266, &arrowLightsAnim.GetCurrentFrame(), 1.0f);
-	App->renderer->Blit(spriteSheet, 275, 116, &plungeRect, 1.0f);
-
+	
 	App->renderer->Blit(spriteSheet, 663, 457, &plungeRect, 1.0f);
 	App->renderer->Blit(spriteSheet, 665, 525, &plungeCompRect, 1.0f);
 	App->renderer->Blit(spriteSheet, 365, 438, &littlePlungeRect, 1.0f);
