@@ -31,8 +31,18 @@ ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Modul
 	reboundLightAnim.speed = 0.05f;
 
 	ballLostAnim.PushBack({ 0,163,67,20 });
-	ballLostAnim.loop = true;
+	ballLostAnim.loop = false;
 	ballLostAnim.speed = 0.01f;
+
+	ballLostAnim.PushBack({ 0,163,67,20 });
+	ballLostAnim.PushBack({ 0,0,0,0 });
+	ballLostAnim.loop = false;
+	ballLostAnim.speed = 0.01f;
+
+	thinkClearAnim.PushBack({ 0,73,67,1100 });
+	thinkClearAnim.PushBack({ 0,0,0,0 });
+	thinkClearAnim.loop = true;
+	thinkClearAnim.speed = 0.01f;
 
 	//plunge pushback
 	plungeRect.x = 275;
@@ -83,7 +93,22 @@ bool ModuleSceneIntro::Start()
 	else
 		LOG("bg assets loaded succesfully!")
 
-	hitWallFx = App->audio->LoadFx(".wav");
+	//load Fx
+
+	hole_in_fx = App->audio->LoadFx("audio/sound_fx/hole_in.wav");
+	hole_out_fx = App->audio->LoadFx("audio/sound_fx/hole_out.wav");
+	triangle_fx = App->audio->LoadFx("audio/sound_fx/bouncing_triangle.wav");
+	start_canon_fx = App->audio->LoadFx("audio/sound_fx/canon_shot.wav");
+	lose_fx = App->audio->LoadFx("audio/sound_fx/lose.wav");
+	five_colors_fx = App->audio->LoadFx("audio/sound_fx/five_colors.wav");
+	bonus_fx = App->audio->LoadFx("audio/sound_fx/yellow_dot.wav");
+	win_fx = App->audio->LoadFx("audio/sound_fx/win.wav");
+	monster_roar_fx = App->audio->LoadFx("audio/sound_fx/monster_roar.wav");
+	hit_wall_fx = App->audio->LoadFx("audio/sound_fx/hit_wall.wav");
+	four_dots_fx = App->audio->LoadFx("audio/sound_fx/four_dots.wav");
+	rebouncer_fx = App->audio->LoadFx("audio/sound_fx/yellow_dot.wav");
+
+	App->audio->PlayMusic("audio/music/Nightmaren.ogg");
 
 	//SDL_Rect atributtes
 	background.x = 0;
@@ -134,29 +159,6 @@ update_status ModuleSceneIntro::Update()
 		CreateBallInMousePos();
 	}
 
-	/*if (start_canon.GetCurrentFrame().x == 801 && !ball_created && inside_start_canon)
-	{
-		for (p2List_item<PhysBody*>* bc = balls.getFirst(); bc != NULL; bc = bc->next)
-		{
-			App->physics->world->DestroyBody(bc->data->body);
-		}
-		balls.clear();
-
-		balls.add(App->physics->CreateBall(485, 608, 14));
-		balls.getLast()->data->listener = this;
-		ball_created = true;
-
-		for (p2List_item<PhysBody*>* bc = balls.getFirst(); bc != NULL; bc = bc->next)
-		{
-			int x, y;
-			bc->data->GetPosition(x, y);
-			bc->data->body->ApplyLinearImpulse(b2Vec2(-2.3f, -2.9f), b2Vec2(x, y), true);
-		}
-		//App->audio->PlayFx();
-		//start_canon_fx
-		if (inside_start_canon)
-			inside_start_canon = false;
-	}*/
 	//render objects
 
 	//ball
@@ -181,10 +183,71 @@ update_status ModuleSceneIntro::Update()
 
 	App->renderer->Blit(spriteSheet, 663, 457, &plungeRect, 1.0f);
 	App->renderer->Blit(spriteSheet, 665, 525, &plungeCompRect, 1.0f);
-	//App->renderer->Blit(debug, 675, 480, &background, 1.0f);
-	/*App->renderer->Blit(spriteSheet, 429, 209, &reboundLightAnim.GetCurrentFrame(), 1.0f);
-	App->renderer->Blit(spriteSheet, 513, 209, &reboundLightAnim.GetCurrentFrame(), 1.0f);
-	App->renderer->Blit(spriteSheet, 470, 173, &reboundLightAnim.GetCurrentFrame(), 1.0f);*/
+	
+
+	if (reb1) {
+		App->audio->PlayFx(App->scene_intro->rebouncer_fx);
+		App->renderer->Blit(spriteSheet, 429, 209, &reboundLightAnim.GetCurrentFrame(), 1.0f);
+	}
+
+	if (reb2) {
+
+		App->renderer->Blit(spriteSheet, 470, 173, &reboundLightAnim.GetCurrentFrame(), 1.0f);
+	}
+
+	if (reb3) {
+		App->renderer->Blit(spriteSheet, 513, 209, &reboundLightAnim.GetCurrentFrame(), 1.0f);
+	}
+	if (reboundLightAnim.Finished())
+		reb1 = reb2 = reb3 = false;
+
+	if (ballLostBlit)
+	{
+		App->renderer->Blit(spriteSheet, 452, 540, &ballLostAnim.GetCurrentFrame(), 1.0f);
+		App->audio->PlayFx(holeFx);
+	}
+
+	if (ballLost)
+	{
+		App->audio->PlayFx(App->scene_intro->hole_in_fx);
+
+		for (p2List_item<PhysBody*>* bc = balls.getFirst(); bc != NULL; bc = bc->next)
+		{
+			App->physics->world->DestroyBody(bc->data->body);
+		}
+		balls.clear();
+
+		ballsLeft--;
+
+		if (ballsLeft > 0) {
+			SpawnBall();
+		}
+
+		ballLost = false;
+	}
+
+	if (enterFunnel)
+	{
+		App->audio->PlayFx(hole_in_fx);
+		SDL_Delay(1000);
+
+		for (p2List_item<PhysBody*>* bc = balls.getFirst(); bc != NULL; bc = bc->next)
+		{
+			App->physics->world->DestroyBody(bc->data->body);
+		}
+		balls.clear();
+
+		enterFunnel = false;
+
+	}
+
+	if (holdInCatapult)
+	{
+		SDL_Delay(500);
+		holdInCatapult = false;
+	}
+
+	App->renderer->Blit(spriteSheet, 245, 40, &thinkClearAnim.GetCurrentFrame(), 1.0f);
 
 	return UPDATE_CONTINUE;
 }
@@ -197,24 +260,51 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 		
 		if (bodyB->bodyType == _DEAD_SENSOR)
 		{
-			LOG("Ball lost");
-			App->renderer->Blit(spriteSheet, 452, 540, &ballLostAnim.GetCurrentFrame(), 1.0f);
-			App->audio->PlayFx(holeFx);
+			ballLostBlit = true;
+
 			ballLost = true;
-			ballsLeft--;
+
 		}
 
 		if (bodyB->bodyType == _REBOUNCER1)
 		{
-			//circleBumperCollision(bodyA);
+			reb1 = true;
+			reboundLightAnim.Reset();
 		}
 		if (bodyB->bodyType == _REBOUNCER2)
 		{
-			App->renderer->Blit(spriteSheet, 513, 209, &reboundLightAnim.GetCurrentFrame(), 1.0f);
+			reb2 = true;
+			reboundLightAnim.Reset();
 		}
 		if (bodyB->bodyType == _REBOUNCER3)
 		{
-			App->renderer->Blit(spriteSheet, 470, 173, &reboundLightAnim.GetCurrentFrame(), 1.0f);
+			reb3 = true;
+			reboundLightAnim.Reset();
+		}
+
+
+		if (bodyB->bodyType == _LEVEL_CHANGE)
+		{
+			topLevelActive = !topLevelActive;
+
+			if (topLevelActive == true)
+			{
+				LOG("Entering top level");
+			}
+			else
+			{
+				LOG("Exiting top level");
+			}
+		}
+
+		if (bodyB->bodyType == _FUNNEL)
+		{
+			enterFunnel = true;
+		}
+
+		if (bodyB->bodyType == _CATAPULT)
+		{
+			holdInCatapult = true;
 		}
 	}
 
@@ -596,10 +686,22 @@ void ModuleSceneIntro::setSensors()
 	// Here we create all sensors in the scene
 
 	sensors.add(App->physics->CreateRectangleSensor(hole.x, hole.y, hole.w, hole.h, _DEAD_SENSOR));
-	
-	sensors.add(App->physics->CreateCircleSensor(442, 223, 10, _REBOUNCER1));
-	sensors.add(App->physics->CreateCircleSensor(485, 188, 10, _REBOUNCER2));
-	sensors.add(App->physics->CreateCircleSensor(526, 223, 10, _REBOUNCER3));
+
+	sensors.add(App->physics->CreateRectangleSensor(443, 223, 28, 28, _REBOUNCER1));
+	sensors.add(App->physics->CreateRectangleSensor(485, 188, 28, 28, _REBOUNCER2));
+	sensors.add(App->physics->CreateRectangleSensor(528, 223, 28, 28, _REBOUNCER3));
+
+	sensors.add(App->physics->CreateRectangleSensor(340, 255, 20, 20, _LEVEL_CHANGE));
+
+	sensors.add(App->physics->CreateRectangleSensor(333, 162, 5, 5, _FUNNEL));
+
+	//CATAPULTA
+	sensors.add(App->physics->CreateRectangleSensor(632, 250, 20, 20, _CATAPULT));
+	sensors.add(App->physics->CreateRectangleSensor(482, 300, 28, 28, _FUNNEL));
+
+	sensors.add(App->physics->CreateRectangleSensor(363, 416, 28, 28, _MINI_PLUNGE));
+	sensors.add(App->physics->CreateRectangleSensor(604, 416, 28, 28, _REBOUNCER3));
+
 	
 }
 
@@ -608,6 +710,14 @@ void ModuleSceneIntro::SpawnBall()
 	//create in module physics the next functions
 
 	balls.add(App->physics->CreateBall(350,30,9));
+	balls.getLast()->data->listener = this;
+}
+
+void ModuleSceneIntro::SpawnBall(int x,int y)
+{
+	//create in module physics the next functions
+
+	balls.add(App->physics->CreateBall(x,y, 9));
 	balls.getLast()->data->listener = this;
 }
 
