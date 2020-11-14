@@ -83,7 +83,21 @@ bool ModuleSceneIntro::Start()
 	else
 		LOG("bg assets loaded succesfully!")
 
+	//Load Fx
 	hitWallFx = App->audio->LoadFx(".wav");
+
+	hole_in_fx = App->audio->LoadFx("audio/sound_fx/hole_in.wav");
+	hole_out_fx = App->audio->LoadFx("audio/sound_fx/hole_out.wav");
+	triangle_fx = App->audio->LoadFx("audio/sound_fx/bouncing_triangle.wav");
+	start_canon_fx = App->audio->LoadFx("audio/sound_fx/canon_shot.wav");
+	lose_fx = App->audio->LoadFx("audio/sound_fx/lose.wav");
+	five_colors_fx = App->audio->LoadFx("audio/sound_fx/five_colors.wav");
+	bonus_fx = App->audio->LoadFx("audio/sound_fx/yellow_dot.wav");
+	win_fx = App->audio->LoadFx("audio/sound_fx/win.wav");
+	monster_roar_fx = App->audio->LoadFx("audio/sound_fx/monster_roar.wav");
+	hit_wall_fx = App->audio->LoadFx("audio/sound_fx/hit_wall.wav");
+	four_dots_fx = App->audio->LoadFx("audio/sound_fx/four_dots.wav");
+	rebouncer_fx = App->audio->LoadFx("audio/sound_fx/yellow_dot.wav");
 
 	//SDL_Rect atributtes
 	background.x = 0;
@@ -172,6 +186,70 @@ update_status ModuleSceneIntro::Update()
 	/*App->renderer->Blit(spriteSheet, 429, 209, &reboundLightAnim.GetCurrentFrame(), 1.0f);
 	App->renderer->Blit(spriteSheet, 513, 209, &reboundLightAnim.GetCurrentFrame(), 1.0f);
 	App->renderer->Blit(spriteSheet, 470, 173, &reboundLightAnim.GetCurrentFrame(), 1.0f);*/
+
+	if (reb1) {
+		App->audio->PlayFx(App->scene_intro->rebouncer_fx);
+		App->renderer->Blit(spriteSheet, 429, 209, &reboundLightAnim.GetCurrentFrame(), 1.0f);
+	}
+
+	if (reb2) {
+
+		App->renderer->Blit(spriteSheet, 470, 173, &reboundLightAnim.GetCurrentFrame(), 1.0f);
+	}
+
+	if (reb3) {
+		App->renderer->Blit(spriteSheet, 513, 209, &reboundLightAnim.GetCurrentFrame(), 1.0f);
+	}
+	if (reboundLightAnim.Finished())
+		reb1 = reb2 = reb3 = false;
+
+	if (ballLostBlit)
+	{
+		App->renderer->Blit(spriteSheet, 452, 540, &ballLostAnim.GetCurrentFrame(), 1.0f);
+		App->audio->PlayFx(holeFx);
+	}
+
+	if (ballLost)
+	{
+		App->audio->PlayFx(App->scene_intro->hole_in_fx);
+
+		for (p2List_item<PhysBody*>* bc = balls.getFirst(); bc != NULL; bc = bc->next)
+		{
+			App->physics->world->DestroyBody(bc->data->body);
+		}
+		balls.clear();
+
+		ballsLeft--;
+
+		if (ballsLeft > 0) {
+			SpawnBall();
+		}
+
+		ballLost = false;
+	}
+
+	if (enterFunnel)
+	{
+		App->audio->PlayFx(hole_in_fx);
+		SDL_Delay(1000);
+
+		for (p2List_item<PhysBody*>* bc = balls.getFirst(); bc != NULL; bc = bc->next)
+		{
+			App->physics->world->DestroyBody(bc->data->body);
+		}
+		balls.clear();
+
+		enterFunnel = false;
+
+	}
+
+	if (holdInCatapult)
+	{
+		SDL_Delay(500);
+		holdInCatapult = false;
+	}
+
+	App->renderer->Blit(spriteSheet, 245, 40, &thinkClearAnim.GetCurrentFrame(), 1.0f);
 
 	return UPDATE_CONTINUE;
 }
@@ -583,10 +661,21 @@ void ModuleSceneIntro::setSensors()
 	// Here we create all sensors in the scene
 
 	sensors.add(App->physics->CreateRectangleSensor(hole.x, hole.y, hole.w, hole.h, _DEAD_SENSOR));
-	
-	sensors.add(App->physics->CreateCircleSensor(442, 223, 10, _REBOUNCER1));
-	sensors.add(App->physics->CreateCircleSensor(485, 188, 10, _REBOUNCER2));
-	sensors.add(App->physics->CreateCircleSensor(526, 223, 10, _REBOUNCER3));
+
+	sensors.add(App->physics->CreateRectangleSensor(443, 223, 28, 28, _REBOUNCER1));
+	sensors.add(App->physics->CreateRectangleSensor(485, 188, 28, 28, _REBOUNCER2));
+	sensors.add(App->physics->CreateRectangleSensor(528, 223, 28, 28, _REBOUNCER3));
+
+	sensors.add(App->physics->CreateRectangleSensor(340, 255, 20, 20, _LEVEL_CHANGE));
+
+	sensors.add(App->physics->CreateRectangleSensor(333, 162, 5, 5, _FUNNEL));
+
+	//CATAPULTA
+	sensors.add(App->physics->CreateRectangleSensor(632, 250, 20, 20, _CATAPULT));
+	sensors.add(App->physics->CreateRectangleSensor(482, 300, 28, 28, _FUNNEL));
+
+	sensors.add(App->physics->CreateRectangleSensor(363, 416, 28, 28, _MINI_PLUNGE));
+	sensors.add(App->physics->CreateRectangleSensor(604, 416, 28, 28, _REBOUNCER3));
 	
 }
 
