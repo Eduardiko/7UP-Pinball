@@ -19,7 +19,7 @@ bool ModulePlayer::Start()
 
 	leftTrigger = App->physics->CreateLeftTrigger();
 	rightTrigger = App->physics->CreateRightTrigger();
-
+	plungeTrigger = App->physics->CreatePlunge();
 	spriteSheet = App->textures->Load("pinball/pinballSpritesheet.png");
 
 	lTriggerRect.x = 0;
@@ -69,6 +69,10 @@ update_status ModulePlayer::Update()
 		rightTrigger->body->ApplyTorque(-15.0f, true);
 	}
 
+	if (App->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
+	{
+		plungeTrigger->body->ApplyForceToCenter(b2Vec2(0, 250), true);
+	}
 	return UPDATE_CONTINUE;
 }
 

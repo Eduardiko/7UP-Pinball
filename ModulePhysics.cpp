@@ -365,40 +365,40 @@ PhysBody* ModulePhysics::CreateBall(int x, int y, int radius)
 
 PhysBody* ModulePhysics::CreatePlunge()
 {
-	b2BodyDef bodyA;
-	bodyA.type = b2_dynamicBody;
-	bodyA.position.Set(PIXEL_TO_METERS(487), PIXEL_TO_METERS(830));
+	b2BodyDef plungeBodyDef;
+	plungeBodyDef.type = b2_dynamicBody;
+	plungeBodyDef.position.Set(PIXEL_TO_METERS(670), PIXEL_TO_METERS(470));
 
-	b2Body* b1 = world->CreateBody(&bodyA);
+	b2Body* plungeBody = world->CreateBody(&plungeBodyDef);
 	b2PolygonShape box;
-	box.SetAsBox(PIXEL_TO_METERS(20) * 0.5f, PIXEL_TO_METERS(4) * 0.5f);
+	box.SetAsBox(PIXEL_TO_METERS(20* 0.5f), PIXEL_TO_METERS(11 * 0.5f));
 
-	b2FixtureDef fixture;
-	fixture.shape = &box;
-	fixture.density = 20.0f;
-	fixture.restitution = 0.1f;
-	//fixture.filter.groupIndex = groupIndex::PLUNGE_BOTTOM;
+	b2FixtureDef plungeFixture;
+	plungeFixture.shape = &box;
+	plungeFixture.density = 20.0f;
+	plungeFixture.restitution = 0.1f;
+	plungeFixture.filter.groupIndex = BODY_INDEX::PLUNGE;
 
-	b1->CreateFixture(&fixture);
+	plungeBody->CreateFixture(&plungeFixture);
 
-	b2BodyDef bodyB;
-	bodyB.type = b2_staticBody;
-	bodyB.position.Set(PIXEL_TO_METERS(487), PIXEL_TO_METERS(811));
+	b2BodyDef plungeBodyBDef;
+	plungeBodyBDef.type = b2_staticBody;
+	plungeBodyBDef.position.Set(PIXEL_TO_METERS(670), PIXEL_TO_METERS(500));
 
-	b2Body* b2 = world->CreateBody(&bodyB);
+	b2Body* plungeBodyB = world->CreateBody(&plungeBodyBDef);
 	b2PolygonShape box1;
-	box1.SetAsBox(PIXEL_TO_METERS(20) * 0.5f, PIXEL_TO_METERS(20) * 0.5f);
+	box1.SetAsBox(PIXEL_TO_METERS(20 * 0.5f), PIXEL_TO_METERS(11 * 0.5f));
 
-	b2FixtureDef fixture2;
-	fixture2.shape = &box1;
-	fixture2.density = 1.0f;
-	//fixture2.filter.groupIndex = groupIndex::BALL;
+	b2FixtureDef plungeFixture2;
+	plungeFixture2.shape = &box1;
+	plungeFixture2.density = 1.0f;
+	plungeFixture2.filter.groupIndex = BODY_INDEX::PLUNGE;
 
-	b2->CreateFixture(&fixture2);
+	plungeBodyB->CreateFixture(&plungeFixture2);
 
 	b2PrismaticJointDef jointDef;
-	jointDef.bodyA = b2;
-	jointDef.bodyB = b1;
+	jointDef.bodyA = plungeBodyB;
+	jointDef.bodyB = plungeBody;
 	jointDef.collideConnected = true;
 
 	jointDef.localAxisA.Set(0, 1);
@@ -415,9 +415,9 @@ PhysBody* ModulePhysics::CreatePlunge()
 	world->CreateJoint(&jointDef);
 
 	PhysBody* pbody = new PhysBody();
-	pbody->body = b1;
-	pbody->body2 = b2;
-	b1->SetUserData(pbody);
+	pbody->body = plungeBody;
+	pbody->body2 = plungeBodyB;
+	plungeBody->SetUserData(pbody);
 
 	return pbody;
 }

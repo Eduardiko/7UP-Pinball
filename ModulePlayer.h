@@ -23,6 +23,8 @@ public:
 	PhysBody* leftTrigger;
 	SDL_Rect lTriggerRect;
 
+	PhysBody* plungeTrigger;
+	
 	SDL_Texture* spriteSheet;
 
 	PhysBody* elDisparador;
