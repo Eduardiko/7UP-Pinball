@@ -35,6 +35,7 @@ public:
 	SDL_Texture* backgroundTex;
 	SDL_Rect background;
 	SDL_Rect plungeRect;
+	SDL_Rect plungeCompRect;
 private:
 	// win/fail
 	unsigned int ballsLeft;

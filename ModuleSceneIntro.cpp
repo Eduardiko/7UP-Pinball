@@ -96,6 +96,16 @@ bool ModuleSceneIntro::Start()
 	hole.w = 60;
 	hole.h = 27;
 
+	plungeRect.x = 284;
+	plungeRect.y = 72;
+	plungeRect.w = 20;
+	plungeRect.h = 76;
+
+	plungeCompRect.x = 233;
+	plungeCompRect.y = 193;
+	plungeCompRect.w = 67;
+	plungeCompRect.h = 21;
+
 	//spawned ball coordinates are in createBall()
 	setSensors();
 	//SpawnBall();
@@ -168,6 +178,9 @@ update_status ModuleSceneIntro::Update()
 
 	App->renderer->Blit(backgroundAssets, 349, 266, &arrowLightsAnim.GetCurrentFrame(), 1.0f);
 	App->renderer->Blit(spriteSheet, 275, 116, &plungeRect, 1.0f);
+
+	App->renderer->Blit(spriteSheet, 663, 457, &plungeRect, 1.0f);
+	App->renderer->Blit(spriteSheet, 665, 525, &plungeCompRect, 1.0f);
 	//App->renderer->Blit(debug, 675, 480, &background, 1.0f);
 	/*App->renderer->Blit(spriteSheet, 429, 209, &reboundLightAnim.GetCurrentFrame(), 1.0f);
 	App->renderer->Blit(spriteSheet, 513, 209, &reboundLightAnim.GetCurrentFrame(), 1.0f);
