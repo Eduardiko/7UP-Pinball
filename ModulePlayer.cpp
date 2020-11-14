@@ -3,6 +3,7 @@
 #include "ModulePlayer.h"
 #include "ModuleRender.h"
 #include "ModuleInput.h"
+#include "ModuleUI.h"
 
 ModulePlayer::ModulePlayer(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
@@ -52,7 +53,10 @@ update_status ModulePlayer::Update()
 	App->renderer->Blit(spriteSheet, 494, 476, &rTriggerRect, 1.0f, rightTrigger->GetRotation(), anchorRVec.x + 36, anchorRVec.y - 4);
 
 	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
+	{
 		leftTrigger->body->ApplyTorque(-65.0f, true);
+		App->UI->halfScoreRight++;
+	}
 	else
 	{
 		leftTrigger->body->ApplyTorque(15.0f, true);

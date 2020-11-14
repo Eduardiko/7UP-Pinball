@@ -29,6 +29,9 @@ bool ModuleUI::Start()
 	char lookupTable[] = { "0123456789" };
 	font = Load("pinball/font.png", lookupTable, 1);
 
+	halfScoreRight = 999900;
+	halfScoreLeft = 999999;
+
 	return ret;
 }
 
@@ -37,12 +40,22 @@ update_status ModuleUI::Update()
 {
 	update_status status = UPDATE_CONTINUE;
 	
-	halfScoreRight = 123456;
+	if (halfScoreRight == 1000000)
+	{
+		halfScoreRight = 0;
+		halfScoreLeft++;
+	}
+
+	if (halfScoreLeft == 1000000)
+	{
+		halfScoreRight = 0;
+		halfScoreLeft = 0;
+	}
+
 	char scoreTextRight[DYNAMIC_TEXT_LEN + 1];
 	IntToString(scoreTextRight, halfScoreRight);
 	RenderDynamicText(scoreTextRight, 491, 29, font, true);
 
-	halfScoreLeft = 123456;
 	char scoreTextLeft[DYNAMIC_TEXT_LEN + 1];
 	IntToString(scoreTextLeft, halfScoreLeft);
 	RenderDynamicText(scoreTextLeft, 347, 29, font, true);
@@ -193,9 +206,6 @@ void ModuleUI::IntToString(char* buffer, int k) {
 void ModuleUI::RenderDynamicText(char* text, int x, int y, int fontIndex, bool inverse) {
 	int i = 0;
 
-	for (; i < DYNAMIC_TEXT_LEN; i++) {
-		if (text[i] != '0') break;
-	}
 	if (i == DYNAMIC_TEXT_LEN) {
 		BlitText(x - (i * 12), y, fontIndex, "0");
 	}
