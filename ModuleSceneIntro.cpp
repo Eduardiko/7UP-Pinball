@@ -11,7 +11,6 @@
 ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
 	backgroundTex = NULL;
-	
 
 	ballAnim.PushBack({ 220, 126, 22, 22 });
 	ballAnim.loop = true;
@@ -39,16 +38,16 @@ ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Modul
 	ballLostAnim.loop = false;
 	ballLostAnim.speed = 0.01f;
 
-	thinkClearAnim.PushBack({ 0,73,67,1100 });
-	thinkClearAnim.PushBack({ 0,0,0,0 });
-	thinkClearAnim.loop = true;
-	thinkClearAnim.speed = 0.01f;
-
 	//plunge pushback
 	plungeRect.x = 275;
 	plungeRect.y = 116;
 	plungeRect.w = 9;
 	plungeRect.h = 32;
+
+	topTexRect.x = 1;
+	topTexRect.y = 73;
+	topTexRect.w = 110;
+	topTexRect.h = 90;
 }
 
 ModuleSceneIntro::~ModuleSceneIntro()
@@ -58,7 +57,8 @@ ModuleSceneIntro::~ModuleSceneIntro()
 bool ModuleSceneIntro::Start()
 {
 	ballsLeft = 3;
-	App->UI->halfScoreLeft = 0;
+	App->UI->halfScoreRight = 0;
+
 
 	if (!App->audio->IsEnabled() ) {
 		App->audio->Enable();
@@ -176,8 +176,8 @@ update_status ModuleSceneIntro::Update()
 		
 		ball_item = ball_item->next;
 	}
-	//App->renderer->Blit(spriteSheet, x, y, &ballAnim.GetCurrentFrame(), 1.0f);
 
+	App->renderer->Blit(spriteSheet, 245, 70, &topTexRect, 1.0f);
 	App->renderer->Blit(backgroundAssets, 349, 266, &arrowLightsAnim.GetCurrentFrame(), 1.0f);
 	App->renderer->Blit(spriteSheet, 275, 116, &plungeRect, 1.0f);
 
@@ -247,8 +247,6 @@ update_status ModuleSceneIntro::Update()
 		holdInCatapult = false;
 	}
 
-	App->renderer->Blit(spriteSheet, 245, 40, &thinkClearAnim.GetCurrentFrame(), 1.0f);
-
 	return UPDATE_CONTINUE;
 }
 
@@ -258,6 +256,8 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 	for (p2List_item<PhysBody*>* bc = balls.getFirst(); bc != NULL; bc = bc->next)
 	{
 		
+		
+
 		if (bodyB->bodyType == _DEAD_SENSOR)
 		{
 			ballLostBlit = true;
@@ -513,95 +513,181 @@ void ModuleSceneIntro::setWalls() {
 	};
 	backgroundWalls.add(App->physics->CreateChain(0, 0, ballStartTunnel, 120, BODY_INDEX::WALL, PHYSIC_BODY_TYPE::_TOP_LEVEL));
 
-	int bottomRightBumper[22] = {
-	553, 404,
-	560, 405,
-	560, 419,
-	556, 430,
-	549, 443,
-	540, 453,
-	531, 452,
-	533, 443,
-	539, 433,
-	546, 420,
-	553, 404
+	int bottomRightBumper[60] = {
+	556, 403,
+	552, 405,
+	550, 408,
+	549, 412,
+	547, 416,
+	545, 419,
+	543, 423,
+	540, 428,
+	539, 430,
+	537, 434,
+	534, 438,
+	532, 443,
+	532, 448,
+	532, 452,
+	534, 454,
+	538, 455,
+	542, 452,
+	545, 449,
+	549, 445,
+	552, 441,
+	555, 437,
+	557, 432,
+	559, 427,
+	561, 423,
+	562, 418,
+	562, 414,
+	562, 410,
+	561, 406,
+	559, 404,
+	556, 403
 	};
-	backgroundWalls.add(App->physics->CreateChain(0, 0, bottomRightBumper, 22, BODY_INDEX::BUMPER, PHYSIC_BODY_TYPE::_FLOOR_LEVEL));
-	int bottomLeftBumper[22] = {
-	415, 404,
-	408, 407,
+	backgroundWalls.add(App->physics->CreateChain(0, 0, bottomRightBumper, 60, BODY_INDEX::BUMPER, PHYSIC_BODY_TYPE::_FLOOR_LEVEL));
+	int bottomLeftBumper[48] = {
+	410, 404,
+	413, 403,
+	417, 405,
+	420, 412,
+	423, 419,
+	427, 427,
+	430, 431,
+	433, 436,
+	437, 442,
+	438, 445,
+	438, 450,
+	436, 453,
+	433, 454,
+	430, 453,
+	426, 450,
+	422, 447,
+	419, 442,
+	416, 437,
+	413, 431,
+	411, 426,
 	409, 419,
-	414, 433,
-	419, 439,
-	425, 448,
-	432, 452,
-	437, 446,
-	430, 434,
-	424, 421,
-	415, 404
+	408, 412,
+	408, 408,
+	410, 404
 };
-	backgroundWalls.add(App->physics->CreateChain(0, 0, bottomLeftBumper, 22, BODY_INDEX::BUMPER, PHYSIC_BODY_TYPE::_FLOOR_LEVEL));
-	int bottomRightRamp[28] = {
-	586, 400,
-	593, 401,
-	592, 426,
-	587, 447,
-	576, 469,
-	564, 481,
-	555, 486,
-	546, 477,
-	552, 469,
-	561, 462,
-	570, 451,
-	577, 439,
-	584, 419,
-	586, 400
+	backgroundWalls.add(App->physics->CreateChain(0, 0, bottomLeftBumper, 48, BODY_INDEX::BUMPER, PHYSIC_BODY_TYPE::_FLOOR_LEVEL));
+	int bottomRightRamp[70] = {
+	592, 398,
+	586, 401,
+	585, 405,
+	584, 411,
+	583, 417,
+	581, 424,
+	579, 431,
+	576, 437,
+	574, 442,
+	571, 447,
+	567, 452,
+	564, 456,
+	560, 460,
+	556, 464,
+	551, 468,
+	548, 471,
+	544, 474,
+	557, 487,
+	562, 484,
+	568, 479,
+	573, 474,
+	577, 469,
+	581, 464,
+	584, 458,
+	587, 453,
+	589, 447,
+	591, 441,
+	592, 435,
+	593, 429,
+	594, 423,
+	594, 417,
+	594, 411,
+	595, 405,
+	594, 401,
+	592, 398
 	};
-	backgroundWalls.add(App->physics->CreateChain(0, 0, bottomRightRamp, 28, BODY_INDEX::WALL, PHYSIC_BODY_TYPE::_FLOOR_LEVEL));
-	int bottomLeftRamp[30] = {
-	381, 402,
-	383, 418,
-	388, 438,
-	400, 455,
-	412, 466,
-	420, 474,
-	419, 481,
-	412, 486,
-	400, 477,
-	391, 466,
-	382, 453,
-	377, 435,
-	374, 419,
-	374, 405,
-	381, 402
+	backgroundWalls.add(App->physics->CreateChain(0, 0, bottomRightRamp, 70, BODY_INDEX::WALL, PHYSIC_BODY_TYPE::_FLOOR_LEVEL));
+	int bottomLeftRamp[74] = {
+	374, 401,
+	377, 398,
+	381, 399,
+	382, 403,
+	382, 409,
+	382, 414,
+	382, 419,
+	384, 425,
+	387, 431,
+	390, 436,
+	392, 440,
+	395, 444,
+	399, 449,
+	402, 453,
+	406, 457,
+	410, 461,
+	414, 465,
+	420, 470,
+	424, 473,
+	414, 487,
+	409, 487,
+	405, 485,
+	402, 482,
+	399, 479,
+	395, 475,
+	392, 471,
+	389, 467,
+	386, 462,
+	383, 457,
+	380, 451,
+	378, 444,
+	376, 437,
+	375, 431,
+	374, 424,
+	374, 416,
+	374, 410,
+	374, 401
 	};
-	backgroundWalls.add(App->physics->CreateChain(0, 0, bottomLeftRamp, 30, BODY_INDEX::WALL, PHYSIC_BODY_TYPE::_FLOOR_LEVEL));
+	backgroundWalls.add(App->physics->CreateChain(0, 0, bottomLeftRamp, 74, BODY_INDEX::WALL, PHYSIC_BODY_TYPE::_FLOOR_LEVEL));
 
-	int middleCannon[44] = {
-	452, 277,
-	447, 280,
-	446, 289,
-	451, 299,
-	460, 308,
+	int middleCannon[66] = {
+	445, 283,
+	447, 289,
+	450, 296,
+	454, 301,
+	458, 305,
+	463, 309,
 	468, 312,
-	474, 299,
-	485, 288,
-	495, 301,
-	501, 316,
-	515, 307,
-	522, 291,
-	523, 281,
-	517, 274,
-	508, 272,
-	503, 275,
-	493, 271,
-	485, 274,
-	477, 271,
-	470, 275,
-	460, 274,
-	452, 277
+	472, 303,
+	477, 291,
+	482, 289,
+	490, 294,
+	496, 304,
+	501, 313,
+	507, 309,
+	513, 305,
+	518, 300,
+	522, 294,
+	524, 286,
+	524, 280,
+	521, 276,
+	516, 274,
+	510, 272,
+	502, 271,
+	495, 270,
+	489, 269,
+	481, 269,
+	473, 270,
+	467, 271,
+	461, 272,
+	455, 274,
+	450, 276,
+	446, 278,
+	445, 282
 	};
-	backgroundWalls.add(App->physics->CreateChain(0, 0, middleCannon, 44, BODY_INDEX::WALL, PHYSIC_BODY_TYPE::_FLOOR_LEVEL));
+	backgroundWalls.add(App->physics->CreateChain(0, 0, middleCannon, 66, BODY_INDEX::WALL, PHYSIC_BODY_TYPE::_FLOOR_LEVEL));
 
 	int topLeftBoomerang[44] = {
 	388, 230,
@@ -697,7 +783,7 @@ void ModuleSceneIntro::setSensors()
 
 	//CATAPULTA
 	sensors.add(App->physics->CreateRectangleSensor(632, 250, 20, 20, _CATAPULT));
-	sensors.add(App->physics->CreateRectangleSensor(482, 300, 28, 28, _FUNNEL));
+	sensors.add(App->physics->CreateRectangleSensor(484, 300, 28, 28, _FUNNEL));
 
 	sensors.add(App->physics->CreateRectangleSensor(363, 416, 28, 28, _MINI_PLUNGE));
 	sensors.add(App->physics->CreateRectangleSensor(604, 416, 28, 28, _REBOUNCER3));

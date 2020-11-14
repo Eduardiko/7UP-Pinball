@@ -14,9 +14,6 @@
 
 // Small class to return to other modules to track position and rotation of physics bodies
 
-
-
-
 enum BODY_INDEX
 {
 	BALL,
@@ -78,6 +75,7 @@ public:
 	b2Joint* joint;
 	Module* listener;
 
+
 	PHYSIC_BODY_TYPE bodyType = _NOT_DEFINED;
 };
 
@@ -109,7 +107,7 @@ public:
 	b2World* world;
 
 private:
-	bool debug;
+	bool debug = false;
 	b2MouseJoint* mouse_joint;
 	b2Body* ground;
 

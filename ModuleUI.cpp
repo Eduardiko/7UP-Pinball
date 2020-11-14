@@ -40,13 +40,13 @@ update_status ModuleUI::Update()
 {
 	update_status status = UPDATE_CONTINUE;
 	
-	if (halfScoreRight == 1000000)
+	if (halfScoreRight > 999999)
 	{
+		halfScoreLeft = halfScoreLeft + halfScoreRight - 999999;
 		halfScoreRight = 0;
-		halfScoreLeft++;
 	}
 
-	if (halfScoreLeft == 1000000)
+	if (halfScoreLeft > 999999)
 	{
 		halfScoreRight = 0;
 		halfScoreLeft = 0;

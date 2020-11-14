@@ -31,13 +31,20 @@ public:
 	bool reb1, reb2, reb3, ballLostBlit, enterFunnel, holdInCatapult;
 
 	p2List<PhysBody*> balls;
+	PhysBody* ballPendingToDelete;
+
 	p2List<PhysBody*> backgroundWalls;
 	p2List<PhysBody*> sensors;
 
 	SDL_Texture* backgroundTex;
 	SDL_Rect background;
+
+	SDL_Texture* topTextures;
+	SDL_Rect topTexRect;
+
 	SDL_Rect plungeRect;
 	SDL_Rect plungeCompRect;
+
 private:
 	// win/fail
 	unsigned int ballsLeft;
@@ -60,7 +67,7 @@ private:
 	uint hit_wall_fx;
 	uint rebouncer_fx;
 
-	SDL_Texture *spriteSheet;
+	SDL_Texture* spriteSheet;
 	SDL_Texture* backgroundAssets;
 	SDL_Texture* debug;
 	Animation ballAnim, arrowLightsAnim,reboundLightAnim,ballLostAnim, thinkClearAnim;
