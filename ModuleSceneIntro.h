@@ -32,6 +32,8 @@ public:
 
 	p2List<PhysBody*> balls;
 	PhysBody* ballPendingToDelete;
+	PhysBody* littlePlungeTriggerR;
+	PhysBody* littlePlungeTriggerL;
 
 	p2List<PhysBody*> backgroundWalls;
 	p2List<PhysBody*> sensors;
@@ -44,7 +46,9 @@ public:
 
 	SDL_Rect plungeRect;
 	SDL_Rect plungeCompRect;
+	SDL_Rect littlePlungeRect;
 
+	
 private:
 	// win/fail
 	unsigned int ballsLeft;

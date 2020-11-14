@@ -45,7 +45,8 @@ enum PHYSIC_BODY_TYPE
 	_REBOUNCER1,
 	_REBOUNCER2,
 	_REBOUNCER3,
-	_MINI_PLUNGE,
+	_MINI_PLUNGE_L,
+	_MINI_PLUNGE_R,
 	_CATAPULT,
 	_FUNNEL,
 
@@ -76,6 +77,7 @@ public:
 	Module* listener;
 
 
+
 	PHYSIC_BODY_TYPE bodyType = _NOT_DEFINED;
 };
 
@@ -93,7 +95,7 @@ public:
 
 
 	PhysBody* CreateCircle(int x, int y, int radius);
-	PhysBody* CreatePlunge();
+	PhysBody* CreatePlunge(int x, int y);
 	PhysBody* CreateRectangle(int x, int y, int width, int height);
 	PhysBody* CreateChain(int x, int y, int* points, int size, BODY_INDEX index, PHYSIC_BODY_TYPE type);
 	PhysBody* CreateBall(int x, int y, int radius);
@@ -105,6 +107,7 @@ public:
 	void BeginContact(b2Contact* contact);
 
 	b2World* world;
+
 
 private:
 	bool debug = false;

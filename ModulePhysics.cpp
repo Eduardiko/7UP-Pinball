@@ -363,11 +363,12 @@ PhysBody* ModulePhysics::CreateBall(int x, int y, int radius)
 	return pbody;
 }
 
-PhysBody* ModulePhysics::CreatePlunge()
+PhysBody* ModulePhysics::CreatePlunge(int x, int y)
 {
+	
 	b2BodyDef plungeBodyDef;
 	plungeBodyDef.type = b2_dynamicBody;
-	plungeBodyDef.position.Set(PIXEL_TO_METERS(670), PIXEL_TO_METERS(470));
+	plungeBodyDef.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
 
 	b2Body* plungeBody = world->CreateBody(&plungeBodyDef);
 	b2PolygonShape box;
@@ -383,7 +384,8 @@ PhysBody* ModulePhysics::CreatePlunge()
 
 	b2BodyDef plungeBodyBDef;
 	plungeBodyBDef.type = b2_staticBody;
-	plungeBodyBDef.position.Set(PIXEL_TO_METERS(670), PIXEL_TO_METERS(500));
+	int z = y + 30;
+	plungeBodyBDef.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(z));
 
 	b2Body* plungeBodyB = world->CreateBody(&plungeBodyBDef);
 	b2PolygonShape box1;

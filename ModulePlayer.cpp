@@ -19,7 +19,8 @@ bool ModulePlayer::Start()
 
 	leftTrigger = App->physics->CreateLeftTrigger();
 	rightTrigger = App->physics->CreateRightTrigger();
-	plungeTrigger = App->physics->CreatePlunge();
+	plungeTrigger = App->physics->CreatePlunge(670, 470);
+	
 	spriteSheet = App->textures->Load("pinball/pinballSpritesheet.png");
 
 	lTriggerRect.x = 0;

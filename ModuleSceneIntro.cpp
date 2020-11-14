@@ -5,6 +5,7 @@
 #include "ModuleInput.h"
 #include "ModuleTextures.h"
 #include "ModuleAudio.h"
+#include "ModulePlayer.h"
 #include "ModulePhysics.h"
 #include "ModuleUI.h"
 
@@ -131,6 +132,13 @@ bool ModuleSceneIntro::Start()
 	plungeCompRect.w = 67;
 	plungeCompRect.h = 21;
 
+	littlePlungeRect.x = 275;
+	littlePlungeRect.y = 116;
+	littlePlungeRect.w = 9;
+	littlePlungeRect.h = 32;
+
+	//littlePlungeTriggerL = App->physics->CreatePlunge(365, 438);
+	//littlePlungeTriggerR = App->physics->CreatePlunge(596, 438);
 	//spawned ball coordinates are in createBall()
 	setSensors();
 	SpawnBall();
@@ -183,6 +191,9 @@ update_status ModuleSceneIntro::Update()
 
 	App->renderer->Blit(spriteSheet, 663, 457, &plungeRect, 1.0f);
 	App->renderer->Blit(spriteSheet, 665, 525, &plungeCompRect, 1.0f);
+	App->renderer->Blit(spriteSheet, 365, 438, &littlePlungeRect, 1.0f);
+	App->renderer->Blit(spriteSheet, 596, 438, &littlePlungeRect, 1.0f);
+
 	
 
 	if (reb1) {
@@ -247,6 +258,9 @@ update_status ModuleSceneIntro::Update()
 		holdInCatapult = false;
 	}
 
+	
+
+
 	return UPDATE_CONTINUE;
 }
 
@@ -306,6 +320,17 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 		{
 			holdInCatapult = true;
 		}
+
+		if (bodyB->bodyType == _MINI_PLUNGE_L)
+		{
+			LOG("enteringPlug")
+			littlePlungeTriggerL->body->ApplyForceToCenter(b2Vec2(0, 250), true);
+		}
+		if (bodyB->bodyType == _MINI_PLUNGE_R)
+		{
+			littlePlungeTriggerR->body->ApplyForceToCenter(b2Vec2(0, 250), true);
+		}
+
 	}
 
 }
@@ -785,8 +810,8 @@ void ModuleSceneIntro::setSensors()
 	sensors.add(App->physics->CreateRectangleSensor(632, 250, 20, 20, _CATAPULT));
 	sensors.add(App->physics->CreateRectangleSensor(484, 300, 28, 28, _FUNNEL));
 
-	sensors.add(App->physics->CreateRectangleSensor(363, 416, 28, 28, _MINI_PLUNGE));
-	sensors.add(App->physics->CreateRectangleSensor(604, 416, 28, 28, _REBOUNCER3));
+	sensors.add(App->physics->CreateRectangleSensor(363, 416, 28, 28, _MINI_PLUNGE_L));
+	sensors.add(App->physics->CreateRectangleSensor(604, 416, 28, 28, _MINI_PLUNGE_R));
 
 	
 }
