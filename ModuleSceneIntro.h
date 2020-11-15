@@ -55,8 +55,6 @@ private:
 
 	bool ballInTop = true;
 
-	bool enteredLevel = false;
-
 	//Fx
 	uint hitWallFx;
 	uint holeFx;

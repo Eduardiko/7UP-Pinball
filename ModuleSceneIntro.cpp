@@ -248,7 +248,7 @@ update_status ModuleSceneIntro::Update()
 			App->physics->world->DestroyBody(bc->data->body);
 		}
 		balls.clear();
-
+	
 		enterFunnel = false;
 
 	}
@@ -271,7 +271,6 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 		if (bodyB->sensorType == _DEAD_SENSOR)
 		{
 			ballLostBlit = true;
-
 			ballLost = true;
 
 		}
@@ -320,31 +319,9 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 
 		}
 
-		if (bodyB->sensorType == _ENTER_LEVEL)
-		{
-			if (!enteredLevel)
-			{
-				int enterLevelRamp[22] = {
-					527, 83,
-					544, 87,
-					559, 92,
-					574, 98,
-					585, 105,
-					595, 113,
-					608, 128,
-					615, 139,
-					622, 151,
-					625, 147,
-					587, 86
-				};
-				backgroundWalls.add(App->physics->CreateChain(0, 0, enterLevelRamp, 22, BODY_TYPE::WALL_FLOOR));
-			}
-			enteredLevel = true;
-		}
-
 		if (bodyB->sensorType == _FUNNEL)
 		{
-			//enterFunnel = true;
+			enterFunnel = true;
 		}
 
 		if (bodyB->sensorType == _CATAPULT)
@@ -825,8 +802,6 @@ void ModuleSceneIntro::setSensors()
 
 	sensors.add(App->physics->CreateRectangleSensor(337, 247, 2, 2, _LEVEL_CHANGE));
 	sensors.add(App->physics->CreateRectangleSensor(652, 156, 2, 2, _LEVEL_CHANGE));
-
-	sensors.add(App->physics->CreateRectangleSensor(545, 107, 2, 2, _ENTER_LEVEL));
 
 	sensors.add(App->physics->CreateRectangleSensor(333, 162, 5, 5, _FUNNEL));
 
