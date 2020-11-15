@@ -92,10 +92,11 @@ bool ModuleSceneIntro::Start()
 	LOG("Loading Intro assets");
 	bool ret = true;
 
+	backgroundTextTex = App->textures->Load("pinball/StartMenuBackground.png");
 	spriteSheet = App->textures->Load("pinball/pinballSpritesheet.png");
 
 	debug = App->textures->Load("pinball/debug.png");
-
+	
 	backgroundTex = App->textures->Load("pinball/background upd.png");
 	background.x = 0;
 	background.y = 0;
@@ -270,6 +271,7 @@ update_status ModuleSceneIntro::Update()
 
 	if (gameStarted == false)
 	{
+		App->renderer->Blit(backgroundTextTex, 0, 0, &background, 1.0f);
 		App->renderer->Blit(spriteSheet, 410, 250, &playGameAnim.GetCurrentFrame(), 1.0f);
 	}
 	
