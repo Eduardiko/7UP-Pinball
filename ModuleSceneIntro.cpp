@@ -212,24 +212,6 @@ update_status ModuleSceneIntro::Update()
 	}
 
 	//render objects
-
-	//ball
-	App->renderer->Blit(backgroundAssets, 349, 266, &arrowLightsAnim.GetCurrentFrame(), 1.0f);
-	
-	p2List_item<PhysBody*>* ball_item = balls.getFirst();
-	while (ball_item != NULL)
-	{
-		int x, y;
-		ball_item->data->GetPosition(x, y);
-
-		float vel = ball_item->data->body->GetLinearVelocity().Length();
-		ballAnim.speed = vel / 15;
-
-		App->renderer->Blit(spriteSheet, x-2, y-2, &ballAnim.GetCurrentFrame(), 1.0f);
-		
-		ball_item = ball_item->next;
-	}
-
 	
 	App->renderer->Blit(spriteSheet, 245, 70, &topTexRect, 1.0f);
 	//App->renderer->Blit(spriteSheet, 663, 457, &plungeRect, 1.0f);
@@ -336,7 +318,22 @@ update_status ModuleSceneIntro::Update()
 		App->renderer->Blit(spriteSheet, 410, 250, &playGameAnim.GetCurrentFrame(), 1.0f);
 	}
 	
+	//ball
+	App->renderer->Blit(backgroundAssets, 349, 266, &arrowLightsAnim.GetCurrentFrame(), 1.0f);
 
+	p2List_item<PhysBody*>* ball_item = balls.getFirst();
+	while (ball_item != NULL)
+	{
+		int x, y;
+		ball_item->data->GetPosition(x, y);
+
+		float vel = ball_item->data->body->GetLinearVelocity().Length();
+		ballAnim.speed = vel / 15;
+
+		App->renderer->Blit(spriteSheet, x - 2, y - 2, &ballAnim.GetCurrentFrame(), 1.0f);
+
+		ball_item = ball_item->next;
+	}
 
 	return UPDATE_CONTINUE;
 }
