@@ -513,7 +513,7 @@ PhysBody* ModulePhysics::CreateMiniPlunge(int x, int y)
 	b2FixtureDef plungeFixture;
 	plungeFixture.shape = &box;
 	plungeFixture.density = 20.0f;
-	plungeFixture.restitution = 4.0f;
+	plungeFixture.restitution = 3.0f;
 	plungeFixture.filter.groupIndex = BODY_TYPE::MINI_PLUNGE;
 
 	plungeBody->CreateFixture(&plungeFixture);

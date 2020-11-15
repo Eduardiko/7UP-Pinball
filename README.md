@@ -11,11 +11,11 @@ SOURCE GITHUB: https://github.com/Eduardiko/7UP-Pinball
 
 Controls:
 
-Left Arrow: Left Trigger
-Right Arrow: Right Trigger
-Down Arrow: Plunge 
+	- Left Arrow: Left Trigger
+	- Right Arrow: Right Trigger
+	- Down Arrow: Plunge 
 
 DEBUG: 
 
-SPACE: Ball creation
-F1: Mouse Joint and Shapes
+	- F1: Show Colliders
+	- F1 + Left Click: Drag Ball

@@ -228,12 +228,6 @@ update_status ModuleSceneIntro::Update()
 			App->renderer->Blit(spriteSheet, 663, 430 + goingDown, &plungeRect, 1.0f);
 		}
 
-		if (App->input->GetKey(SDL_SCANCODE_R) == KEY_DOWN)
-		{
-			gameStarted = false;
-			ballsLeft = 1;
-		}
-
 		App->renderer->Blit(spriteSheet, 660, 505, &plungeCompRect, 1.0f);
 		App->renderer->Blit(spriteSheet, 365, 438, &littlePlungeRect, 1.0f);
 		App->renderer->Blit(spriteSheet, 596, 438, &littlePlungeRect, 1.0f);
@@ -465,11 +459,11 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 
 		if (bodyB->sensorType == _BUMPER_L)
 		{
-			bodyA->body->ApplyLinearImpulse({ 0.8f * 2.5, -0.8f * 2.5 }, { 0.0f,0.0f }, true);
+			bodyA->body->ApplyLinearImpulse({ 0.5f * 2.5, -0.5f * 2.5 }, { 0.0f,0.0f }, true);
 		}
 		if (bodyB->sensorType == _BUMPER_R)
 		{
-			bodyA->body->ApplyLinearImpulse({ -0.8f * 2.5, -0.8f * 2.5 }, { 0.0f,0.0f }, true);
+			bodyA->body->ApplyLinearImpulse({ -0.5f * 2.5, -0.5f * 2.5 }, { 0.0f,0.0f }, true);
 		}
 
 
@@ -953,22 +947,6 @@ void ModuleSceneIntro::setWalls() {
 	500, 110
 	};
 	backgroundWalls.add(App->physics->CreateChain(0, 0, topRightStick, 20, BODY_TYPE::WALL_FLOOR));
-	int leftBumperBoom[4] =
-	{
-
-		420, 403,
-		439, 444,
-
-	};
-	backgroundWalls.add(App->physics->CreateBumperChain(0, 0, leftBumperBoom, 4, BODY_TYPE::WALL_FLOOR));
-	int rightBumperBoom[4] =
-	{
-
-		549, 408,
-		533, 440
-
-	};
-	backgroundWalls.add(App->physics->CreateBumperChain(0, 0, rightBumperBoom, 4, BODY_TYPE::WALL_FLOOR));
 	int bumperSensorL[4] =
 	{
 		420, 403,
@@ -981,7 +959,34 @@ void ModuleSceneIntro::setWalls() {
 		533, 440
 	};
 	backgroundWalls.add(App->physics->CreateBumperChainSensor(0, 0, bumperSensorR, 4, SENSOR_TYPE::_BUMPER_R));
-
+	
+	int topLeftBullseye[10]
+	{
+		426, 146,
+		429, 150,
+		380, 170,
+		377, 165,
+		426, 146
+	};
+	backgroundWalls.add(App->physics->CreateBumperChain(0, 0, topLeftBullseye, 10, BODY_TYPE::WALL_FLOOR));
+	int topRightBullseye[10]
+	{
+		541, 144,
+		538, 148,
+		592, 170,
+		594, 165,
+		541, 144
+	};
+	backgroundWalls.add(App->physics->CreateBumperChain(0, 0, topRightBullseye, 10, BODY_TYPE::WALL_FLOOR));
+	int middleBullseye[10]
+	{
+		509, 268,
+		460, 268,
+		460, 275,
+		508, 275,
+		509, 268
+	};
+	backgroundWalls.add(App->physics->CreateBumperChain(0, 0, middleBullseye, 10, BODY_TYPE::WALL_FLOOR));
 }
 
 

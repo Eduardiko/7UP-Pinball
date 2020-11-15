@@ -40,12 +40,14 @@ public:
 	int score;
 	int highScore;
 	int lastScore;
+	int lifes;
 
 	int font = -1;
 	int font2 = -1;
 	int font2_numbers = -1;
 
 	char scoreText[DYNAMIC_TEXT_LEN + 1] = { "000000000000" };
+	char lifeText[2] = { "0" };
 
 	SDL_Texture* pointSpritesheetTex;
 	SDL_Rect pointsRect;
@@ -65,7 +67,9 @@ public:
 	void BlitBigText(int x, int y, int fontIndex, const char* text) const;
 	void BlitText(int x, int y, int fontIndex, const char* text) const;
 
-	void IntToString(char* buffer, int k);
+	void IntToDynamicString(char* buffer, int k);
+	void IntToString(char* buffer, int k, int length);
+
 
 	int k = 0;
 private:

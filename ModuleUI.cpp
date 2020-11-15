@@ -47,20 +47,26 @@ update_status ModuleUI::Update()
 	if (App->scene_intro->ballsLeft == 0)
 		lastScore = score;
 
-	IntToString(scoreText, score);
+	lifes = App->scene_intro->ballsLeft;
+
+	IntToDynamicString(scoreText, score);
 	BlitBigText(347, 29, font, scoreText);
 
 	int datax = 69;
-	int datay = 234;
+	int datay = 215;
 
 	BlitText(datax, datay, font2, "HIGHSCORE");
 
-	IntToString(scoreText, highScore);
+	IntToDynamicString(scoreText, highScore);
 	BlitText(datax, datay + 15, font2, scoreText);
 
 	BlitText(datax, datay + 40, font2, "LAST SCORE");
-	IntToString(scoreText, lastScore);
+	IntToDynamicString(scoreText, lastScore);
 	BlitText(datax, datay + 55, font2, scoreText);
+
+	BlitText(datax, datay + 80, font2, "LIFES");
+	IntToString(lifeText, lifes, 2);
+	BlitText(datax, datay + 95, font2, lifeText);
 
 	return status;
 }
@@ -220,7 +226,7 @@ void ModuleUI::BlitBigText(int x, int y, int font_id, const char* text) const
 	}
 }
 
-void ModuleUI::IntToString(char* buffer, int k) {
+void ModuleUI::IntToDynamicString(char* buffer, int k) {
 
 	for (int i = 0; i < DYNAMIC_TEXT_LEN; i++) {
 		buffer[i] = '0';
@@ -229,6 +235,22 @@ void ModuleUI::IntToString(char* buffer, int k) {
 	buffer[DYNAMIC_TEXT_LEN] = 0;
 
 	int i = DYNAMIC_TEXT_LEN - 1;
+	while (k != 0) {
+		if (i < 0) break;
+		buffer[i--] += k % 10;
+		k /= 10;
+	}
+}
+
+void ModuleUI::IntToString(char* buffer, int k, int length) {
+
+	for (int i = 0; i < length; i++) {
+		buffer[i] = '0';
+	}
+
+	buffer[length] = 0;
+
+	int i = length - 1;
 	while (k != 0) {
 		if (i < 0) break;
 		buffer[i--] += k % 10;
