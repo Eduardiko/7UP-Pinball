@@ -653,32 +653,34 @@ update_status ModulePhysics::PostUpdate()
 		}
 	}
 
-
-	if (bSelected != nullptr)
+	if (debug)
 	{
-		b2MouseJointDef def;
-		def.bodyA = ground;
-		def.bodyB = bSelected;
-		def.target = vecSelected;
-		def.dampingRatio = 0.5f;
-		def.frequencyHz = 2.0f;
-		def.maxForce = 100.0f * bSelected->GetMass();
-		mouse_joint = (b2MouseJoint*)world->CreateJoint(&def);
-		bSelected = nullptr;
-	}
+		if (bSelected != nullptr)
+		{
+			b2MouseJointDef def;
+			def.bodyA = ground;
+			def.bodyB = bSelected;
+			def.target = vecSelected;
+			def.dampingRatio = 0.5f;
+			def.frequencyHz = 2.0f;
+			def.maxForce = 100.0f * bSelected->GetMass();
+			mouse_joint = (b2MouseJoint*)world->CreateJoint(&def);
+			bSelected = nullptr;
+		}
 
-	if (mouse_joint != nullptr)
-	{
-		vecSelected.x = PIXEL_TO_METERS(App->input->GetMouseX());
-		vecSelected.y = PIXEL_TO_METERS(App->input->GetMouseY());
-		mouse_joint->SetTarget(vecSelected);
-		App->renderer->DrawLine(METERS_TO_PIXELS(mouse_joint->GetAnchorA().x), METERS_TO_PIXELS(mouse_joint->GetAnchorA().y), METERS_TO_PIXELS(mouse_joint->GetAnchorB().x), METERS_TO_PIXELS(mouse_joint->GetAnchorB().y), 250, 0, 0, 255);
-	}
+		if (mouse_joint != nullptr)
+		{
+			vecSelected.x = PIXEL_TO_METERS(App->input->GetMouseX());
+			vecSelected.y = PIXEL_TO_METERS(App->input->GetMouseY());
+			mouse_joint->SetTarget(vecSelected);
+			App->renderer->DrawLine(METERS_TO_PIXELS(mouse_joint->GetAnchorA().x), METERS_TO_PIXELS(mouse_joint->GetAnchorA().y), METERS_TO_PIXELS(mouse_joint->GetAnchorB().x), METERS_TO_PIXELS(mouse_joint->GetAnchorB().y), 250, 0, 0, 255);
+		}
 
-	if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_UP && mouse_joint != nullptr)
-	{
-		world->DestroyJoint(mouse_joint);
-		mouse_joint = nullptr;
+		if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_UP && mouse_joint != nullptr)
+		{
+			world->DestroyJoint(mouse_joint);
+			mouse_joint = nullptr;
+		}
 	}
 
 	return UPDATE_CONTINUE;
