@@ -26,8 +26,6 @@ ModulePhysics::~ModulePhysics()
 
 bool ModulePhysics::Start()
 {
-	LOG("Creating Physics 2D environment");
-
 	world = new b2World(b2Vec2(GRAVITY_X, -GRAVITY_Y));
 	world->SetContactListener(this);
 
@@ -690,8 +688,6 @@ update_status ModulePhysics::PostUpdate()
 // Called before quitting
 bool ModulePhysics::CleanUp()
 {
-	LOG("Destroying physics world");
-
 	// Delete the whole physics world!
 	delete world;
 

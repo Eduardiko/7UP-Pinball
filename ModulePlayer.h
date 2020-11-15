@@ -27,6 +27,5 @@ public:
 	
 	SDL_Texture* spriteSheet;
 
-
 	PhysBody* elDisparador;
 };

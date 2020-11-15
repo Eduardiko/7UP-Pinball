@@ -99,9 +99,7 @@ bool ModuleSceneIntro::Start()
 		App->UI->Start();
 	}
 
-	
 
-	LOG("Loading Intro assets");
 	bool ret = true;
 
 	spriteSheet = App->textures->Load("pinball/pinballSpritesheet.png");
@@ -183,7 +181,6 @@ bool ModuleSceneIntro::Start()
 // Load assets
 bool ModuleSceneIntro::CleanUp()
 {
-	LOG("Unloading Intro scene");
 
 	return true;
 }
@@ -197,7 +194,7 @@ update_status ModuleSceneIntro::Update()
 	}
 	if (ballLost) {
 		ballLost = false;
-		ResetBallPos(ballPendingToDelete, 698, 438);
+		ResetBallPos(ballPendingToDelete, 663, 400);
 	}
 
 	if (ballInHole) {
@@ -209,32 +206,45 @@ update_status ModuleSceneIntro::Update()
 
 	App->renderer->Blit(backgroundTex, 0, 0, &background, 1.0f);
 
-	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
-	{
-		CreateBallInMousePos();
-	}
 
 	//render objects
 	
 	App->renderer->Blit(spriteSheet, 245, 70, &topTexRect, 1.0f);
-	//App->renderer->Blit(spriteSheet, 663, 457, &plungeRect, 1.0f);
-	App->renderer->Blit(spriteSheet, 665, 525, &plungeCompRect, 1.0f);
-	App->renderer->Blit(spriteSheet, 365, 438, &littlePlungeRect, 1.0f);
-	App->renderer->Blit(spriteSheet, 596, 438, &littlePlungeRect, 1.0f);
 
-	//plunge anim
-	App->renderer->Blit(spriteSheet, 663, 457, &plungeAnim.GetCurrentFrame(), 1.0f);
-
-	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_UP)
+	if (gameStarted == true)
 	{
-		App->renderer->Blit(spriteSheet, 663, 417, &plungeAnim.GetCurrentFrame(), 1.0f);
-		App->renderer->Blit(spriteSheet, 663, 417-20, &plungeAnim.GetCurrentFrame(), 1.0f);
-		App->renderer->Blit(spriteSheet, 663, 417-40, &plungeAnim.GetCurrentFrame(), 1.0f);
-		
+		if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
+		{
+			if (goingDown < 20)
+				goingDown = goingDown + 2;
+
+			App->renderer->Blit(spriteSheet, 663, 430 + goingDown, &plungeRect, 1.0f);
+
+		}
+		else {
+			if (goingDown > 0)
+				goingDown = goingDown - 5;
+
+			App->renderer->Blit(spriteSheet, 663, 430 + goingDown, &plungeRect, 1.0f);
+		}
+
+		if (App->input->GetKey(SDL_SCANCODE_R) == KEY_DOWN)
+		{
+			gameStarted = false;
+			ballsLeft = 1;
+		}
+
+		App->renderer->Blit(spriteSheet, 660, 505, &plungeCompRect, 1.0f);
+		App->renderer->Blit(spriteSheet, 365, 438, &littlePlungeRect, 1.0f);
+		App->renderer->Blit(spriteSheet, 596, 438, &littlePlungeRect, 1.0f);
 	}
-
-
-	
+	else {
+		App->renderer->Blit(spriteSheet, 660, 505, &plungeCompRect, 1.0f);
+		App->renderer->Blit(spriteSheet, 365, 438, &littlePlungeRect, 1.0f);
+		App->renderer->Blit(spriteSheet, 596, 438, &littlePlungeRect, 1.0f);
+		App->renderer->Blit(spriteSheet, 663, 430, &plungeRect, 1.0f);
+	}
+	//plunge ani	
 
 	if (reb1) {
 		App->audio->PlayFx(App->scene_intro->rebouncer_fx);
@@ -284,10 +294,9 @@ update_status ModuleSceneIntro::Update()
 		ballsLeft++;
 		counter++;
 		if (counter == 75)
+			counter = 0;
 			star1 = star2 = star3 = false;
 	}
-
-	LOG("arro counter %d",arrowCounter);
 
 	App->renderer->Blit(tri1, 110, 110, &arr1.GetCurrentFrame(), 1.0f);
 
@@ -312,6 +321,7 @@ update_status ModuleSceneIntro::Update()
 		App->renderer->Blit(tri6, 0, 0, &arr6.GetCurrentFrame(), 1.0f);
 		break;
 	}
+
 	arrowCounter++;
 	if (arrowCounter == 7) arrowCounter = 1;
 
@@ -321,9 +331,12 @@ update_status ModuleSceneIntro::Update()
 		App->renderer->Blit(backgroundTextTex, 0, 0, &background, 1.0f);
 		App->renderer->Blit(spriteSheet, 410, 250, &playGameAnim.GetCurrentFrame(), 1.0f);
 	}
-	
+	else
+	{
+		App->renderer->Blit(backgroundAssets, 349, 266, &arrowLightsAnim.GetCurrentFrame(), 1.0f);
+	}
 	//ball
-	App->renderer->Blit(backgroundAssets, 349, 266, &arrowLightsAnim.GetCurrentFrame(), 1.0f);
+	
 
 	p2List_item<PhysBody*>* ball_item = balls.getFirst();
 	while (ball_item != NULL)
@@ -402,7 +415,6 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 				if (ballInTop == true)
 				{
 					newFilter.groupIndex = BODY_TYPE::BALL_FLOOR;
-					LOG("lavaina");
 					ballInTop = false;
 				}
 				else
@@ -1008,7 +1020,7 @@ void ModuleSceneIntro::SpawnBall()
 {
 	//create in module physics the next functions
 
-	balls.add(App->physics->CreateBall(698,438,9));
+	balls.add(App->physics->CreateBall(663,400,9));
 	balls.getLast()->data->listener = this;
 }
 

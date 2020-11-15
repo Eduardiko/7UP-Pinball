@@ -49,13 +49,6 @@ update_status ModuleDebug::Update()
 		ToggleColliders();
 	}
 
-	if (App->input->GetMouseButton(1))
-	{
-		int x, y;
-		x = App->input->GetMouseX(); y = App->input->GetMouseY();
-		LOG("Mouse Position X: %d , Y: %d", x, y);
-	}
-
 	return status;
 }
 
@@ -77,11 +70,9 @@ void ModuleDebug::ToggleColliders()
 {
 	if (App->debug->showColliders == false)
 	{
-		LOG("Draw Colliders");
 		App->debug->showColliders = true;
 	}
 	else if (App->debug->showColliders == true) {
-		LOG("Undraw Colliders")
 		App->debug->showColliders = false;
 	}
 }

@@ -72,6 +72,7 @@ private:
 	bool ballInTop = true;
 
 	int counter = 0;
+	int goingDown = 0;
 
 	//Fx
 	uint hitWallFx;
