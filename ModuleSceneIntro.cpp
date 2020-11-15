@@ -46,9 +46,18 @@ ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Modul
 	playGameAnim.speed = 0.01f;
 
 	starAnim.PushBack({ 0,184,19,19 });
-	starAnim.PushBack({ 0,0,0,0});
-	starAnim.loop = false;
+	starAnim.loop = true;
 	starAnim.speed = 0.01f;
+
+	//arrows 
+	arr1.PushBack({ 0,0,3000,3000 });
+	arr2.PushBack({ 0,0,3000,3000 });
+	arr3.PushBack({ 0,0,3000,3000 });
+	arr4.PushBack({ 0,0,3000,3000 });
+	arr5.PushBack({ 0,0,3000,3000 });
+	arr6.PushBack({ 0,0,3000,3000 });
+	arr1.loop = arr2.loop = arr3.loop = arr4.loop = arr5.loop = arr6.loop = true;
+	arr1.speed = arr2.speed = arr3.speed = arr4.speed = arr5.speed = arr6.speed = 0.01f;
 
 	//plunge pushback
 	plungeRect.x = 275;
@@ -93,6 +102,13 @@ bool ModuleSceneIntro::Start()
 	bool ret = true;
 
 	spriteSheet = App->textures->Load("pinball/pinballSpritesheet.png");
+
+	tri1 = App->textures->Load("pinball/tri 1.png");
+	tri2 = App->textures->Load("pinball/tri 2.png");
+	tri3 = App->textures->Load("pinball/tri 3.png");
+	tri4 = App->textures->Load("pinball/tri 4.png");
+	tri5 = App->textures->Load("pinball/tri 5.png");
+	tri6 = App->textures->Load("pinball/tri 6.png");
 
 	debug = App->textures->Load("pinball/debug.png");
 
@@ -240,7 +256,6 @@ update_status ModuleSceneIntro::Update()
 	if (ballLostBlit)
 	{
 		App->renderer->Blit(spriteSheet, 452, 540, &ballLostAnim.GetCurrentFrame(), 1.0f);
-		App->audio->PlayFx(combo_fx);
 	}
 
 	if (holdInCatapult)
@@ -262,10 +277,36 @@ update_status ModuleSceneIntro::Update()
 	if (star3)
 	{
 		App->audio->PlayFx(holeFx);
-		App->renderer->Blit(spriteSheet, 515, 99, &starAnim.GetCurrentFrame(), 1.0f);
+		App->renderer->Blit(spriteSheet, 515, 102, &starAnim.GetCurrentFrame(), 1.0f);
 	}
-	if (starAnim.Finished())
-		star1 = star2 = star3 = false;
+
+	LOG("arro counter %d",arrowCounter);
+
+	App->renderer->Blit(tri1, 110, 110, &arr1.GetCurrentFrame(), 1.0f);
+
+	switch (arrowCounter)
+	{
+	case(1):
+		App->renderer->Blit(tri1, 0, 0, &arr1.GetCurrentFrame(), 1.0f);
+		break;
+	case(2):
+		App->renderer->Blit(tri2,0, 0, &arr2.GetCurrentFrame(), 1.0f);
+		break;
+	case(3):
+		App->renderer->Blit(tri3, 0, 0, &arr3.GetCurrentFrame(), 1.0f);
+		break;
+	case(4):
+		App->renderer->Blit(tri4, 0, 0, &arr4.GetCurrentFrame(), 1.0f);
+		break;
+	case(5):
+		App->renderer->Blit(tri5, 0, 0, &arr5.GetCurrentFrame(), 1.0f);
+		break;
+	case(6):
+		App->renderer->Blit(tri6, 0, 0, &arr6.GetCurrentFrame(), 1.0f);
+		break;
+	}
+	arrowCounter++;
+	if (arrowCounter == 7) arrowCounter = 1;
 
 
 	if (gameStarted == false)
@@ -931,9 +972,9 @@ void ModuleSceneIntro::setSensors()
 	sensors.add(App->physics->CreateRectangleSensor(363, 416, 28, 28, _MINI_PLUNGE_L));
 	sensors.add(App->physics->CreateRectangleSensor(604, 416, 28, 28, _MINI_PLUNGE_R));
 
-	sensors.add(App->physics->CreateRectangleSensor(446, 109, 14,14, _STAR1));
-	sensors.add(App->physics->CreateRectangleSensor(483, 108, 14, 14, _STAR2));
-	sensors.add(App->physics->CreateRectangleSensor(523, 113, 14, 14, _STAR3));
+	sensors.add(App->physics->CreateRectangleSensor(446, 134, 14,14, _STAR1));
+	sensors.add(App->physics->CreateRectangleSensor(485, 133, 14, 14, _STAR2));
+	sensors.add(App->physics->CreateRectangleSensor(523, 136, 14, 14, _STAR3));
 
 	/*sensors.add(App->physics->CreateBumperChainSensor(420, 403, &28, 4, _BUMPER_L));
 	sensors.add(App->physics->CreateBumperChainSensor(549, 533, &28, 4, _BUMPER_R));*/

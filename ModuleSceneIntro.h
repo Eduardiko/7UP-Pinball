@@ -43,6 +43,13 @@ public:
 	SDL_Texture* backgroundTex;
 	SDL_Rect background;
 
+	SDL_Texture* tri1;
+	SDL_Texture* tri2;
+	SDL_Texture* tri3;
+	SDL_Texture* tri4;
+	SDL_Texture* tri5;
+	SDL_Texture* tri6;
+
 	SDL_Texture* topTextures;
 	SDL_Rect topTexRect;
 
@@ -56,6 +63,7 @@ private:
 	unsigned int ballsLeft;
 	bool ballLost = false;
 	bool pendingToDelete = false;
+	unsigned int arrowCounter = 0;
 
 	bool ballInHole = false;
 	bool ballInTop = true;
@@ -81,7 +89,7 @@ private:
 	SDL_Texture* spriteSheet;
 	SDL_Texture* backgroundAssets;
 	SDL_Texture* debug;
-	Animation ballAnim, arrowLightsAnim, reboundLightAnim, ballLostAnim, thinkClearAnim, playGameAnim, starAnim;
+	Animation ballAnim, arrowLightsAnim, reboundLightAnim, ballLostAnim, thinkClearAnim, playGameAnim, starAnim, arr1, arr2, arr3, arr4, arr5, arr6;
 
 
 	//sensors and collision detectors
