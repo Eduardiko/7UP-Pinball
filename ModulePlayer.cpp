@@ -50,10 +50,9 @@ bool ModulePlayer::CleanUp()
 update_status ModulePlayer::Update()
 {
 
-	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT)
+	if (App->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN)
 	{
 		App->scene_intro->gameStarted = true;
-		SDL_Delay(200);
 	}
 
 	b2Vec2 anchorLVec = leftTrigger->joint->GetAnchorB();

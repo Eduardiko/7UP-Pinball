@@ -261,11 +261,24 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 		ballLostBlit = true;
 		App->audio->PlayFx(App->scene_intro->hole_in_fx);
 		ballLost = true;
-
-		ballLostBlit = true;
 		ballPendingToDelete = bodyA;
 		ballsLeft--;
+
+		b2Fixture* fixture = bodyA->body->GetFixtureList();
+
+		while (fixture != NULL)
+		{
+			b2Filter newFilter;
+			newFilter.groupIndex = BODY_TYPE::BALL_TOP;
+			ballInTop = false;
+			fixture->SetFilterData(newFilter);
+			fixture = fixture->GetNext();
+		}
+
+
 		ballInTop = true;
+
+
 	}
 
 		if (bodyB->sensorType == _REBOUNCER1)
