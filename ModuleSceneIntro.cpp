@@ -360,6 +360,16 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 		{
 			App->UI->halfScoreRight += 1500;
 		}
+
+		if (bodyB->sensorType == _BUMPER_L)
+		{
+			bodyA->body->ApplyLinearImpulse({ 0.8f * 2.5, -0.8f * 2.5 }, { 0.0f,0.0f }, true);
+		}
+		if (bodyB->sensorType == _BUMPER_R)
+		{
+			bodyA->body->ApplyLinearImpulse({ -0.8f * 2.5, -0.8f * 2.5 }, { 0.0f,0.0f }, true);
+		}
+
 		
 }
 
@@ -828,8 +838,28 @@ void ModuleSceneIntro::setWalls() {
 		439, 444,
 
 	};
-
 	backgroundWalls.add(App->physics->CreateBumperChain(0, 0, leftBumperBoom, 4, BODY_TYPE::WALL_FLOOR));
+	int rightBumperBoom[4] =
+	{
+
+		549, 408,
+		533, 440
+
+	};
+	backgroundWalls.add(App->physics->CreateBumperChain(0, 0, rightBumperBoom, 4, BODY_TYPE::WALL_FLOOR));
+	int bumperSensorL[4] =
+	{
+		420, 403,
+		436, 440,
+	};
+	backgroundWalls.add(App->physics->CreateBumperChainSensor(0, 0, bumperSensorL, 4, SENSOR_TYPE::_BUMPER_L));
+	int bumperSensorR[4] =
+	{
+		549, 408,
+		533, 440
+	};
+	backgroundWalls.add(App->physics->CreateBumperChainSensor(0, 0, bumperSensorR, 4, SENSOR_TYPE::_BUMPER_R));
+
 }
 
 
@@ -856,7 +886,8 @@ void ModuleSceneIntro::setSensors()
 	sensors.add(App->physics->CreateRectangleSensor(363, 416, 28, 28, _MINI_PLUNGE_L));
 	sensors.add(App->physics->CreateRectangleSensor(604, 416, 28, 28, _MINI_PLUNGE_R));
 
-	
+	/*sensors.add(App->physics->CreateBumperChainSensor(420, 403, &28, 4, _BUMPER_L));
+	sensors.add(App->physics->CreateBumperChainSensor(549, 533, &28, 4, _BUMPER_R));*/
 }
 
 void ModuleSceneIntro::SpawnBall()

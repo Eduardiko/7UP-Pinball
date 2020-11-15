@@ -46,7 +46,8 @@ enum SENSOR_TYPE
 	_MINI_PLUNGE_R,
 	_CATAPULT,
 	_FUNNEL,
-
+	_BUMPER_R,
+	_BUMPER_L,
 	_LEVEL_CHANGE,
 	_TOP_LEVEL,
 	_FLOOR_LEVEL,
@@ -100,6 +101,7 @@ public:
 	PhysBody* CreateLeftTrigger();
 	PhysBody* CreateRightTrigger();
 	PhysBody* CreateBumperChain(int x, int y, int* points, int size, BODY_TYPE type);
+	PhysBody* CreateBumperChainSensor(int x, int y, int* points, int size, SENSOR_TYPE sensorType);
 	PhysBody* CreateRectangleSensor(int x, int y, int width, int height, SENSOR_TYPE sensorType);
 	PhysBody* CreateCircleBumper(int x, int y, int radius, SENSOR_TYPE sensorType);
 
