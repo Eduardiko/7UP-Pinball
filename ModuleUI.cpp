@@ -27,13 +27,12 @@ bool ModuleUI::Start()
 	bool ret = true;
 
 	char lookupTable[] = { "0123456789" };
+	char lookupTable2[] = { "0123456789.,\"!'-©ABCDEFGHIJKLMNOPQRSTUVWXYZ.    " };
+
 	font = Load("pinball/font.png", lookupTable, 1);
+	font2 = Load("pinball/font2.png", lookupTable2, 3);
 
-	halfScoreRight = 999900;
-	halfScoreLeft = 999999;
-
-	halfScoreRight = 000000;
-	halfScoreLeft = 000000;
+	score = 0;
 
 	return ret;
 }
@@ -43,25 +42,26 @@ update_status ModuleUI::Update()
 {
 	update_status status = UPDATE_CONTINUE;
 	
-	if (halfScoreRight > 999999)
-	{
-		halfScoreLeft = halfScoreLeft + halfScoreRight - 999999;
-		halfScoreRight = 0;
-	}
+	if (score > highScore)
+		highScore = score;
 
-	if (halfScoreLeft > 999999)
-	{
-		halfScoreRight = 0;
-		halfScoreLeft = 0;
-	}
+	if (App->scene_intro->ballsLeft == 0)
+		lastScore = score;
 
-	char scoreTextRight[DYNAMIC_TEXT_LEN + 1];
-	IntToString(scoreTextRight, halfScoreRight);
-	RenderDynamicText(scoreTextRight, 491, 29, font, true);
+	IntToString(scoreText, score);
+	BlitBigText(347, 29, font, scoreText);
 
-	char scoreTextLeft[DYNAMIC_TEXT_LEN + 1];
-	IntToString(scoreTextLeft, halfScoreLeft);
-	RenderDynamicText(scoreTextLeft, 347, 29, font, true);
+	int datax = 69;
+	int datay = 234;
+
+	BlitText(datax, datay, font2, "HIGHSCORE");
+
+	IntToString(scoreText, highScore);
+	BlitText(datax, datay + 15, font2, scoreText);
+
+	BlitText(datax, datay + 40, font2, "LAST SCORE");
+	IntToString(scoreText, lastScore);
+	BlitText(datax, datay + 55, font2, scoreText);
 
 	return status;
 }
@@ -73,6 +73,7 @@ bool ModuleUI::CleanUp()
 	bool ret = true;
 
 	UnLoad(font);
+	UnLoad(font2);
 
 	return ret;
 }
@@ -125,8 +126,8 @@ int ModuleUI::Load(const char* texture_path, const char* characters, uint rows)
 	font.totalLength = strlen(characters);
 	font.columns = fonts[id].totalLength / rows;
 
-	uint tex_w = 130;
-	uint tex_h = 27;
+	uint tex_w, tex_h;
+	App->textures->GetTextureSize(tex, tex_w, tex_h);
 	font.char_w = tex_w / font.columns;
 	font.char_h = tex_h / font.rows;
 
@@ -150,8 +151,46 @@ void ModuleUI::UnLoad(int font_id)
 
 void ModuleUI::BlitText(int x, int y, int font_id, const char* text) const
 {
-	//LOG("printing");
+	if (text == nullptr || font_id < 0 || font_id >= MAX_FONTS || fonts[font_id].texture == nullptr)
+	{
+		LOG("Unable to render text with bmp font id %d", font_id);
+		return;
+	}
 
+	const Font* font = &fonts[font_id];
+	SDL_Rect spriteRect;
+	uint len = strlen(text);
+
+	spriteRect.w = font->char_w;
+	spriteRect.h = font->char_h;
+
+	for (uint i = 0; i < len; ++i)
+	{
+		uint charIndex = 0;
+
+		// Find the location of the current character in the lookup table
+		for (uint j = 0; j < font->totalLength; ++j)
+		{
+			if (font->table[j] == text[i])
+			{
+				charIndex = j;
+				break;
+			}
+		}
+
+		// Retrieve the position of the current character in the sprite
+		spriteRect.x = spriteRect.w * (charIndex % font->columns);
+		spriteRect.y = spriteRect.h * (charIndex / font->columns);
+
+		App->renderer->Blit(font->texture, x, y, &spriteRect, 0.0f, false);
+
+		// Advance the position where we blit the next character
+		x += spriteRect.w;
+	}
+}
+
+void ModuleUI::BlitBigText(int x, int y, int font_id, const char* text) const
+{
 	if (text == nullptr || font_id < 0 || font_id >= MAX_FONTS || fonts[font_id].texture == nullptr)
 	{
 		LOG("Unable to render text with bmp font id %d", font_id);
@@ -203,16 +242,5 @@ void ModuleUI::IntToString(char* buffer, int k) {
 		if (i < 0) break;
 		buffer[i--] += k % 10;
 		k /= 10;
-	}
-}
-
-void ModuleUI::RenderDynamicText(char* text, int x, int y, int fontIndex, bool inverse) {
-	int i = 0;
-
-	if (i == DYNAMIC_TEXT_LEN) {
-		BlitText(x - (i * 12), y, fontIndex, "0");
-	}
-	else {
-		BlitText(x - (i * 12), y, fontIndex, text + i);
 	}
 }

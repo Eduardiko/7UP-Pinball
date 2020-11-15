@@ -6,7 +6,7 @@
 
 #define MAX_FONTS 100
 #define MAX_FONT_CHARS 256
-#define DYNAMIC_TEXT_LEN 6
+#define DYNAMIC_TEXT_LEN 12
 
 struct SDL_Texture;
 
@@ -37,9 +37,15 @@ public:
 	bool CleanUp();
 
 public:
-	int halfScoreRight;
-	int halfScoreLeft;
+	int score;
+	int highScore;
+	int lastScore;
+
 	int font = -1;
+	int font2 = -1;
+	int font2_numbers = -1;
+
+	char scoreText[DYNAMIC_TEXT_LEN + 1] = { "000000000000" };
 
 	SDL_Texture* pointSpritesheetTex;
 	SDL_Rect pointsRect;
@@ -56,10 +62,10 @@ public:
 	void UnLoad(int fontIndex);
 
 	// Create a surface from text
+	void BlitBigText(int x, int y, int fontIndex, const char* text) const;
 	void BlitText(int x, int y, int fontIndex, const char* text) const;
 
 	void IntToString(char* buffer, int k);
-	void RenderDynamicText(char* text, int x, int y, int fontIndex, bool inverse);
 
 	int k = 0;
 private:

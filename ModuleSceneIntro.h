@@ -60,9 +60,10 @@ public:
 	SDL_Texture* backgroundTextTex;
 
 	uint trigger_hit_fx;
+	unsigned int ballsLeft;
+
 private:
 	// win/fail
-	unsigned int ballsLeft;
 	bool ballLost = false;
 	bool pendingToDelete = false;
 	unsigned int arrowCounter = 0;

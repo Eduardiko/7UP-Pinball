@@ -78,7 +78,7 @@ ModuleSceneIntro::~ModuleSceneIntro()
 bool ModuleSceneIntro::Start()
 {
 	ballsLeft = 3;
-	App->UI->halfScoreRight = 0;
+	App->UI->score = 0;
 
 
 	if (!App->audio->IsEnabled() ) {
@@ -112,7 +112,7 @@ bool ModuleSceneIntro::Start()
 
 	debug = App->textures->Load("pinball/debug.png");
 
-	backgroundTex = App->textures->Load("pinball/background upd.png");
+	backgroundTex = App->textures->Load("pinball/background.png");
 	background.x = 0;
 	background.y = 0;
 	background.w = SCREEN_WIDTH;
@@ -351,19 +351,19 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 		{
 			reb1 = true;
 			reboundLightAnim.Reset();
-			App->UI->halfScoreRight += 1000;
+			App->UI->score += 1000;
 		}
 		if (bodyB->sensorType == _REBOUNCER2)
 		{
 			reb2 = true;
 			reboundLightAnim.Reset();
-			App->UI->halfScoreRight += 1000;
+			App->UI->score += 1000;
 		}
 		if (bodyB->sensorType == _REBOUNCER3)
 		{
 			reb3 = true;
 			reboundLightAnim.Reset();
-			App->UI->halfScoreRight += 1000;
+			App->UI->score += 1000;
 		}
 
 
@@ -397,7 +397,7 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 		if (bodyB->sensorType == _FUNNEL)
 		{
 			enterFunnel = true;
-			App->UI->halfScoreRight += 4500;
+			App->UI->score += 4500;
 
 			b2Fixture* fixture = bodyA->body->GetFixtureList();
 
@@ -418,13 +418,13 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 
 		if (bodyB->sensorType == _CATAPULT)
 		{
-			App->UI->halfScoreRight += 4500;
+			App->UI->score += 4500;
 			//holdInCatapult = true;
 		}
 
 		if (bodyB->sensorType == _MINI_PLUNGE_L || _MINI_PLUNGE_R)
 		{
-			App->UI->halfScoreRight += 1500;
+			App->UI->score += 1500;
 		}
 
 		if (bodyB->sensorType == _BUMPER_L)
@@ -442,19 +442,19 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 			App->audio->PlayFx(holeFx);
 			star1 = true;
 			starAnim.Reset();
-			App->UI->halfScoreRight += 2000;
+			App->UI->score += 2000;
 		}
 		if (bodyB->sensorType == _STAR2)
 		{
 			star2 = true;
 			starAnim.Reset();
-			App->UI->halfScoreRight += 2000;
+			App->UI->score += 2000;
 		}
 		if (bodyB->sensorType == _STAR3)
 		{
 			star3 = true;
 			starAnim.Reset();
-			App->UI->halfScoreRight += 2000;
+			App->UI->score += 2000;
 		}
 		
 }
