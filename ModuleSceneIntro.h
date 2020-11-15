@@ -26,6 +26,7 @@ public:
 	void setSensors();
 
 public:
+	bool gameStarted = false;
 
 	bool reb1, reb2, reb3, ballLostBlit, enterFunnel, holdInCatapult;
 
@@ -47,7 +48,7 @@ public:
 	SDL_Rect plungeCompRect;
 	SDL_Rect littlePlungeRect;
 
-	
+	uint trigger_hit_fx;
 private:
 	// win/fail
 	unsigned int ballsLeft;
@@ -75,7 +76,7 @@ private:
 	SDL_Texture* spriteSheet;
 	SDL_Texture* backgroundAssets;
 	SDL_Texture* debug;
-	Animation ballAnim, arrowLightsAnim,reboundLightAnim,ballLostAnim, thinkClearAnim;
+	Animation ballAnim, arrowLightsAnim, reboundLightAnim, ballLostAnim, thinkClearAnim, playGameAnim;
 
 
 	//sensors and collision detectors

@@ -4,6 +4,8 @@
 #include "ModuleRender.h"
 #include "ModuleInput.h"
 #include "ModuleUI.h"
+#include "ModuleAudio.h"
+#include "ModuleSceneIntro.h"
 
 ModulePlayer::ModulePlayer(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
@@ -47,33 +49,54 @@ bool ModulePlayer::CleanUp()
 // Update: draw background
 update_status ModulePlayer::Update()
 {
+
+	if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_REPEAT)
+	{
+		App->scene_intro->gameStarted = true;
+		SDL_Delay(200);
+	}
+
 	b2Vec2 anchorLVec = leftTrigger->joint->GetAnchorB();
 	b2Vec2 anchorRVec = rightTrigger->joint->GetAnchorB();
 
 	App->renderer->Blit(spriteSheet, 418, 476, &lTriggerRect, 1.0f, leftTrigger->GetRotation(), anchorLVec.x, anchorLVec.y - 4);
 	App->renderer->Blit(spriteSheet, 494, 476, &rTriggerRect, 1.0f, rightTrigger->GetRotation(), anchorRVec.x + 36, anchorRVec.y - 4);
 
-	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
+	if (App->scene_intro->gameStarted)
 	{
-		leftTrigger->body->ApplyTorque(-65.0f, true);
-		App->UI->halfScoreRight++;
-	}
-	else
-	{
-		leftTrigger->body->ApplyTorque(15.0f, true);
+		
+
+		if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
+		{
+			leftTrigger->body->ApplyTorque(-65.0f, true);
+
+
+		}
+		if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_DOWN)
+			App->audio->PlayFx(App->scene_intro->trigger_hit_fx);
+
+		else
+		{
+			leftTrigger->body->ApplyTorque(15.0f, true);
+		}
+
+		if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
+		{
+			rightTrigger->body->ApplyTorque(65.0f, true);
+		}
+		if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_DOWN)
+			App->audio->PlayFx(App->scene_intro->trigger_hit_fx);
+		else
+		{
+			rightTrigger->body->ApplyTorque(-15.0f, true);
+		}
+
+		if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
+		{
+			plungeTrigger->body->ApplyForceToCenter(b2Vec2(0, 250), true);
+		}
 	}
 
-	if(App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
-		rightTrigger->body->ApplyTorque(65.0f, true);
-	else
-	{
-		rightTrigger->body->ApplyTorque(-15.0f, true);
-	}
-
-	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
-	{
-		plungeTrigger->body->ApplyForceToCenter(b2Vec2(0, 250), true);
-	}
 	return UPDATE_CONTINUE;
 }
 

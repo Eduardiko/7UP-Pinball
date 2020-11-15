@@ -32,6 +32,9 @@ bool ModuleUI::Start()
 	halfScoreRight = 999900;
 	halfScoreLeft = 999999;
 
+	halfScoreRight = 000000;
+	halfScoreLeft = 000000;
+
 	return ret;
 }
 

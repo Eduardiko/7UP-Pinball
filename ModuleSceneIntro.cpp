@@ -39,6 +39,12 @@ ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Modul
 	ballLostAnim.loop = false;
 	ballLostAnim.speed = 0.01f;
 
+	playGameAnim.PushBack({ 0,0,153,71 });
+	playGameAnim.PushBack({ 153,0,153,71 });
+	playGameAnim.PushBack({ 0,0,153,71 });
+	playGameAnim.loop = true;
+	playGameAnim.speed = 0.01f;
+
 	//plunge pushback
 	plungeRect.x = 275;
 	plungeRect.y = 116;
@@ -76,6 +82,8 @@ bool ModuleSceneIntro::Start()
 		App->UI->Start();
 	}
 
+	SpawnBall(700,355);
+
 	LOG("Loading Intro assets");
 	bool ret = true;
 
@@ -90,12 +98,10 @@ bool ModuleSceneIntro::Start()
 	background.h = SCREEN_HEIGHT;	
 
 	backgroundAssets=App->textures->Load("pinball/background assets.png");
-	if (backgroundAssets == nullptr) LOG("Couldnt load background assets!")
-	else
-		LOG("bg assets loaded succesfully!")
 
 	//load Fx
 
+	trigger_hit_fx = App->audio->LoadFx("audio/sound_fx/flipper_hit.wav");
 	hole_in_fx = App->audio->LoadFx("audio/sound_fx/hole_in.wav");
 	hole_out_fx = App->audio->LoadFx("audio/sound_fx/hole_out.wav");
 	triangle_fx = App->audio->LoadFx("audio/sound_fx/bouncing_triangle.wav");
@@ -160,6 +166,7 @@ bool ModuleSceneIntro::CleanUp()
 // Update: draw background
 update_status ModuleSceneIntro::Update()
 {
+	
 
 	App->renderer->Blit(backgroundTex, 0, 0, &background, 1.0f);
 
@@ -259,6 +266,10 @@ update_status ModuleSceneIntro::Update()
 		holdInCatapult = false;
 	}
 
+	if (gameStarted == false)
+	{
+		App->renderer->Blit(spriteSheet, 410, 250, &playGameAnim.GetCurrentFrame(), 1.0f);
+	}
 	
 
 
@@ -279,16 +290,19 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 		{
 			reb1 = true;
 			reboundLightAnim.Reset();
+			App->UI->halfScoreRight += 1000;
 		}
 		if (bodyB->sensorType == _REBOUNCER2)
 		{
 			reb2 = true;
 			reboundLightAnim.Reset();
+			App->UI->halfScoreRight += 1000;
 		}
 		if (bodyB->sensorType == _REBOUNCER3)
 		{
 			reb3 = true;
 			reboundLightAnim.Reset();
+			App->UI->halfScoreRight += 1000;
 		}
 
 
@@ -321,14 +335,23 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 
 		if (bodyB->sensorType == _FUNNEL)
 		{
+			App->UI->halfScoreRight += 4500;
 			enterFunnel = true;
 		}
 
 		if (bodyB->sensorType == _CATAPULT)
 		{
+			App->UI->halfScoreRight += 4500;
 			//holdInCatapult = true;
 		}
+
+		if (bodyB->sensorType == _MINI_PLUNGE_L || _MINI_PLUNGE_R)
+		{
+			App->UI->halfScoreRight += 1500;
+		}
+		
 }
+
 
 void ModuleSceneIntro::setWalls() {
 
