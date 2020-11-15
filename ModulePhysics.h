@@ -99,6 +99,7 @@ public:
 	PhysBody* CreateBall(int x, int y, int radius);
 	PhysBody* CreateLeftTrigger();
 	PhysBody* CreateRightTrigger();
+	PhysBody* CreateBumperChain(int x, int y, int* points, int size, BODY_TYPE type);
 	PhysBody* CreateRectangleSensor(int x, int y, int width, int height, SENSOR_TYPE sensorType);
 	PhysBody* CreateCircleBumper(int x, int y, int radius, SENSOR_TYPE sensorType);
 

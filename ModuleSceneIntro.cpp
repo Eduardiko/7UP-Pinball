@@ -787,7 +787,17 @@ void ModuleSceneIntro::setWalls() {
 	500, 110
 	};
 	backgroundWalls.add(App->physics->CreateChain(0, 0, topRightStick, 20, BODY_TYPE::WALL_FLOOR));
+	int leftBumperBoom[4] =
+	{
+
+		420, 403,
+		439, 444,
+
+	};
+
+	backgroundWalls.add(App->physics->CreateBumperChain(0, 0, leftBumperBoom, 4, BODY_TYPE::WALL_FLOOR));
 }
+
 
 void ModuleSceneIntro::setSensors()
 {
