@@ -122,7 +122,7 @@ bool ModuleSceneIntro::Start()
 	background.h = SCREEN_HEIGHT;	
 
 	backgroundAssets=App->textures->Load("pinball/background assets.png");
-
+	backgroundTextTex = App->textures->Load("pinball/StartMenuBackground.png");
 	//load Fx
 
 	trigger_hit_fx = App->audio->LoadFx("audio/sound_fx/flipper_hit.wav");
@@ -191,7 +191,10 @@ bool ModuleSceneIntro::CleanUp()
 // Update: draw background
 update_status ModuleSceneIntro::Update()
 {
-	
+	if (ballsLeft == 0)
+	{
+		gameStarted = false;
+	}
 	if (ballLost) {
 		ballLost = false;
 		ResetBallPos(ballPendingToDelete, 698, 438);
@@ -315,6 +318,7 @@ update_status ModuleSceneIntro::Update()
 
 	if (gameStarted == false)
 	{
+		App->renderer->Blit(backgroundTextTex, 0, 0, &background, 1.0f);
 		App->renderer->Blit(spriteSheet, 410, 250, &playGameAnim.GetCurrentFrame(), 1.0f);
 	}
 	

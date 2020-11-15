@@ -52,6 +52,11 @@ update_status ModulePlayer::Update()
 
 	if (App->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN)
 	{
+		if (App->scene_intro->gameStarted == false & App->scene_intro->ballsLeft == 0 )
+		{
+			App->scene_intro->ballsLeft = 3;
+			App->UI->score = 0;
+		}
 		App->scene_intro->gameStarted = true;
 		LOG("Game Started");
 	}
