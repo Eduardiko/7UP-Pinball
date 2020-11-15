@@ -53,6 +53,10 @@ private:
 	unsigned int ballsLeft;
 	bool ballLost = false;
 
+	bool ballInTop = true;
+
+	bool enteredLevel = false;
+
 	//Fx
 	uint hitWallFx;
 	uint holeFx;

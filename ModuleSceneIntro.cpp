@@ -137,8 +137,8 @@ bool ModuleSceneIntro::Start()
 	littlePlungeRect.w = 9;
 	littlePlungeRect.h = 32;
 
-	littlePlungeTriggerL = App->physics->CreatePlunge(364, 440);
-	littlePlungeTriggerR = App->physics->CreatePlunge(602, 440);
+	littlePlungeTriggerL = App->physics->CreateMiniPlunge(364, 440);
+	littlePlungeTriggerR = App->physics->CreateMiniPlunge(602, 440);
 
 	//spawned ball coordinates are in createBall()
 	setSensors();
@@ -171,6 +171,7 @@ update_status ModuleSceneIntro::Update()
 	//render objects
 
 	//ball
+	App->renderer->Blit(backgroundAssets, 349, 266, &arrowLightsAnim.GetCurrentFrame(), 1.0f);
 	
 	p2List_item<PhysBody*>* ball_item = balls.getFirst();
 	while (ball_item != NULL)
@@ -186,9 +187,8 @@ update_status ModuleSceneIntro::Update()
 		ball_item = ball_item->next;
 	}
 
-	App->renderer->Blit(spriteSheet, 245, 70, &topTexRect, 1.0f);
-	App->renderer->Blit(backgroundAssets, 349, 266, &arrowLightsAnim.GetCurrentFrame(), 1.0f);
 	
+	App->renderer->Blit(spriteSheet, 245, 70, &topTexRect, 1.0f);
 	App->renderer->Blit(spriteSheet, 663, 457, &plungeRect, 1.0f);
 	App->renderer->Blit(spriteSheet, 665, 525, &plungeCompRect, 1.0f);
 	App->renderer->Blit(spriteSheet, 365, 438, &littlePlungeRect, 1.0f);
@@ -234,6 +234,7 @@ update_status ModuleSceneIntro::Update()
 			SpawnBall();
 		}
 
+		ballInTop = true;
 		ballLost = false;
 	}
 
@@ -266,9 +267,6 @@ update_status ModuleSceneIntro::Update()
 
 void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 {
-	//iterate all balls to see if they collide
-	for (p2List_item<PhysBody*>* bc = balls.getFirst(); bc != NULL; bc = bc->next)
-	{
 
 		if (bodyB->sensorType == _DEAD_SENSOR)
 		{
@@ -297,44 +295,62 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 
 		if (bodyB->sensorType == _LEVEL_CHANGE)
 		{
-			b2Filter filter;
+		
+			b2Fixture* fixture = bodyA->body->GetFixtureList();
 
-			if (filter.groupIndex = -1)
+			while (fixture != NULL)
 			{
-				for (b2Fixture* f = bodyA->body->GetFixtureList(); f; f = f->GetNext()) {
-					f->GetFilterData();
-					filter.groupIndex = -2;
-					f->SetFilterData(filter);
+				b2Filter newFilter;
+				if (ballInTop == true)
+				{
+					newFilter.groupIndex = BODY_TYPE::BALL_FLOOR;
+					LOG("lavaina");
+					ballInTop = false;
 				}
-			}
-			
+				else
+				{
+					newFilter.groupIndex = BODY_TYPE::BALL_TOP;
+					ballInTop = true;
 
+				}
+				
+				fixture->SetFilterData(newFilter);
+				fixture = fixture->GetNext();
+			}
+
+		}
+
+		if (bodyB->sensorType == _ENTER_LEVEL)
+		{
+			if (!enteredLevel)
+			{
+				int enterLevelRamp[22] = {
+					527, 83,
+					544, 87,
+					559, 92,
+					574, 98,
+					585, 105,
+					595, 113,
+					608, 128,
+					615, 139,
+					622, 151,
+					625, 147,
+					587, 86
+				};
+				backgroundWalls.add(App->physics->CreateChain(0, 0, enterLevelRamp, 22, BODY_TYPE::WALL_FLOOR));
+			}
+			enteredLevel = true;
 		}
 
 		if (bodyB->sensorType == _FUNNEL)
 		{
-			enterFunnel = true;
+			//enterFunnel = true;
 		}
 
 		if (bodyB->sensorType == _CATAPULT)
 		{
-			holdInCatapult = true;
+			//holdInCatapult = true;
 		}
-
-		if (bodyB->sensorType == _MINI_PLUNGE_L)
-		{
-			LOG("enteringPlug")
-			int impulse = rand() % 750 + 500;
-			littlePlungeTriggerL->body->ApplyForceToCenter(b2Vec2(0, impulse), true);
-		}
-		if (bodyB->sensorType == _MINI_PLUNGE_R)
-		{
-			int impulse = rand() % 750 + 500;
-			littlePlungeTriggerR->body->ApplyForceToCenter(b2Vec2(0, impulse), true);
-		}
-
-	}
-
 }
 
 void ModuleSceneIntro::setWalls() {
@@ -345,7 +361,7 @@ void ModuleSceneIntro::setWalls() {
 
 	// Static walls
 
-	int backgroundFloor[188] = {
+	int backgroundFloor[196] = {
 	514, 532,
 	526, 530,
 	537, 525,
@@ -386,8 +402,12 @@ void ModuleSceneIntro::setWalls() {
 	621, 154,
 	623, 147,
 	632, 146,
-	638, 150,
-	648, 128,
+	644, 160,
+	645, 170,
+	641, 182,
+	664, 190,
+	668, 170,
+	662, 145,
 	633, 114,
 	614, 102,
 	588, 95,
@@ -441,7 +461,7 @@ void ModuleSceneIntro::setWalls() {
 	454, 552,
 	514, 552
 	};
-	backgroundWalls.add(App->physics->CreateChain(0, 0, backgroundFloor, 188, BODY_TYPE::WALL_FLOOR));
+	backgroundWalls.add(App->physics->CreateChain(0, 0, backgroundFloor, 196, BODY_TYPE::WALL_FLOOR));
 	int backgroundLeftFunnel[60] = {
 	337, 267,
 	353, 251,
@@ -482,8 +502,8 @@ void ModuleSceneIntro::setWalls() {
 	711, 338,
 	711, 441,
 	709, 450,
-	702, 454,
-	659, 453,
+	702, 452,
+	659, 456,
 	659, 260,
 	660, 239,
 	663, 219,
@@ -492,7 +512,7 @@ void ModuleSceneIntro::setWalls() {
 	672, 166,
 	666, 144,
 	652, 128,
-	634, 120,
+	627, 122,
 	618, 126,
 	605, 137,
 	599, 151,
@@ -503,7 +523,7 @@ void ModuleSceneIntro::setWalls() {
 	642, 178,
 	643, 162,
 	637, 149,
-	622, 144,
+	610, 137,
 	638, 124,
 	648, 129,
 	655, 138,
@@ -803,7 +823,10 @@ void ModuleSceneIntro::setSensors()
 	sensors.add(App->physics->CreateCircleBumper(485, 188, 10, _REBOUNCER2));
 	sensors.add(App->physics->CreateCircleBumper(526, 223, 10, _REBOUNCER3));
 
-	sensors.add(App->physics->CreateRectangleSensor(340, 255, 20, 20, _LEVEL_CHANGE));
+	sensors.add(App->physics->CreateRectangleSensor(337, 247, 2, 2, _LEVEL_CHANGE));
+	sensors.add(App->physics->CreateRectangleSensor(652, 156, 2, 2, _LEVEL_CHANGE));
+
+	sensors.add(App->physics->CreateRectangleSensor(545, 107, 2, 2, _ENTER_LEVEL));
 
 	sensors.add(App->physics->CreateRectangleSensor(333, 162, 5, 5, _FUNNEL));
 
@@ -821,7 +844,7 @@ void ModuleSceneIntro::SpawnBall()
 {
 	//create in module physics the next functions
 
-	balls.add(App->physics->CreateBall(350,30,9));
+	balls.add(App->physics->CreateBall(698,438,9));
 	balls.getLast()->data->listener = this;
 }
 

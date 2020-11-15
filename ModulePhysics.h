@@ -16,11 +16,14 @@
 
 enum BODY_TYPE
 {
-	BALL = -1,
 	WALL_TOP = -1,
+	PLUNGE = -1,
+	BALL_FLOOR = -1,
 
+
+	BALL_TOP = -2,
+	MINI_PLUNGE = -2,
 	WALL_FLOOR = -2,
-	PLUNGE = -2,
 	TRIGGER = -2,
 	BUMPER = -2,
 
@@ -36,6 +39,7 @@ enum SENSOR_TYPE
 	_BUMPER,
 	_PLUNGE,
 	_DEAD_SENSOR,
+	_ENTER_LEVEL,
 	_REBOUNCER1,
 	_REBOUNCER2,
 	_REBOUNCER3,
@@ -90,6 +94,7 @@ public:
 
 	PhysBody* CreateCircle(int x, int y, int radius);
 	PhysBody* CreatePlunge(int x, int y);
+	PhysBody* CreateMiniPlunge(int x, int y);
 	PhysBody* CreateRectangle(int x, int y, int width, int height);
 	PhysBody* CreateChain(int x, int y, int* points, int size, BODY_TYPE type);
 	PhysBody* CreateBall(int x, int y, int radius);

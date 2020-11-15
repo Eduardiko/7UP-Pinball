@@ -349,7 +349,7 @@ PhysBody* ModulePhysics::CreateBall(int x, int y, int radius)
 	fixture.density = 1.0f;
 	fixture.friction = 0.0f;
 	fixture.restitution = 0.3f;
-	fixture.filter.groupIndex = BODY_TYPE::BALL;
+	fixture.filter.groupIndex = BODY_TYPE::BALL_TOP;
 
 	b->CreateFixture(&fixture);
 
@@ -394,6 +394,67 @@ PhysBody* ModulePhysics::CreatePlunge(int x, int y)
 	plungeFixture2.shape = &box1;
 	plungeFixture2.density = 1.0f;
 	plungeFixture2.filter.groupIndex = BODY_TYPE::PLUNGE;
+
+	plungeBodyB->CreateFixture(&plungeFixture2);
+
+	b2PrismaticJointDef jointDef;
+	jointDef.bodyA = plungeBodyB;
+	jointDef.bodyB = plungeBody;
+	jointDef.collideConnected = true;
+
+	jointDef.localAxisA.Set(0, 1);
+	jointDef.localAxisA.Normalize();
+	jointDef.localAnchorA.Set(0, 0);
+	jointDef.localAnchorB.Set(0, 0);
+
+	jointDef.lowerTranslation = -1.0f;
+	jointDef.upperTranslation = 1.0f;
+	jointDef.enableLimit = true;
+	jointDef.maxMotorForce = 200.0f;
+	jointDef.motorSpeed = -200.0f;
+	jointDef.enableMotor = true;
+	world->CreateJoint(&jointDef);
+
+	PhysBody* pbody = new PhysBody();
+	pbody->body = plungeBody;
+	pbody->body2 = plungeBodyB;
+	plungeBody->SetUserData(pbody);
+
+	return pbody;
+}
+
+PhysBody* ModulePhysics::CreateMiniPlunge(int x, int y)
+{
+
+	b2BodyDef plungeBodyDef;
+	plungeBodyDef.type = b2_dynamicBody;
+	plungeBodyDef.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
+
+	b2Body* plungeBody = world->CreateBody(&plungeBodyDef);
+	b2PolygonShape box;
+	box.SetAsBox(PIXEL_TO_METERS(20 * 0.5f), PIXEL_TO_METERS(11 * 0.5f));
+
+	b2FixtureDef plungeFixture;
+	plungeFixture.shape = &box;
+	plungeFixture.density = 20.0f;
+	plungeFixture.restitution = 4.0f;
+	plungeFixture.filter.groupIndex = BODY_TYPE::MINI_PLUNGE;
+
+	plungeBody->CreateFixture(&plungeFixture);
+
+	b2BodyDef plungeBodyBDef;
+	plungeBodyBDef.type = b2_staticBody;
+	int z = y + 50;
+	plungeBodyBDef.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(z));
+
+	b2Body* plungeBodyB = world->CreateBody(&plungeBodyBDef);
+	b2PolygonShape box1;
+	box1.SetAsBox(PIXEL_TO_METERS(20 * 0.5f), PIXEL_TO_METERS(11 * 0.5f));
+
+	b2FixtureDef plungeFixture2;
+	plungeFixture2.shape = &box1;
+	plungeFixture2.density = 1.0f;
+	plungeFixture2.filter.groupIndex = BODY_TYPE::MINI_PLUNGE;
 
 	plungeBodyB->CreateFixture(&plungeFixture2);
 
