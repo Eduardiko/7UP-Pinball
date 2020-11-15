@@ -82,7 +82,7 @@ bool ModuleSceneIntro::Start()
 		App->UI->Start();
 	}
 
-	SpawnBall(700,355);
+	
 
 	LOG("Loading Intro assets");
 	bool ret = true;
@@ -209,11 +209,12 @@ update_status ModuleSceneIntro::Update()
 	}
 
 	if (reb2) {
-
+		App->audio->PlayFx(App->scene_intro->rebouncer_fx);
 		App->renderer->Blit(spriteSheet, 470, 173, &reboundLightAnim.GetCurrentFrame(), 1.0f);
 	}
 
 	if (reb3) {
+		App->audio->PlayFx(App->scene_intro->rebouncer_fx);
 		App->renderer->Blit(spriteSheet, 513, 209, &reboundLightAnim.GetCurrentFrame(), 1.0f);
 	}
 	if (reboundLightAnim.Finished())
