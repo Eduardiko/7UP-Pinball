@@ -294,6 +294,14 @@ update_status ModuleSceneIntro::Update()
 		App->renderer->Blit(spriteSheet, 514, 103, &starAnim.GetCurrentFrame(), 1.0f);
 	}
 
+	if (star1 && star2 & star3 == true)
+	{
+		ballsLeft++;
+		counter++;
+		if (counter == 75)
+			star1 = star2 = star3 = false;
+	}
+
 	LOG("arro counter %d",arrowCounter);
 
 	App->renderer->Blit(tri1, 110, 110, &arr1.GetCurrentFrame(), 1.0f);
@@ -338,6 +346,7 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 
 	if (bodyB->sensorType == _DEAD_SENSOR)
 	{
+		star1 = star2 = star3 = false;
 		ballLostBlit = true;
 		App->audio->PlayFx(App->scene_intro->hole_in_fx);
 		ballLost = true;

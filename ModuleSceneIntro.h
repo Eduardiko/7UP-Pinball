@@ -71,6 +71,8 @@ private:
 	bool ballInHole = false;
 	bool ballInTop = true;
 
+	int counter = 0;
+
 	//Fx
 	uint hitWallFx;
 	uint holeFx;
