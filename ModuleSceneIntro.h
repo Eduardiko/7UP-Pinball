@@ -57,6 +57,8 @@ public:
 	SDL_Rect plungeCompRect;
 	SDL_Rect littlePlungeRect;
 
+	SDL_Texture* backgroundTextTex;
+
 	uint trigger_hit_fx;
 private:
 	// win/fail
