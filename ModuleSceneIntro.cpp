@@ -266,18 +266,17 @@ update_status ModuleSceneIntro::Update()
 
 	if (star1)
 	{
-		
-		App->renderer->Blit(spriteSheet, 437, 104, &starAnim.GetCurrentFrame(), 1.0f);
+		App->renderer->Blit(spriteSheet, 439, 103, &starAnim.GetCurrentFrame(), 1.0f);
 	}
 	if (star2)
 	{
 		App->audio->PlayFx(holeFx);
-		App->renderer->Blit(spriteSheet, 473, 98, &starAnim.GetCurrentFrame(), 1.0f);
+		App->renderer->Blit(spriteSheet, 476, 99, &starAnim.GetCurrentFrame(), 1.0f);
 	}
 	if (star3)
 	{
 		App->audio->PlayFx(holeFx);
-		App->renderer->Blit(spriteSheet, 515, 102, &starAnim.GetCurrentFrame(), 1.0f);
+		App->renderer->Blit(spriteSheet, 514, 103, &starAnim.GetCurrentFrame(), 1.0f);
 	}
 
 	LOG("arro counter %d",arrowCounter);
@@ -966,7 +965,7 @@ void ModuleSceneIntro::setSensors()
 	sensors.add(App->physics->CreateRectangleSensor(333, 162, 5, 5, _FUNNEL));
 
 	//CATAPULTA
-	sensors.add(App->physics->CreateRectangleSensor(632, 250, 20, 20, _CATAPULT));
+	sensors.add(App->physics->CreateRectangleSensor(632, 250, 20, 20, _FUNNEL));
 	sensors.add(App->physics->CreateRectangleSensor(484, 300, 28, 28, _FUNNEL));
 
 	sensors.add(App->physics->CreateRectangleSensor(363, 416, 28, 28, _MINI_PLUNGE_L));
