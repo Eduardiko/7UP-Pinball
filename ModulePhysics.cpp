@@ -105,7 +105,7 @@ PhysBody* ModulePhysics::CreateRectangle(int x, int y, int width, int height)
 	return pbody;
 }
 
-PhysBody* ModulePhysics::CreateRectangleSensor(int x, int y, int width, int height, PHYSIC_BODY_TYPE sensorType)
+PhysBody* ModulePhysics::CreateRectangleSensor(int x, int y, int width, int height, SENSOR_TYPE sensorType)
 {
 	b2BodyDef body;
 	body.type = b2_staticBody;
@@ -128,12 +128,12 @@ PhysBody* ModulePhysics::CreateRectangleSensor(int x, int y, int width, int heig
 	b->SetUserData(pbody);
 	pbody->width = width;
 	pbody->height = height;
-	pbody->bodyType = sensorType;
+	pbody->sensorType = sensorType;
 
 	return pbody;
 }
 
-PhysBody* ModulePhysics::CreateCircleSensor(int x, int y, int radius, PHYSIC_BODY_TYPE sensorType)
+PhysBody* ModulePhysics::CreateCircleBumper(int x, int y, int radius, SENSOR_TYPE sensorType)
 {
 	b2BodyDef body;
 	body.type = b2_staticBody;
@@ -154,12 +154,12 @@ PhysBody* ModulePhysics::CreateCircleSensor(int x, int y, int radius, PHYSIC_BOD
 	pbody->body = b;
 	b->SetUserData(pbody);
 	pbody->width = pbody->height = radius;
-	pbody->bodyType = sensorType;
+	pbody->sensorType = sensorType;
 
 	return pbody;
 }
 
-PhysBody* ModulePhysics::CreateChain(int x, int y, int* points, int size, BODY_INDEX index, PHYSIC_BODY_TYPE type)
+PhysBody* ModulePhysics::CreateChain(int x, int y, int* points, int size, BODY_TYPE type)
 {
 	b2BodyDef body;
 	body.type = b2_staticBody;
@@ -180,7 +180,7 @@ PhysBody* ModulePhysics::CreateChain(int x, int y, int* points, int size, BODY_I
 
 	b2FixtureDef fixture;
 	fixture.shape = &shape;
-	fixture.filter.groupIndex = index;
+	fixture.filter.groupIndex = type;
 
 	b->CreateFixture(&fixture);
 
@@ -188,7 +188,6 @@ PhysBody* ModulePhysics::CreateChain(int x, int y, int* points, int size, BODY_I
 
 	PhysBody* pbody = new PhysBody();
 	pbody->body = b;
-	pbody->bodyType = type;
 	b->SetUserData(pbody);
 	pbody->width = pbody->height = 0;
 
@@ -226,7 +225,7 @@ PhysBody* ModulePhysics::CreateLeftTrigger()
 	b2FixtureDef triggerFixtureDef;
 	triggerFixtureDef.shape = &triggerShape;
 	triggerFixtureDef.density = 1;
-	triggerFixtureDef.filter.groupIndex = BODY_INDEX::TRIGGER;
+	triggerFixtureDef.filter.groupIndex = BODY_TYPE::TRIGGER;
 	triggerBody->CreateFixture(&triggerFixtureDef);
 
 	b2Vec2 centerRectangle = triggerBody->GetWorldCenter();
@@ -242,7 +241,7 @@ PhysBody* ModulePhysics::CreateLeftTrigger()
 	pivotCircle.m_radius = PIXEL_TO_METERS(0.5f);
 	b2FixtureDef pivotFixtureDef;
 	pivotFixtureDef.shape = &pivotCircle;
-	pivotFixtureDef.filter.groupIndex = BODY_INDEX::TRIGGER;
+	pivotFixtureDef.filter.groupIndex = BODY_TYPE::TRIGGER;
 	pivotBody->CreateFixture(&pivotFixtureDef);
 
 	b2RevoluteJointDef revJointDef;
@@ -295,7 +294,7 @@ PhysBody* ModulePhysics::CreateRightTrigger()
 	b2FixtureDef triggerFixtureDef;
 	triggerFixtureDef.shape = &triggerShape;
 	triggerFixtureDef.density = 1;
-	triggerFixtureDef.filter.groupIndex = BODY_INDEX::TRIGGER;
+	triggerFixtureDef.filter.groupIndex = BODY_TYPE::TRIGGER;
 	triggerBody->CreateFixture(&triggerFixtureDef);
 
 	b2Vec2 centerRectangle = triggerBody->GetWorldCenter();
@@ -311,7 +310,7 @@ PhysBody* ModulePhysics::CreateRightTrigger()
 	pivotCircle.m_radius = PIXEL_TO_METERS(0.5f);
 	b2FixtureDef pivotFixtureDef;
 	pivotFixtureDef.shape = &pivotCircle;
-	pivotFixtureDef.filter.groupIndex = BODY_INDEX::TRIGGER;
+	pivotFixtureDef.filter.groupIndex = BODY_TYPE::TRIGGER;
 	pivotBody->CreateFixture(&pivotFixtureDef);
 
 	b2RevoluteJointDef revJointDef;
@@ -350,7 +349,7 @@ PhysBody* ModulePhysics::CreateBall(int x, int y, int radius)
 	fixture.density = 1.0f;
 	fixture.friction = 0.0f;
 	fixture.restitution = 0.3f;
-	fixture.filter.groupIndex = BODY_INDEX::BALL;
+	fixture.filter.groupIndex = BODY_TYPE::BALL;
 
 	b->CreateFixture(&fixture);
 
@@ -358,7 +357,7 @@ PhysBody* ModulePhysics::CreateBall(int x, int y, int radius)
 	pbody->body = b;
 	b->SetUserData(pbody);
 	pbody->width = pbody->height = radius;
-	pbody->bodyType = _BALL;
+	pbody->sensorType = _BALL;
 
 	return pbody;
 }
@@ -378,7 +377,7 @@ PhysBody* ModulePhysics::CreatePlunge(int x, int y)
 	plungeFixture.shape = &box;
 	plungeFixture.density = 20.0f;
 	plungeFixture.restitution = 0.1f;
-	plungeFixture.filter.groupIndex = BODY_INDEX::PLUNGE;
+	plungeFixture.filter.groupIndex = BODY_TYPE::PLUNGE;
 
 	plungeBody->CreateFixture(&plungeFixture);
 
@@ -394,7 +393,7 @@ PhysBody* ModulePhysics::CreatePlunge(int x, int y)
 	b2FixtureDef plungeFixture2;
 	plungeFixture2.shape = &box1;
 	plungeFixture2.density = 1.0f;
-	plungeFixture2.filter.groupIndex = BODY_INDEX::PLUNGE;
+	plungeFixture2.filter.groupIndex = BODY_TYPE::PLUNGE;
 
 	plungeBodyB->CreateFixture(&plungeFixture2);
 
@@ -601,7 +600,7 @@ void ModulePhysics::BeginContact(b2Contact* contact)
 	PhysBody* physA = (PhysBody*)contact->GetFixtureA()->GetBody()->GetUserData();
 	PhysBody* physB = (PhysBody*)contact->GetFixtureB()->GetBody()->GetUserData();
 
-	/*if ((physB->top && physA->bodyType == _TOP_LEVEL) || (!physB->top && physA->bodyType == _FLOOR_LEVEL))
+	/*if ((physB->top && physA->sensorType == _TOP_LEVEL) || (!physB->top && physA->sensorType == _FLOOR_LEVEL))
 	{*/
 		if (physA && physA->listener != NULL)
 			physA->listener->OnCollision(physA, physB);

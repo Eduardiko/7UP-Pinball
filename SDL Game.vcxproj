@@ -75,7 +75,6 @@
     <ClInclude Include="Globals.h" />
     <ClInclude Include="ModulePhysics.h" />
     <ClInclude Include="ModuleUI.h" />
-    <ClInclude Include="momentaryTrigger.h" />
     <ClInclude Include="p2List.h" />
     <ClInclude Include="Module.h" />
     <ClInclude Include="ModuleAudio.h" />
@@ -102,7 +101,6 @@
     <ClCompile Include="ModuleTextures.cpp" />
     <ClCompile Include="ModuleUI.cpp" />
     <ClCompile Include="ModuleWindow.cpp" />
-    <ClCompile Include="momentaryTrigger.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

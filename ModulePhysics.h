@@ -14,27 +14,21 @@
 
 // Small class to return to other modules to track position and rotation of physics bodies
 
-enum BODY_INDEX
+enum BODY_TYPE
 {
-	BALL,
-	WALL,
-	TRIGGER,
-	BUMPER,
-	PLUNGE,
+	BALL = -1,
+	WALL_TOP = -1,
+
+	WALL_FLOOR = -2,
+	PLUNGE = -2,
+	TRIGGER = -2,
+	BUMPER = -2,
 
 
 	NOT_DEFINED
 };
-/*enum groupIndex {
 
-	RIGID_PINBALL = -1,
-	FLIPPERS,
-	PLUNGE_TOP,
-	PLUNGE_BOTTOM,
-
-	NO_DEF
-};*/
-enum PHYSIC_BODY_TYPE
+enum SENSOR_TYPE
 {
 	_BALL,
 	_WALL,
@@ -70,7 +64,7 @@ public:
 
 public:
 	int width, height;
-	bool top;
+
 	b2Body* body;
 	b2Body* body2;
 	b2Joint* joint;
@@ -78,7 +72,7 @@ public:
 
 
 
-	PHYSIC_BODY_TYPE bodyType = _NOT_DEFINED;
+	SENSOR_TYPE sensorType = _NOT_DEFINED;
 };
 
 // Module --------------------------------------
@@ -97,12 +91,12 @@ public:
 	PhysBody* CreateCircle(int x, int y, int radius);
 	PhysBody* CreatePlunge(int x, int y);
 	PhysBody* CreateRectangle(int x, int y, int width, int height);
-	PhysBody* CreateChain(int x, int y, int* points, int size, BODY_INDEX index, PHYSIC_BODY_TYPE type);
+	PhysBody* CreateChain(int x, int y, int* points, int size, BODY_TYPE type);
 	PhysBody* CreateBall(int x, int y, int radius);
 	PhysBody* CreateLeftTrigger();
 	PhysBody* CreateRightTrigger();
-	PhysBody* CreateRectangleSensor(int x, int y, int width, int height, PHYSIC_BODY_TYPE sensorType);
-	PhysBody* CreateCircleSensor(int x, int y, int radius, PHYSIC_BODY_TYPE sensorType);
+	PhysBody* CreateRectangleSensor(int x, int y, int width, int height, SENSOR_TYPE sensorType);
+	PhysBody* CreateCircleBumper(int x, int y, int radius, SENSOR_TYPE sensorType);
 
 	void BeginContact(b2Contact* contact);
 

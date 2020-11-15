@@ -27,7 +27,6 @@ public:
 
 public:
 
-	bool topLevelActive = false;
 	bool reb1, reb2, reb3, ballLostBlit, enterFunnel, holdInCatapult;
 
 	p2List<PhysBody*> balls;

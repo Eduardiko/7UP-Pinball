@@ -137,8 +137,9 @@ bool ModuleSceneIntro::Start()
 	littlePlungeRect.w = 9;
 	littlePlungeRect.h = 32;
 
-	//littlePlungeTriggerL = App->physics->CreatePlunge(365, 438);
-	//littlePlungeTriggerR = App->physics->CreatePlunge(596, 438);
+	littlePlungeTriggerL = App->physics->CreatePlunge(364, 440);
+	littlePlungeTriggerR = App->physics->CreatePlunge(602, 440);
+
 	//spawned ball coordinates are in createBall()
 	setSensors();
 	SpawnBall();
@@ -268,10 +269,8 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 	//iterate all balls to see if they collide
 	for (p2List_item<PhysBody*>* bc = balls.getFirst(); bc != NULL; bc = bc->next)
 	{
-		
-		
 
-		if (bodyB->bodyType == _DEAD_SENSOR)
+		if (bodyB->sensorType == _DEAD_SENSOR)
 		{
 			ballLostBlit = true;
 
@@ -279,55 +278,59 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 
 		}
 
-		if (bodyB->bodyType == _REBOUNCER1)
+		if (bodyB->sensorType == _REBOUNCER1)
 		{
 			reb1 = true;
 			reboundLightAnim.Reset();
 		}
-		if (bodyB->bodyType == _REBOUNCER2)
+		if (bodyB->sensorType == _REBOUNCER2)
 		{
 			reb2 = true;
 			reboundLightAnim.Reset();
 		}
-		if (bodyB->bodyType == _REBOUNCER3)
+		if (bodyB->sensorType == _REBOUNCER3)
 		{
 			reb3 = true;
 			reboundLightAnim.Reset();
 		}
 
 
-		if (bodyB->bodyType == _LEVEL_CHANGE)
+		if (bodyB->sensorType == _LEVEL_CHANGE)
 		{
-			topLevelActive = !topLevelActive;
+			b2Filter filter;
 
-			if (topLevelActive == true)
+			if (filter.groupIndex = -1)
 			{
-				LOG("Entering top level");
+				for (b2Fixture* f = bodyA->body->GetFixtureList(); f; f = f->GetNext()) {
+					f->GetFilterData();
+					filter.groupIndex = -2;
+					f->SetFilterData(filter);
+				}
 			}
-			else
-			{
-				LOG("Exiting top level");
-			}
+			
+
 		}
 
-		if (bodyB->bodyType == _FUNNEL)
+		if (bodyB->sensorType == _FUNNEL)
 		{
 			enterFunnel = true;
 		}
 
-		if (bodyB->bodyType == _CATAPULT)
+		if (bodyB->sensorType == _CATAPULT)
 		{
 			holdInCatapult = true;
 		}
 
-		if (bodyB->bodyType == _MINI_PLUNGE_L)
+		if (bodyB->sensorType == _MINI_PLUNGE_L)
 		{
 			LOG("enteringPlug")
-			littlePlungeTriggerL->body->ApplyForceToCenter(b2Vec2(0, 250), true);
+			int impulse = rand() % 750 + 500;
+			littlePlungeTriggerL->body->ApplyForceToCenter(b2Vec2(0, impulse), true);
 		}
-		if (bodyB->bodyType == _MINI_PLUNGE_R)
+		if (bodyB->sensorType == _MINI_PLUNGE_R)
 		{
-			littlePlungeTriggerR->body->ApplyForceToCenter(b2Vec2(0, 250), true);
+			int impulse = rand() % 750 + 500;
+			littlePlungeTriggerR->body->ApplyForceToCenter(b2Vec2(0, impulse), true);
 		}
 
 	}
@@ -438,8 +441,7 @@ void ModuleSceneIntro::setWalls() {
 	454, 552,
 	514, 552
 	};
-	//backgroundWalls.add(App->physics->CreateChain(0, 0, backgroundFloor, 190, BODY_INDEX::WALL, 0.01f, _NOT_DEFINED));
-	backgroundWalls.add(App->physics->CreateChain(0, 0, backgroundFloor, 188, BODY_INDEX::WALL, PHYSIC_BODY_TYPE::_FLOOR_LEVEL));
+	backgroundWalls.add(App->physics->CreateChain(0, 0, backgroundFloor, 188, BODY_TYPE::WALL_FLOOR));
 	int backgroundLeftFunnel[60] = {
 	337, 267,
 	353, 251,
@@ -472,7 +474,7 @@ void ModuleSceneIntro::setWalls() {
 	313, 233,
 	337, 267
 	};
-	backgroundWalls.add(App->physics->CreateChain(0, 0, backgroundLeftFunnel, 60, BODY_INDEX::WALL, PHYSIC_BODY_TYPE::_TOP_LEVEL));
+	backgroundWalls.add(App->physics->CreateChain(0, 0, backgroundLeftFunnel, 60, BODY_TYPE::WALL_TOP));
 	int ballStartTunnel[120] = {
 	688, 328,
 	701, 328,
@@ -535,7 +537,7 @@ void ModuleSceneIntro::setWalls() {
 	689, 335,
 	688, 328
 	};
-	backgroundWalls.add(App->physics->CreateChain(0, 0, ballStartTunnel, 120, BODY_INDEX::WALL, PHYSIC_BODY_TYPE::_TOP_LEVEL));
+	backgroundWalls.add(App->physics->CreateChain(0, 0, ballStartTunnel, 120, BODY_TYPE::WALL_TOP));
 
 	int bottomRightBumper[60] = {
 	556, 403,
@@ -569,7 +571,7 @@ void ModuleSceneIntro::setWalls() {
 	559, 404,
 	556, 403
 	};
-	backgroundWalls.add(App->physics->CreateChain(0, 0, bottomRightBumper, 60, BODY_INDEX::BUMPER, PHYSIC_BODY_TYPE::_FLOOR_LEVEL));
+	backgroundWalls.add(App->physics->CreateChain(0, 0, bottomRightBumper, 60, BODY_TYPE::WALL_FLOOR));
 	int bottomLeftBumper[48] = {
 	410, 404,
 	413, 403,
@@ -596,7 +598,7 @@ void ModuleSceneIntro::setWalls() {
 	408, 408,
 	410, 404
 };
-	backgroundWalls.add(App->physics->CreateChain(0, 0, bottomLeftBumper, 48, BODY_INDEX::BUMPER, PHYSIC_BODY_TYPE::_FLOOR_LEVEL));
+	backgroundWalls.add(App->physics->CreateChain(0, 0, bottomLeftBumper, 48, BODY_TYPE::WALL_FLOOR));
 	int bottomRightRamp[70] = {
 	592, 398,
 	586, 401,
@@ -634,7 +636,7 @@ void ModuleSceneIntro::setWalls() {
 	594, 401,
 	592, 398
 	};
-	backgroundWalls.add(App->physics->CreateChain(0, 0, bottomRightRamp, 70, BODY_INDEX::WALL, PHYSIC_BODY_TYPE::_FLOOR_LEVEL));
+	backgroundWalls.add(App->physics->CreateChain(0, 0, bottomRightRamp, 70, BODY_TYPE::WALL_FLOOR));
 	int bottomLeftRamp[74] = {
 	374, 401,
 	377, 398,
@@ -674,7 +676,7 @@ void ModuleSceneIntro::setWalls() {
 	374, 410,
 	374, 401
 	};
-	backgroundWalls.add(App->physics->CreateChain(0, 0, bottomLeftRamp, 74, BODY_INDEX::WALL, PHYSIC_BODY_TYPE::_FLOOR_LEVEL));
+	backgroundWalls.add(App->physics->CreateChain(0, 0, bottomLeftRamp, 74, BODY_TYPE::WALL_FLOOR));
 
 	int middleCannon[66] = {
 	445, 283,
@@ -711,7 +713,7 @@ void ModuleSceneIntro::setWalls() {
 	446, 278,
 	445, 282
 	};
-	backgroundWalls.add(App->physics->CreateChain(0, 0, middleCannon, 66, BODY_INDEX::WALL, PHYSIC_BODY_TYPE::_FLOOR_LEVEL));
+	backgroundWalls.add(App->physics->CreateChain(0, 0, middleCannon, 66, BODY_TYPE::WALL_FLOOR));
 
 	int topLeftBoomerang[44] = {
 	388, 230,
@@ -737,7 +739,7 @@ void ModuleSceneIntro::setWalls() {
 	382, 227,
 	388, 230,
 	};
-	backgroundWalls.add(App->physics->CreateChain(0, 0, topLeftBoomerang, 44, BODY_INDEX::WALL, PHYSIC_BODY_TYPE::_FLOOR_LEVEL));
+	backgroundWalls.add(App->physics->CreateChain(0, 0, topLeftBoomerang, 44, BODY_TYPE::WALL_FLOOR));
 	int topRightBoomerang[44] = {
 	544, 148,
 	580, 161,
@@ -762,7 +764,7 @@ void ModuleSceneIntro::setWalls() {
 	538, 143,
 	544, 148
 	};
-	backgroundWalls.add(App->physics->CreateChain(0, 0, topRightBoomerang, 44, BODY_INDEX::WALL, PHYSIC_BODY_TYPE::_FLOOR_LEVEL));
+	backgroundWalls.add(App->physics->CreateChain(0, 0, topRightBoomerang, 44, BODY_TYPE::WALL_FLOOR));
 	int topLeftStick[18] = {
 	466, 112,
 	461, 116,
@@ -774,7 +776,7 @@ void ModuleSceneIntro::setWalls() {
 	471, 116,
 	466, 112,
 	};
-	backgroundWalls.add(App->physics->CreateChain(0, 0, topLeftStick, 18, BODY_INDEX::WALL, PHYSIC_BODY_TYPE::_FLOOR_LEVEL));
+	backgroundWalls.add(App->physics->CreateChain(0, 0, topLeftStick, 18, BODY_TYPE::WALL_FLOOR));
 	int topRightStick[20] = {
 	500, 110,
 	497, 116,
@@ -787,7 +789,7 @@ void ModuleSceneIntro::setWalls() {
 	509, 115,
 	500, 110
 	};
-	backgroundWalls.add(App->physics->CreateChain(0, 0, topRightStick, 20, BODY_INDEX::WALL, PHYSIC_BODY_TYPE::_FLOOR_LEVEL));
+	backgroundWalls.add(App->physics->CreateChain(0, 0, topRightStick, 20, BODY_TYPE::WALL_FLOOR));
 }
 
 void ModuleSceneIntro::setSensors()
@@ -797,9 +799,9 @@ void ModuleSceneIntro::setSensors()
 
 	sensors.add(App->physics->CreateRectangleSensor(hole.x, hole.y, hole.w, hole.h, _DEAD_SENSOR));
 
-	sensors.add(App->physics->CreateCircleSensor(442, 223, 10, _REBOUNCER1));
-	sensors.add(App->physics->CreateCircleSensor(485, 188, 10, _REBOUNCER2));
-	sensors.add(App->physics->CreateCircleSensor(526, 223, 10, _REBOUNCER3));
+	sensors.add(App->physics->CreateCircleBumper(442, 223, 10, _REBOUNCER1));
+	sensors.add(App->physics->CreateCircleBumper(485, 188, 10, _REBOUNCER2));
+	sensors.add(App->physics->CreateCircleBumper(526, 223, 10, _REBOUNCER3));
 
 	sensors.add(App->physics->CreateRectangleSensor(340, 255, 20, 20, _LEVEL_CHANGE));
 
