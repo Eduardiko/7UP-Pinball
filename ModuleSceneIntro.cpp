@@ -45,6 +45,11 @@ ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Modul
 	playGameAnim.loop = true;
 	playGameAnim.speed = 0.01f;
 
+	starAnim.PushBack({ 0,184,19,19 });
+	starAnim.PushBack({ 0,0,0,0});
+	starAnim.loop = false;
+	starAnim.speed = 0.01f;
+
 	//plunge pushback
 	plungeRect.x = 275;
 	plungeRect.y = 116;
@@ -91,7 +96,7 @@ bool ModuleSceneIntro::Start()
 
 	debug = App->textures->Load("pinball/debug.png");
 
-	backgroundTex = App->textures->Load("pinball/background.png");
+	backgroundTex = App->textures->Load("pinball/background upd.png");
 	background.x = 0;
 	background.y = 0;
 	background.w = SCREEN_WIDTH;
@@ -114,6 +119,7 @@ bool ModuleSceneIntro::Start()
 	hit_wall_fx = App->audio->LoadFx("audio/sound_fx/hit_wall.wav");
 	four_dots_fx = App->audio->LoadFx("audio/sound_fx/four_dots.wav");
 	rebouncer_fx = App->audio->LoadFx("audio/sound_fx/yellow_dot.wav");
+	combo_fx = App->audio->LoadFx("audio/sound_fx/combo.wav");
 
 	App->audio->PlayMusic("audio/music/Nightmaren.ogg");
 
@@ -234,7 +240,7 @@ update_status ModuleSceneIntro::Update()
 	if (ballLostBlit)
 	{
 		App->renderer->Blit(spriteSheet, 452, 540, &ballLostAnim.GetCurrentFrame(), 1.0f);
-		App->audio->PlayFx(holeFx);
+		App->audio->PlayFx(combo_fx);
 	}
 
 	if (holdInCatapult)
@@ -242,6 +248,25 @@ update_status ModuleSceneIntro::Update()
 		//SDL_Delay(500);
 		//holdInCatapult = false;
 	}
+
+	if (star1)
+	{
+		
+		App->renderer->Blit(spriteSheet, 437, 104, &starAnim.GetCurrentFrame(), 1.0f);
+	}
+	if (star2)
+	{
+		App->audio->PlayFx(holeFx);
+		App->renderer->Blit(spriteSheet, 473, 98, &starAnim.GetCurrentFrame(), 1.0f);
+	}
+	if (star3)
+	{
+		App->audio->PlayFx(holeFx);
+		App->renderer->Blit(spriteSheet, 515, 99, &starAnim.GetCurrentFrame(), 1.0f);
+	}
+	if (starAnim.Finished())
+		star1 = star2 = star3 = false;
+
 
 	if (gameStarted == false)
 	{
@@ -370,6 +395,26 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 			bodyA->body->ApplyLinearImpulse({ -0.8f * 2.5, -0.8f * 2.5 }, { 0.0f,0.0f }, true);
 		}
 
+
+		if (bodyB->sensorType == _STAR1)
+		{
+			App->audio->PlayFx(holeFx);
+			star1 = true;
+			starAnim.Reset();
+			App->UI->halfScoreRight += 2000;
+		}
+		if (bodyB->sensorType == _STAR2)
+		{
+			star2 = true;
+			starAnim.Reset();
+			App->UI->halfScoreRight += 2000;
+		}
+		if (bodyB->sensorType == _STAR3)
+		{
+			star3 = true;
+			starAnim.Reset();
+			App->UI->halfScoreRight += 2000;
+		}
 		
 }
 
@@ -885,6 +930,10 @@ void ModuleSceneIntro::setSensors()
 
 	sensors.add(App->physics->CreateRectangleSensor(363, 416, 28, 28, _MINI_PLUNGE_L));
 	sensors.add(App->physics->CreateRectangleSensor(604, 416, 28, 28, _MINI_PLUNGE_R));
+
+	sensors.add(App->physics->CreateRectangleSensor(446, 109, 14,14, _STAR1));
+	sensors.add(App->physics->CreateRectangleSensor(483, 108, 14, 14, _STAR2));
+	sensors.add(App->physics->CreateRectangleSensor(523, 113, 14, 14, _STAR3));
 
 	/*sensors.add(App->physics->CreateBumperChainSensor(420, 403, &28, 4, _BUMPER_L));
 	sensors.add(App->physics->CreateBumperChainSensor(549, 533, &28, 4, _BUMPER_R));*/

@@ -30,7 +30,7 @@ public:
 public:
 	bool gameStarted = false;
 
-	bool reb1, reb2, reb3, ballLostBlit, enterFunnel, holdInCatapult;
+	bool reb1, reb2, reb3, ballLostBlit, enterFunnel, holdInCatapult, star1, star2, star3;
 
 	p2List<PhysBody*> balls;
 	PhysBody* ballPendingToDelete;
@@ -76,11 +76,12 @@ private:
 	uint monster_roar_fx;
 	uint hit_wall_fx;
 	uint rebouncer_fx;
+	uint combo_fx;
 
 	SDL_Texture* spriteSheet;
 	SDL_Texture* backgroundAssets;
 	SDL_Texture* debug;
-	Animation ballAnim, arrowLightsAnim, reboundLightAnim, ballLostAnim, thinkClearAnim, playGameAnim;
+	Animation ballAnim, arrowLightsAnim, reboundLightAnim, ballLostAnim, thinkClearAnim, playGameAnim, starAnim;
 
 
 	//sensors and collision detectors

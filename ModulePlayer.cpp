@@ -53,6 +53,7 @@ update_status ModulePlayer::Update()
 	if (App->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN)
 	{
 		App->scene_intro->gameStarted = true;
+		LOG("Game Started");
 	}
 
 	b2Vec2 anchorLVec = leftTrigger->joint->GetAnchorB();
