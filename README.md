@@ -11,11 +11,18 @@ SOURCE GITHUB: https://github.com/Eduardiko/7UP-Pinball
 
 Controls:
 
-	- Left Arrow: Left Trigger
-	- Right Arrow: Right Trigger
-	- Down Arrow: Plunge 
+	- Left Arrow: Left Trigger.
+	- Right Arrow: Right Trigger.
+	- Down Arrow: Plunge .
 
 DEBUG: 
 
-	- F1: Show Colliders
-	- F1 + Left Click: Drag Ball
+	- F1: Show Colliders.
+	- F1 + Left Click: Drag Ball.
+
+DIFFERENCES:
+
+	- Left funnel without gravity.
+	- Right hole spawns ball on top.
+	- Middle cannon spawns ball on top.
+	- Point system.
