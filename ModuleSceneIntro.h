@@ -24,6 +24,8 @@ public:
 	void CreateBallInMousePos();
 	void setWalls();
 	void setSensors();
+	void ResetBallPos(PhysBody* ball, int x, int y);
+
 
 public:
 	bool gameStarted = false;
@@ -53,7 +55,9 @@ private:
 	// win/fail
 	unsigned int ballsLeft;
 	bool ballLost = false;
+	bool pendingToDelete = false;
 
+	bool ballInHole = false;
 	bool ballInTop = true;
 
 	//Fx

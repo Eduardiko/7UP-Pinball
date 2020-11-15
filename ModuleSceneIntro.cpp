@@ -167,6 +167,17 @@ bool ModuleSceneIntro::CleanUp()
 update_status ModuleSceneIntro::Update()
 {
 	
+	if (ballLost) {
+		ballLost = false;
+		ResetBallPos(ballPendingToDelete, 698, 438);
+	}
+
+	if (ballInHole) {
+		ballInHole = false;
+		int offset = rand() % 6;
+
+		ResetBallPos(ballPendingToDelete, 483 + offset, 82);
+	}
 
 	App->renderer->Blit(backgroundTex, 0, 0, &background, 1.0f);
 
@@ -226,45 +237,10 @@ update_status ModuleSceneIntro::Update()
 		App->audio->PlayFx(holeFx);
 	}
 
-	if (ballLost)
-	{
-		App->audio->PlayFx(App->scene_intro->hole_in_fx);
-
-		for (p2List_item<PhysBody*>* bc = balls.getFirst(); bc != NULL; bc = bc->next)
-		{
-			App->physics->world->DestroyBody(bc->data->body);
-		}
-		balls.clear();
-
-		ballsLeft--;
-
-		if (ballsLeft > 0) {
-			SpawnBall();
-		}
-
-		ballInTop = true;
-		ballLost = false;
-	}
-
-	if (enterFunnel)
-	{
-		App->audio->PlayFx(hole_in_fx);
-		SDL_Delay(1000);
-
-		for (p2List_item<PhysBody*>* bc = balls.getFirst(); bc != NULL; bc = bc->next)
-		{
-			App->physics->world->DestroyBody(bc->data->body);
-		}
-		balls.clear();
-	
-		enterFunnel = false;
-
-	}
-
 	if (holdInCatapult)
 	{
-		SDL_Delay(500);
-		holdInCatapult = false;
+		//SDL_Delay(500);
+		//holdInCatapult = false;
 	}
 
 	if (gameStarted == false)
@@ -280,12 +256,17 @@ update_status ModuleSceneIntro::Update()
 void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 {
 
-		if (bodyB->sensorType == _DEAD_SENSOR)
-		{
-			ballLostBlit = true;
-			ballLost = true;
+	if (bodyB->sensorType == _DEAD_SENSOR)
+	{
+		ballLostBlit = true;
+		App->audio->PlayFx(App->scene_intro->hole_in_fx);
+		ballLost = true;
 
-		}
+		ballLostBlit = true;
+		ballPendingToDelete = bodyA;
+		ballsLeft--;
+		ballInTop = true;
+	}
 
 		if (bodyB->sensorType == _REBOUNCER1)
 		{
@@ -336,8 +317,24 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 
 		if (bodyB->sensorType == _FUNNEL)
 		{
-			App->UI->halfScoreRight += 4500;
 			enterFunnel = true;
+			App->UI->halfScoreRight += 4500;
+
+			b2Fixture* fixture = bodyA->body->GetFixtureList();
+
+			while (fixture != NULL)
+			{
+				b2Filter newFilter;
+				newFilter.groupIndex = BODY_TYPE::BALL_FLOOR;
+				ballInTop = false;
+				fixture->SetFilterData(newFilter);
+				fixture = fixture->GetNext();
+			}
+
+			ballInHole = true;
+			App->audio->PlayFx(App->scene_intro->hole_in_fx);
+			ballPendingToDelete = bodyA;
+			ballInTop = false;
 		}
 
 		if (bodyB->sensorType == _CATAPULT)
@@ -875,4 +872,13 @@ void ModuleSceneIntro::CreateBallInMousePos()
 
 	balls.add(App->physics->CreateBall(x, y, radius));
 	balls.getLast()->data->listener = this;
+}
+
+void ModuleSceneIntro::ResetBallPos(PhysBody* ball, int x, int y)
+{
+	b2Vec2 ballpos;
+	ballpos.x = PIXEL_TO_METERS(x);
+	ballpos.y = PIXEL_TO_METERS(y);
+	ball->body->SetTransform(ballpos, 0.0f);
+	ball->body->SetLinearVelocity(b2Vec2(0, 0));
 }
