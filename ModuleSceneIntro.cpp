@@ -59,6 +59,9 @@ ModuleSceneIntro::ModuleSceneIntro(Application* app, bool start_enabled) : Modul
 	arr1.loop = arr2.loop = arr3.loop = arr4.loop = arr5.loop = arr6.loop = true;
 	arr1.speed = arr2.speed = arr3.speed = arr4.speed = arr5.speed = arr6.speed = 0.01f;
 
+	plungeAnim.PushBack({ 284,72,20,76 });
+	plungeAnim.loop = true;
+
 	//plunge pushback
 	plungeRect.x = 275;
 	plungeRect.y = 116;
@@ -229,10 +232,22 @@ update_status ModuleSceneIntro::Update()
 
 	
 	App->renderer->Blit(spriteSheet, 245, 70, &topTexRect, 1.0f);
-	App->renderer->Blit(spriteSheet, 663, 457, &plungeRect, 1.0f);
+	//App->renderer->Blit(spriteSheet, 663, 457, &plungeRect, 1.0f);
 	App->renderer->Blit(spriteSheet, 665, 525, &plungeCompRect, 1.0f);
 	App->renderer->Blit(spriteSheet, 365, 438, &littlePlungeRect, 1.0f);
 	App->renderer->Blit(spriteSheet, 596, 438, &littlePlungeRect, 1.0f);
+
+	//plunge anim
+	App->renderer->Blit(spriteSheet, 663, 457, &plungeAnim.GetCurrentFrame(), 1.0f);
+
+	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_UP)
+	{
+		App->renderer->Blit(spriteSheet, 663, 417, &plungeAnim.GetCurrentFrame(), 1.0f);
+		App->renderer->Blit(spriteSheet, 663, 417-20, &plungeAnim.GetCurrentFrame(), 1.0f);
+		App->renderer->Blit(spriteSheet, 663, 417-40, &plungeAnim.GetCurrentFrame(), 1.0f);
+		
+	}
+
 
 	
 

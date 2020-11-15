@@ -92,7 +92,7 @@ private:
 	SDL_Texture* spriteSheet;
 	SDL_Texture* backgroundAssets;
 	SDL_Texture* debug;
-	Animation ballAnim, arrowLightsAnim, reboundLightAnim, ballLostAnim, thinkClearAnim, playGameAnim, starAnim, arr1, arr2, arr3, arr4, arr5, arr6;
+	Animation ballAnim, arrowLightsAnim, reboundLightAnim, ballLostAnim, thinkClearAnim, playGameAnim, starAnim, arr1, arr2, arr3, arr4, arr5, arr6, plungeAnim;
 
 
 	//sensors and collision detectors
