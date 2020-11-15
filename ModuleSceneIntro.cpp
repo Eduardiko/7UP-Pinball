@@ -101,7 +101,6 @@ bool ModuleSceneIntro::Start()
 	LOG("Loading Intro assets");
 	bool ret = true;
 
-	backgroundTextTex = App->textures->Load("pinball/StartMenuBackground.png");
 	spriteSheet = App->textures->Load("pinball/pinballSpritesheet.png");
 
 	tri1 = App->textures->Load("pinball/tri 1.png");
@@ -112,7 +111,7 @@ bool ModuleSceneIntro::Start()
 	tri6 = App->textures->Load("pinball/tri 6.png");
 
 	debug = App->textures->Load("pinball/debug.png");
-	
+
 	backgroundTex = App->textures->Load("pinball/background upd.png");
 	background.x = 0;
 	background.y = 0;
@@ -312,7 +311,6 @@ update_status ModuleSceneIntro::Update()
 
 	if (gameStarted == false)
 	{
-		App->renderer->Blit(backgroundTextTex, 0, 0, &background, 1.0f);
 		App->renderer->Blit(spriteSheet, 410, 250, &playGameAnim.GetCurrentFrame(), 1.0f);
 	}
 	
@@ -976,7 +974,7 @@ void ModuleSceneIntro::setSensors()
 
 	sensors.add(App->physics->CreateRectangleSensor(446, 134, 14,14, _STAR1));
 	sensors.add(App->physics->CreateRectangleSensor(485, 133, 14, 14, _STAR2));
-	sensors.add(App->physics->CreateRectangleSensor(523, 136, 14, 14, _STAR3));
+	sensors.add(App->physics->CreateRectangleSensor(523, 133, 14, 14, _STAR3));
 
 	/*sensors.add(App->physics->CreateBumperChainSensor(420, 403, &28, 4, _BUMPER_L));
 	sensors.add(App->physics->CreateBumperChainSensor(549, 533, &28, 4, _BUMPER_R));*/
